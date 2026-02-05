@@ -9,7 +9,7 @@ export function Footer() {
   return (
     <footer className="bg-taxi-black text-white">
       <Container>
-        <div className="py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div>
             <div className="text-2xl font-display font-bold mb-4">
@@ -21,6 +21,39 @@ export function Footer() {
                 ? 'Du køyrer trygt, med oss frå Voss!'
                 : 'Drive safe with us, from Voss!'}
             </p>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h3 className="font-bold text-lg mb-4">
+              {locale === 'no' ? 'Snarvegar' : 'Quick Links'}
+            </h3>
+            <div className="space-y-2 text-sm text-taxi-light-grey">
+              <Link
+                href={`/${locale}/about`}
+                className="block hover:text-taxi-yellow transition-colors"
+              >
+                {locale === 'no' ? 'Om Oss' : 'About Us'}
+              </Link>
+              <Link
+                href={`/${locale}/packages`}
+                className="block hover:text-taxi-yellow transition-colors"
+              >
+                {locale === 'no' ? 'Pakkar' : 'Packages'}
+              </Link>
+              <Link
+                href={`/${locale}/testimonials`}
+                className="block hover:text-taxi-yellow transition-colors"
+              >
+                {locale === 'no' ? 'Tilbakemeldingar' : 'Testimonials'}
+              </Link>
+              <Link
+                href={`/${locale}/news`}
+                className="block hover:text-taxi-yellow transition-colors"
+              >
+                {locale === 'no' ? 'Nyheter' : 'News'}
+              </Link>
+            </div>
           </div>
 
           {/* Contact Info */}

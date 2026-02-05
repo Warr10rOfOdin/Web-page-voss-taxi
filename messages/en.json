@@ -2,10 +2,13 @@
   "nav": {
     "home": "Home",
     "services": "Services",
-    "calculator": "Fare Estimate",
-    "about": "About",
-    "contact": "Contact",
+    "packages": "Packages",
     "tourist": "Tours",
+    "about": "About",
+    "testimonials": "Testimonials",
+    "news": "News",
+    "calculator": "Fare Estimate",
+    "contact": "Contact",
     "wheelchair": "Wheelchair Taxi",
     "business": "Business"
   },
