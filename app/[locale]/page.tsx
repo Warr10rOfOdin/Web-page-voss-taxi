@@ -5,11 +5,12 @@ import { FareEstimator } from '@/components/sections/FareEstimator';
 import { WhyChooseUs } from '@/components/sections/WhyChooseUs';
 import { TouristSpotlight } from '@/components/sections/TouristSpotlight';
 
-export default function HomePage({
-  params: { locale },
+export default async function HomePage({
+  params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
   setRequestLocale(locale);
 
   return (

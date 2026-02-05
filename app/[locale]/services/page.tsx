@@ -12,10 +12,11 @@ const services = [
 ];
 
 export default async function ServicesPage({
-  params: { locale },
+  params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations('services');
 
