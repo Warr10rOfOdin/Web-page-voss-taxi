@@ -18,11 +18,11 @@ export default async function TvindefossenPage({
       description: 'Tvindefossen er den 98. høyeste fossen i Norge regnet ut frå totalt fall, med eit fall på 110 meter. Fossen er ein kjent turistattraksjon like ved E-16, og er berømt for det legendariske vannet med foryngande krefter.',
       history: {
         title: 'Historie og legende',
-        content: \`Tvindefossen ligg ved Tvinde i Voss kommune, 12 km nord for Voss sentrum. Vannet frå fossen kjem frå Kroelva og renn ut i Strandaelva. Det lengste fallet er 85 meter, noko som gjer fossen til eit spektakulært syn.
+        content: `Tvindefossen ligg ved Tvinde i Voss kommune, 12 km nord for Voss sentrum. Vannet frå fossen kjem frå Kroelva og renn ut i Strandaelva. Det lengste fallet er 85 meter, noko som gjer fossen til eit spektakulært syn.
 
 På slutten av 1990-talet skapte vatnet i Tvindefossen eit rykte for foryngelse og gjenoppliving av seksuell styrke. Dette gjorde det til ein av dei viktigaste naturlege turistattraksjonane i Vest-Norge, med så mange som 200 000 menneske i året frå USA, Japan og Russland som besøkte og fylte containere med vannet.
 
-På eit tidspunkt var det Norges niende mest besøkte naturlige attraksjon, med 272 000 besøkende. I dag er fossen framleis populær, både for sin naturlege skjønnheit og den fascinerende historia.\`,
+På eit tidspunkt var det Norges niende mest besøkte naturlige attraksjon, med 272 000 besøkende. I dag er fossen framleis populær, både for sin naturlege skjønnheit og den fascinerende historia.`,
       },
       highlights: {
         title: 'Høgdepunkt',
@@ -57,11 +57,11 @@ På eit tidspunkt var det Norges niende mest besøkte naturlige attraksjon, med 
       description: 'Tvindefossen is the 98th highest waterfall in Norway by total drop, with a fall of 110 meters. The waterfall is a well-known tourist attraction right by Highway E-16, and is famous for its legendary water with rejuvenating powers.',
       history: {
         title: 'History and legend',
-        content: \`Tvindefossen is located at Tvinde in Voss municipality, 12 km north of Voss center. The water from the waterfall comes from the Kroelva river and flows into the Strandaelva. The longest drop is 85 meters, making the waterfall a spectacular sight.
+        content: `Tvindefossen is located at Tvinde in Voss municipality, 12 km north of Voss center. The water from the waterfall comes from the Kroelva river and flows into the Strandaelva. The longest drop is 85 meters, making the waterfall a spectacular sight.
 
 In the late 1990s, the water in Tvindefossen created a reputation for rejuvenation and revival of sexual strength. This made it one of the most important natural tourist attractions in Western Norway, with as many as 200,000 people per year from the USA, Japan and Russia visiting and filling containers with the water.
 
-At one point it was Norway\\'s ninth most visited natural attraction, with 272,000 visitors. Today, the waterfall is still popular, both for its natural beauty and the fascinating history.\`,
+At one point it was Norway's ninth most visited natural attraction, with 272,000 visitors. Today, the waterfall is still popular, both for its natural beauty and the fascinating history.`,
       },
       highlights: {
         title: 'Highlights',

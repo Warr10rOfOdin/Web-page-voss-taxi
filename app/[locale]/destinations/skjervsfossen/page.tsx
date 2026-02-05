@@ -18,7 +18,7 @@ export default async function SkjervsfossenPage({
       description: 'Skjervsfossen er ein spektakulær tvillingfoss i Granvin kommune med ein total høgde på 125 meter. Fossen ligg ved riksvei 13, ein av Norges viktigaste turistvegar, og er lett tilgjengeleg frå vegen.',
       history: {
         title: 'Historie',
-        content: \`Skjervsfossen ligg ved Skjervet, omtrent midt mellom Granvin og Voss. Riksvei 13 passerer på avsatsen mellom fossens øvre og nedre fall, noko som gjer fossen unik og lett tilgjengeleg.
+        content: `Skjervsfossen ligg ved Skjervet, omtrent midt mellom Granvin og Voss. Riksvei 13 passerer på avsatsen mellom fossens øvre og nedre fall, noko som gjer fossen unik og lett tilgjengeleg.
 
 Fossen er ein tvillingfoss i elva Storelvi med den øvre delen som den mest imponerende, med eit vertikal fall på 60 meter. Vatnet kaskar ned fjellsida i to parallelle straumar, noko som gjer dette til eit spektakulært syn.
 
@@ -53,15 +53,15 @@ Riksvei 13 er ein nasjonal turistveg og er kjend for si natur og landskapsopplev
     },
     en: {
       title: 'Skjervsfossen',
-      subtitle: 'Twin waterfall along Norway\\'s most beautiful tourist route',
-      description: 'Skjervsfossen is a spectacular twin waterfall in Granvin municipality with a total height of 125 meters. The waterfall is located by Highway 13, one of Norway\\'s most important tourist routes, and is easily accessible from the road.',
+      subtitle: 'Twin waterfall along Norway\'s most beautiful tourist route',
+      description: 'Skjervsfossen is a spectacular twin waterfall in Granvin municipality with a total height of 125 meters. The waterfall is located by Highway 13, one of Norway\'s most important tourist routes, and is easily accessible from the road.',
       history: {
         title: 'History',
-        content: \`Skjervsfossen is located at Skjervet, approximately halfway between Granvin and Voss. Highway 13 passes on the ledge between the waterfall\\'s upper and lower falls, making the waterfall unique and easily accessible.
+        content: `Skjervsfossen is located at Skjervet, approximately halfway between Granvin and Voss. Highway 13 passes on the ledge between the waterfall's upper and lower falls, making the waterfall unique and easily accessible.
 
 The waterfall is a twin waterfall in the Storelvi river with the upper part being the most impressive, with a vertical drop of 60 meters. The water cascades down the mountainside in two parallel streams, making this a spectacular sight.
 
-Highway 13 is a national tourist route and is known for its nature and landscape experiences. The waterfall is 15 kilometers from Voss center, but it is important to remember to take the old road and not the tunnel to see the waterfall!\`,
+Highway 13 is a national tourist route and is known for its nature and landscape experiences. The waterfall is 15 kilometers from Voss center, but it is important to remember to take the old road and not the tunnel to see the waterfall!`,
       },
       highlights: {
         title: 'Highlights',

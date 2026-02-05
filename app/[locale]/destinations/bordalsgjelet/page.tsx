@@ -18,7 +18,7 @@ export default async function BordalsgjelePage({
       description: 'Bordalsgjelet er ein spektakulær naturattraksjon i gangavstand frå Voss sentrum. Det djupe og dramatiske gjelet er tilrettelagt for publikum med utsiktspunkt og benker.',
       history: {
         title: 'Geologi og tilrettelegging',
-        content: \`Bordalsgjelet er forma av is og elven gjennom årtusen. Det djupe gjelet gir eit fantastisk innblikk i naturkreftene som har forma landskapet vårt.
+        content: `Bordalsgjelet er forma av is og elven gjennom årtusen. Det djupe gjelet gir eit fantastisk innblikk i naturkreftene som har forma landskapet vårt.
 
 Når det ikkje er snø og is, er det ein tilrettelagt sti du kan følge innover gjelet. Her får du god utsikt til dei fantastiske jettegrytene som is og elven har formet gjennom tusenvis av år.
 
@@ -57,11 +57,11 @@ Gjelet er tilrettelagt med utsiktspunkt og benker, noko som gjer det til ein pop
       description: 'Bordalsgjelet is a spectacular natural attraction within walking distance from Voss center. The deep and dramatic gorge is facilitated for the public with viewpoints and benches.',
       history: {
         title: 'Geology and facilitation',
-        content: \`Bordalsgjelet is formed by ice and the river over thousands of years. The deep gorge provides a fantastic insight into the natural forces that have shaped our landscape.
+        content: `Bordalsgjelet is formed by ice and the river over thousands of years. The deep gorge provides a fantastic insight into the natural forces that have shaped our landscape.
 
-When there is no snow and ice, there is a facilitated path you can follow into the gorge. Here you get a good view of the fantastic giant\\'s kettles that ice and the river have formed over thousands of years.
+When there is no snow and ice, there is a facilitated path you can follow into the gorge. Here you get a good view of the fantastic giant's kettles that ice and the river have formed over thousands of years.
 
-The gorge is facilitated with viewpoints and benches, making it a popular attraction for both locals and tourists. For your own safety, it is important to stay on the marked trails!\`,
+The gorge is facilitated with viewpoints and benches, making it a popular attraction for both locals and tourists. For your own safety, it is important to stay on the marked trails!`,
       },
       highlights: {
         title: 'Highlights',

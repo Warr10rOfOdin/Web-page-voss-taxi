@@ -18,7 +18,7 @@ export default async function MolstertunetPage({
       description: 'Voss Folkemuseum på Mølster vart grunnlagt i 1917 og er ein av tre autentiske gårdstun som museet eig og konserverer. Her står alle bygningane framleis akkurat der dei var då folk budde der.',
       history: {
         title: 'Historie',
-        content: \`Voss Folkemuseum si første oppgåve var å kjøpe gårdstun på Mølster. I dag er dette ein av tre autentiske gårdstun som eies og konservert av museet, der alle bygningane framleis er plassert akkurat der dei var då folk bodde der.
+        content: `Voss Folkemuseum si første oppgåve var å kjøpe gårdstun på Mølster. I dag er dette ein av tre autentiske gårdstun som eies og konservert av museet, der alle bygningane framleis er plassert akkurat der dei var då folk bodde der.
 
 På Mølster gård, som lett kan sjåast i åssiden ovanfor Vossevangen, er det ein nyare museumsbygning. Her finn du permanente og midlertidige utstillingar som gir den besøkande større kunnskap om den lokale kulturen.
 
@@ -57,11 +57,11 @@ Det er også ein museumsbutikk, og om sommaren har dei vanlegvis høner og sauer
       description: 'The Voss Folk Museum at Mølster was founded in 1917 and is one of three authentic farmsteads that the museum owns and preserves. Here, all the buildings still stand exactly where they were when people lived there.',
       history: {
         title: 'History',
-        content: \`The first task of the Voss Folk Museum was to purchase the farmstead at Mølster. Today, this is one of three authentic farmsteads owned and preserved by the museum, where all the buildings are still located exactly where they were when people lived there.
+        content: `The first task of the Voss Folk Museum was to purchase the farmstead at Mølster. Today, this is one of three authentic farmsteads owned and preserved by the museum, where all the buildings are still located exactly where they were when people lived there.
 
 At Mølster farm, which can easily be seen on the hillside above Vossevangen, there is a newer museum building. Here you will find permanent and temporary exhibitions that give visitors greater knowledge about the local culture.
 
-There is also a museum shop, and in summer they usually have chickens and sheep on the farm. This gives children in particular a holistic experience of what life on a farm was like in the past.\`,
+There is also a museum shop, and in summer they usually have chickens and sheep on the farm. This gives children in particular a holistic experience of what life on a farm was like in the past.`,
       },
       highlights: {
         title: 'Highlights',
