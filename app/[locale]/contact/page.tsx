@@ -1,7 +1,8 @@
-import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { setRequestLocale } from 'next-intl/server';
+import Image from 'next/image';
 import { Container } from '@/components/ui/Container';
-import { Card, CardHeader, CardTitle } from '@/components/ui/Card';
-import { Button } from '@/components/ui/Button';
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/Card';
+import { getPageContent } from '@/lib/content';
 
 export default async function ContactPage({
   params,
@@ -10,14 +11,20 @@ export default async function ContactPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations('contact');
-  const tCta = await getTranslations('cta');
+
+  // Load content from CMS
+  const content = await getPageContent('contact');
+  if (!content) {
+    return <div>Content not found</div>;
+  }
+
+  const pageContent = content[locale as 'no' | 'en'];
 
   const contactMethods = [
     {
-      title: t('phone'),
-      value: '+47 56 51 13 40',
-      href: 'tel:+4756511340',
+      key: 'phone',
+      data: pageContent.contactInfo.phone,
+      href: `tel:${pageContent.contactInfo.phone.value.replace(/\s/g, '')}`,
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -30,9 +37,9 @@ export default async function ContactPage({
       ),
     },
     {
-      title: t('email'),
-      value: 'post@vosstaxi.no',
-      href: 'mailto:post@vosstaxi.no',
+      key: 'email',
+      data: pageContent.contactInfo.email,
+      href: `mailto:${pageContent.contactInfo.email.value}`,
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -45,9 +52,8 @@ export default async function ContactPage({
       ),
     },
     {
-      title: t('address'),
-      value: 'Uttrågata 19, 5700 Voss',
-      href: 'https://maps.google.com/?q=Uttrågata+19,+5700+Voss',
+      key: 'address',
+      data: pageContent.contactInfo.address,
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -66,8 +72,8 @@ export default async function ContactPage({
       ),
     },
     {
-      title: t('hours'),
-      value: t('hoursValue'),
+      key: 'hours',
+      data: pageContent.contactInfo.hours,
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -82,60 +88,107 @@ export default async function ContactPage({
   ];
 
   return (
-    <div className="py-16 md:py-24">
-      <Container>
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6">
-            {t('title')}
-          </h1>
-          <p className="text-xl text-taxi-grey">
-            {t('subtitle')}
-          </p>
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="relative bg-taxi-black text-white py-20 md:py-32">
+        <div className="absolute inset-0 bg-gradient-to-r from-taxi-black via-taxi-black/80 to-transparent z-0">
+          {pageContent.hero.backgroundImage && (
+            <Image
+              src={pageContent.hero.backgroundImage}
+              alt={pageContent.hero.title}
+              fill
+              className="object-cover opacity-30"
+              priority
+            />
+          )}
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 mb-12">
-          {contactMethods.map((method) => (
-            <Card key={method.title} variant="hover">
-              <CardHeader>
-                <div className="flex items-center space-x-4">
-                  <div className="text-taxi-yellow">
-                    {method.icon}
-                  </div>
-                  <div>
-                    <CardTitle className="text-xl mb-2">{method.title}</CardTitle>
-                    {method.href ? (
-                      <a
-                        href={method.href}
-                        className="text-taxi-grey hover:text-taxi-yellow transition-colors text-lg"
-                        target={method.href.startsWith('http') ? '_blank' : undefined}
-                        rel={method.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                      >
-                        {method.value}
-                      </a>
-                    ) : (
-                      <p className="text-taxi-grey text-lg">{method.value}</p>
-                    )}
-                  </div>
-                </div>
-              </CardHeader>
-            </Card>
-          ))}
-        </div>
-
-        <div className="bg-taxi-black text-white rounded-2xl p-8 md:p-12 text-center">
-          <h2 className="text-3xl font-display font-bold mb-6">
-            {tCta('bookNow')}
-          </h2>
-          <p className="text-taxi-light-grey mb-8 text-lg">
-            Call us now or send us an email
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="primary">
-              {tCta('callNow')}: +47 56 51 13 40
-            </Button>
+        <Container className="relative z-10">
+          <div className="max-w-3xl">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6">
+              {pageContent.hero.title}
+            </h1>
+            <p className="text-xl md:text-2xl text-taxi-light-grey">
+              {pageContent.hero.subtitle}
+            </p>
           </div>
-        </div>
-      </Container>
+        </Container>
+      </section>
+
+      {/* Contact Info Section */}
+      <section className="py-16 md:py-24 bg-white">
+        <Container>
+          <div className="grid md:grid-cols-2 gap-6 mb-16">
+            {contactMethods.map((method) => (
+              <Card key={method.key} variant="hover">
+                <CardHeader>
+                  <div className="flex items-start space-x-4">
+                    <div className="text-taxi-yellow flex-shrink-0">
+                      {method.icon}
+                    </div>
+                    <div className="flex-1">
+                      <CardTitle className="text-xl mb-2">{method.data.label}</CardTitle>
+                      {method.href ? (
+                        <a
+                          href={method.href}
+                          className="text-taxi-yellow hover:text-taxi-black transition-colors text-lg font-semibold block mb-2"
+                        >
+                          {method.data.value}
+                        </a>
+                      ) : (
+                        <p className="text-taxi-yellow text-lg font-semibold mb-2">{method.data.value}</p>
+                      )}
+                      <p className="text-taxi-grey text-sm">{method.data.description}</p>
+                    </div>
+                  </div>
+                </CardHeader>
+              </Card>
+            ))}
+          </div>
+
+          {/* FAQ Section */}
+          <div>
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-8 text-center">
+              {pageContent.faq.title}
+            </h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              {pageContent.faq.items.map((item: any, index: number) => (
+                <Card key={index}>
+                  <CardHeader>
+                    <CardTitle className="text-lg">{item.question}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="text-base">{item.answer}</CardDescription>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 bg-taxi-black text-white">
+        <Container>
+          <div className="text-center max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
+              {locale === 'no' ? 'Klar til å bestille?' : 'Ready to book?'}
+            </h2>
+            <p className="text-taxi-light-grey text-lg mb-8">
+              {locale === 'no'
+                ? 'Ring oss no eller send oss ein e-post'
+                : 'Call us now or send us an email'}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href={`tel:${pageContent.contactInfo.phone.value.replace(/\s/g, '')}`}>
+                <button className="bg-taxi-yellow text-taxi-black px-8 py-3 rounded-lg font-semibold hover:bg-yellow-400 transition-colors text-lg">
+                  {locale === 'no' ? 'Ring Oss' : 'Call Us'}: {pageContent.contactInfo.phone.value}
+                </button>
+              </a>
+            </div>
+          </div>
+        </Container>
+      </section>
     </div>
   );
 }
