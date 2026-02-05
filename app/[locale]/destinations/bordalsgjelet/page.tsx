@@ -67,7 +67,7 @@ The gorge is facilitated with viewpoints and benches, making it a popular attrac
         title: 'Highlights',
         items: [
           'Dramatic gorge formed by ice and water',
-          'Spectacular giant\\'s kettles',
+          "Spectacular giant's kettles",
           'Within walking distance from Voss center',
           'Facilitated trails and viewpoints',
           'Free access',
@@ -97,7 +97,7 @@ The gorge is facilitated with viewpoints and benches, making it a popular attrac
   return (
     <div className="py-16 md:py-24 bg-gradient-to-b from-white to-taxi-light-grey">
       <Container>
-        <Link href={\`/\${locale}/tourist\`} className="inline-flex items-center text-taxi-grey hover:text-taxi-yellow transition-colors mb-8">
+        <Link href={`/${locale}/tourist`} className="inline-flex items-center text-taxi-grey hover:text-taxi-yellow transition-colors mb-8">
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
@@ -177,7 +177,7 @@ The gorge is facilitated with viewpoints and benches, making it a popular attrac
               </div>
 
               <div className="border-t border-taxi-light-grey pt-6 space-y-3">
-                <Link href={\`/\${locale}/book\`}>
+                <Link href={`/${locale}/book`}>
                   <Button className="w-full" size="lg">{t.bookTour}</Button>
                 </Link>
                 <a href="tel:+4756511340">
