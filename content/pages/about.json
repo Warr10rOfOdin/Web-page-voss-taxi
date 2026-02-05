@@ -1,0 +1,95 @@
+{
+  "page": "about",
+  "no": {
+    "meta": {
+      "title": "Om Oss - Voss Taxi",
+      "description": "Voss Taxi er eit lokalt familiedreve taxiselskap med lang erfaring. Vi har tent Voss-samfunnet i mange år med profesjonell og påliteleg service."
+    },
+    "hero": {
+      "title": "Om Voss Taxi",
+      "subtitle": "Lokalt eigde og familiedreve sidan [år]",
+      "backgroundImage": "/images/IMG_20211231_050221_808.jpg"
+    },
+    "story": {
+      "title": "Vår Historie",
+      "content": "Voss Taxi har tent Voss-samfunnet i mange år. Vi er eit lokalt familiedreve selskap som tek stoltheit i å levere profesjonell og påliteleg taxiservice.\n\nVåre erfarne sjåførar kjenner Voss og omegn som si eiga lomme, og vi er dedikerte til å gje våre kundar den beste moglegekøyreoppleving.\n\nOm det er transport til flyplassen, ein sightseeing-tur til dei vakraste stadene i regionen, eller dagleg transport - vi er her for deg 24/7, 365 dagar i året."
+    },
+    "values": {
+      "title": "Våre Verdiar",
+      "items": [
+        {
+          "title": "Pålitelegheit",
+          "description": "Vi er alltid i tid og klare til å køyre deg dit du skal."
+        },
+        {
+          "title": "Tryggleik",
+          "description": "Tryggleiken til våre passasjerar er vår høgaste prioritet."
+        },
+        {
+          "title": "Lokal Kunnskap",
+          "description": "Våre sjåførar kjenner området perfekt og kan gje deg dei beste råda."
+        },
+        {
+          "title": "Kundeservice",
+          "description": "Vi går alltid den ekstra mila for å sikre at du har ei god oppleving."
+        }
+      ]
+    },
+    "team": {
+      "title": "Vårt Team",
+      "description": "Vi har eit team av erfarne og profesjonelle sjåførar som er dedikerte til å gje deg den beste service. Alle våre sjåførar er godkjende, forsikra og har grundig kunnskap om området."
+    },
+    "cta": {
+      "title": "Klar til å køyre med oss?",
+      "subtitle": "Bestill din tur i dag eller kontakt oss for meir informasjon",
+      "buttonText": "Bestill No",
+      "buttonLink": "/book"
+    }
+  },
+  "en": {
+    "meta": {
+      "title": "About Us - Voss Taxi",
+      "description": "Voss Taxi is a locally family-owned taxi company with extensive experience. We have served the Voss community for many years with professional and reliable service."
+    },
+    "hero": {
+      "title": "About Voss Taxi",
+      "subtitle": "Locally owned and family-operated since [year]",
+      "backgroundImage": "/images/IMG_20211231_050221_808.jpg"
+    },
+    "story": {
+      "title": "Our Story",
+      "content": "Voss Taxi has served the Voss community for many years. We are a locally family-owned company that takes pride in delivering professional and reliable taxi service.\n\nOur experienced drivers know Voss and surroundings like the back of their hand, and we are dedicated to giving our customers the best possible ride experience.\n\nWhether it's transport to the airport, a sightseeing tour to the most beautiful places in the region, or daily transport - we are here for you 24/7, 365 days a year."
+    },
+    "values": {
+      "title": "Our Values",
+      "items": [
+        {
+          "title": "Reliability",
+          "description": "We are always on time and ready to take you where you need to go."
+        },
+        {
+          "title": "Safety",
+          "description": "The safety of our passengers is our highest priority."
+        },
+        {
+          "title": "Local Knowledge",
+          "description": "Our drivers know the area perfectly and can give you the best advice."
+        },
+        {
+          "title": "Customer Service",
+          "description": "We always go the extra mile to ensure you have a good experience."
+        }
+      ]
+    },
+    "team": {
+      "title": "Our Team",
+      "description": "We have a team of experienced and professional drivers who are dedicated to giving you the best service. All our drivers are certified, insured and have thorough knowledge of the area."
+    },
+    "cta": {
+      "title": "Ready to ride with us?",
+      "subtitle": "Book your trip today or contact us for more information",
+      "buttonText": "Book Now",
+      "buttonLink": "/book"
+    }
+  }
+}

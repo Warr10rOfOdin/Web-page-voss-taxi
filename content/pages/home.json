@@ -1,0 +1,141 @@
+{
+  "page": "home",
+  "no": {
+    "meta": {
+      "title": "Voss Taxi - Du køyrer trygt med oss frå Voss",
+      "description": "Profesjonell taxiservice i Voss og omegn. Vi tilbyr flyplasstransport, sightseeing, rullestoltaxi og Maxi Taxi. Ring oss på +47 56 51 13 40."
+    },
+    "hero": {
+      "title": "Du køyrer trygt, med oss frå Voss!",
+      "subtitle": "På vegen for deg, 24/7 - 365 dagar i året",
+      "ctaPrimary": "Bestill Taxi",
+      "ctaSecondary": "Taxi Kalkulator",
+      "backgroundImage": "/images/IMG_20211231_050221_808.jpg"
+    },
+    "highlights": {
+      "title": "Våre Tenester",
+      "services": [
+        {
+          "icon": "clock",
+          "title": "Døgnopen Service",
+          "description": "Vi er tilgjengelege for deg 24/7, 365 dagar i året"
+        },
+        {
+          "icon": "plane",
+          "title": "Flyplasstransport",
+          "description": "Trygge turar til og frå Bergen Flesland og andre flyplass"
+        },
+        {
+          "icon": "camera",
+          "title": "Sightseeing & Utflukter",
+          "description": "Opplev Voss og omegn med lokale sjåførar som kjenner området"
+        },
+        {
+          "icon": "wheelchair",
+          "title": "Rullestol Taxi",
+          "description": "Tilgjengeleg transport for alle"
+        },
+        {
+          "icon": "users",
+          "title": "Maxi Taxi",
+          "description": "Plass til store grupper, opp til 16 passasjerar"
+        }
+      ]
+    },
+    "calculator": {
+      "title": "Taxi Kalkulator",
+      "subtitle": "Få eit prisoverslag på turen din",
+      "cta": "Opne Kalkulator"
+    },
+    "trust": {
+      "title": "Kvifor Velje Voss Taxi?",
+      "features": [
+        {
+          "title": "Erfarne Sjåførar",
+          "description": "Alle våre sjåførar er profesjonelle og kjenner Voss-området som si eiga lomme."
+        },
+        {
+          "title": "Moderne Bilar",
+          "description": "Vår bilpark består av moderne, komfortable og miljøvennlege køyretøy."
+        },
+        {
+          "title": "Fast Pris",
+          "description": "Vi tilbyr faste prisar på dei fleste rutar, slik at du veit kva turen kostar på førehand."
+        },
+        {
+          "title": "Lokalt Eigde",
+          "description": "Vi er eit lokalt familiedreve selskap som har tent Voss-samfunnet i mange år."
+        }
+      ]
+    }
+  },
+  "en": {
+    "meta": {
+      "title": "Voss Taxi - Drive safe with us from Voss",
+      "description": "Professional taxi service in Voss and surroundings. We offer airport transfer, sightseeing, wheelchair taxi and Maxi Taxi. Call us at +47 56 51 13 40."
+    },
+    "hero": {
+      "title": "Drive safe with us, from Voss!",
+      "subtitle": "On the road for you, 24/7 - 365 days a year",
+      "ctaPrimary": "Book Taxi",
+      "ctaSecondary": "Fare Estimate",
+      "backgroundImage": "/images/IMG_20211231_050221_808.jpg"
+    },
+    "highlights": {
+      "title": "Our Services",
+      "services": [
+        {
+          "icon": "clock",
+          "title": "24/7 Service",
+          "description": "We are available for you around the clock, every day of the year"
+        },
+        {
+          "icon": "plane",
+          "title": "Airport Transfer",
+          "description": "Safe rides to and from Bergen Flesland and other airports"
+        },
+        {
+          "icon": "camera",
+          "title": "Sightseeing & Tours",
+          "description": "Experience Voss and surroundings with local drivers who know the area"
+        },
+        {
+          "icon": "wheelchair",
+          "title": "Wheelchair Taxi",
+          "description": "Accessible transport for everyone"
+        },
+        {
+          "icon": "users",
+          "title": "Maxi Taxi",
+          "description": "Room for large groups, up to 16 passengers"
+        }
+      ]
+    },
+    "calculator": {
+      "title": "Fare Estimate",
+      "subtitle": "Get an instant price estimate for your trip",
+      "cta": "Open Calculator"
+    },
+    "trust": {
+      "title": "Why Choose Voss Taxi?",
+      "features": [
+        {
+          "title": "Experienced Drivers",
+          "description": "All our drivers are professional and know the Voss area like the back of their hand."
+        },
+        {
+          "title": "Modern Vehicles",
+          "description": "Our fleet consists of modern, comfortable and environmentally friendly vehicles."
+        },
+        {
+          "title": "Fixed Prices",
+          "description": "We offer fixed prices on most routes, so you know what the trip costs in advance."
+        },
+        {
+          "title": "Locally Owned",
+          "description": "We are a locally family-owned business that has served the Voss community for many years."
+        }
+      ]
+    }
+  }
+}

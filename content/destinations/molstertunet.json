@@ -1,0 +1,83 @@
+{
+  "slug": "molstertunet",
+  "no": {
+    "title": "Mølstertunet",
+    "subtitle": "Historisk gard og kulturminne",
+    "heroImage": "/images/20230104_085911.jpg",
+    "description": "Mølstertunet er ein historisk gard og museum som viser korleis folk levde i Voss-regionen for fleire hundre år sidan. Dette er ein av dei best bevarte gardstunet på Vestlandet.",
+    "history": {
+      "title": "Historie",
+      "content": "Mølstertunet daterer seg tilbake til mellomalderen og har ei lang historie som gard i Voss. Garden har vore i same slektslinje i mange generasjonar.\n\nI dag er Mølstertunet eit museum som viser korleis livet var på ein vestlandsgard gjennom tidene. Tunet omfattar fleire bygningar, inkludert eit stabbur frå 1300-talet.\n\nMuseet er ope for publikum om sommaren og tilbyr guidet omvisning som tar deg gjennom historia og kulturarven i området."
+    },
+    "highlights": {
+      "title": "Høgdepunkt",
+      "items": [
+        "Historisk gard frå mellomalderen",
+        "Stabbur frå 1300-talet",
+        "Guidet omvisning",
+        "Kulturhistorisk museum",
+        "Tradisjonell vestlandsarkitektur",
+        "Familie-vennleg"
+      ]
+    },
+    "info": {
+      "title": "Praktisk informasjon",
+      "items": [
+        "Avstand frå Voss: 5 km",
+        "Køyretid: Ca. 10 minutt",
+        "Ope: Sommarsesongen (juni - august)",
+        "Guidet omvisning tilgjengeleg",
+        "Parkering: Ved museet",
+        "Familie-vennleg"
+      ]
+    },
+    "gallery": [
+      "/images/20230104_085911.jpg",
+      "/images/20251003_214335.jpg",
+      "/images/IMG_20211231_050221_808.jpg",
+      "/images/20240526_111711.jpg"
+    ],
+    "bookTour": "Bestill tur til Mølstertunet",
+    "backToDestinations": "Tilbake til alle destinasjonar"
+  },
+  "en": {
+    "title": "Mølstertunet",
+    "subtitle": "Historic farm and cultural monument",
+    "heroImage": "/images/20230104_085911.jpg",
+    "description": "Mølstertunet is a historic farm and museum that shows how people lived in the Voss region several hundred years ago. This is one of the best preserved farm complexes in Western Norway.",
+    "history": {
+      "title": "History",
+      "content": "Mølstertunet dates back to the Middle Ages and has a long history as a farm in Voss. The farm has been in the same family line for many generations.\n\nToday, Mølstertunet is a museum that shows what life was like on a Western Norwegian farm through the ages. The complex includes several buildings, including a storehouse from the 1300s.\n\nThe museum is open to the public in summer and offers guided tours that take you through the history and cultural heritage of the area."
+    },
+    "highlights": {
+      "title": "Highlights",
+      "items": [
+        "Historic farm from the Middle Ages",
+        "Storehouse from the 1300s",
+        "Guided tours",
+        "Cultural history museum",
+        "Traditional Western Norwegian architecture",
+        "Family-friendly"
+      ]
+    },
+    "info": {
+      "title": "Practical Information",
+      "items": [
+        "Distance from Voss: 5 km",
+        "Driving time: Approx. 10 minutes",
+        "Open: Summer season (June - August)",
+        "Guided tours available",
+        "Parking: At the museum",
+        "Family-friendly"
+      ]
+    },
+    "gallery": [
+      "/images/20230104_085911.jpg",
+      "/images/20251003_214335.jpg",
+      "/images/IMG_20211231_050221_808.jpg",
+      "/images/20240526_111711.jpg"
+    ],
+    "bookTour": "Book tour to Mølstertunet",
+    "backToDestinations": "Back to all destinations"
+  }
+}

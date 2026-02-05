@@ -1,0 +1,171 @@
+{
+  "page": "services",
+  "no": {
+    "meta": {
+      "title": "Våre Tenester - Voss Taxi",
+      "description": "Vi tilbyr eit bredt spekter av taxitenester i Voss og omegn. Flyplasstransport, sightseeing, rullestoltaxi, bedriftstransport og meir."
+    },
+    "hero": {
+      "title": "Våre Tenester",
+      "subtitle": "Profesjonell taxiservice for alle dine behov",
+      "backgroundImage": "/images/20240618_074440.jpg"
+    },
+    "services": [
+      {
+        "title": "Flyplasstransport",
+        "description": "Vi tilbyr påliteleg transport til og frå Bergen Flesland og andre flyplass i regionen. Book på førehand eller ring oss når du lander.",
+        "features": [
+          "Transport til/frå Bergen Flesland",
+          "Møter deg ved ankomst",
+          "Hjelp med bagasje",
+          "Faste prisar",
+          "Moderne, komfortable bilar"
+        ],
+        "image": "/images/20230603_113847.jpg",
+        "ctaText": "Bestill Flyplasstransport",
+        "ctaLink": "/book"
+      },
+      {
+        "title": "Sightseeing & Utflukter",
+        "description": "Opplev dei vakraste stadene i Voss og omegn med våre kunnskapsrike sjåførar. Vi tilpassar turen etter dine ønskjer.",
+        "features": [
+          "Stalheimskleiva",
+          "Tvindefossen",
+          "Nærøyfjorden",
+          "Flåm og Flåmsbana",
+          "Bergen by",
+          "Tilpassa turar"
+        ],
+        "image": "/images/20240910_123244.jpg",
+        "ctaText": "Sjå Alle Destinasjonar",
+        "ctaLink": "/tourist"
+      },
+      {
+        "title": "Rullestol Taxi",
+        "description": "Vi har spesialtilpassa køyretøy for deg som brukar rullestol. Trygge og komfortable turar med erfarne sjåførar.",
+        "features": [
+          "Spesialtilpassa køyretøy",
+          "Erfarne sjåførar",
+          "Hjelp med på- og avstigning",
+          "Tilgjengeleg 24/7",
+          "Sjukehusturar"
+        ],
+        "image": "/images/20240526_111711.jpg",
+        "ctaText": "Bestill Rullestol Taxi",
+        "ctaLink": "/book"
+      },
+      {
+        "title": "Maxi Taxi",
+        "description": "Perfekt for større grupper og familiar. Våre Maxi Taxi har plass til opptil 16 passasjerar med bagasje.",
+        "features": [
+          "Opp til 16 passasjerar",
+          "God plass til bagasje",
+          "Ideell for flyplass-/ferjekai",
+          "Familie- og gruppeturar",
+          "Bedriftstransport"
+        ],
+        "image": "/images/20230104_085911.jpg",
+        "ctaText": "Bestill Maxi Taxi",
+        "ctaLink": "/book"
+      },
+      {
+        "title": "Bedriftstransport",
+        "description": "Vi tilbyr skreddarsydde transportløysingar for bedrifter. Faktureringsavtalar og faste prisar tilgjengeleg.",
+        "features": [
+          "Faktureringsavtalar",
+          "Faste prisar",
+          "Månadleg rapportering",
+          "Prioritert service",
+          "Fleksible løysingar"
+        ],
+        "image": "/images/IMG_20211231_050221_808.jpg",
+        "ctaText": "Kontakt Oss",
+        "ctaLink": "/contact"
+      }
+    ]
+  },
+  "en": {
+    "meta": {
+      "title": "Our Services - Voss Taxi",
+      "description": "We offer a wide range of taxi services in Voss and surroundings. Airport transfer, sightseeing, wheelchair taxi, corporate transport and more."
+    },
+    "hero": {
+      "title": "Our Services",
+      "subtitle": "Professional taxi service for all your needs",
+      "backgroundImage": "/images/20240618_074440.jpg"
+    },
+    "services": [
+      {
+        "title": "Airport Transfer",
+        "description": "We offer reliable transport to and from Bergen Flesland and other airports in the region. Book in advance or call us when you land.",
+        "features": [
+          "Transport to/from Bergen Flesland",
+          "Meet you on arrival",
+          "Help with luggage",
+          "Fixed prices",
+          "Modern, comfortable cars"
+        ],
+        "image": "/images/20230603_113847.jpg",
+        "ctaText": "Book Airport Transfer",
+        "ctaLink": "/book"
+      },
+      {
+        "title": "Sightseeing & Tours",
+        "description": "Experience the most beautiful places in Voss and surroundings with our knowledgeable drivers. We customize the tour according to your wishes.",
+        "features": [
+          "Stalheimskleiva",
+          "Tvindefossen",
+          "Nærøyfjord",
+          "Flåm and Flåm Railway",
+          "Bergen city",
+          "Custom tours"
+        ],
+        "image": "/images/20240910_123244.jpg",
+        "ctaText": "See All Destinations",
+        "ctaLink": "/tourist"
+      },
+      {
+        "title": "Wheelchair Taxi",
+        "description": "We have specially adapted vehicles for wheelchair users. Safe and comfortable rides with experienced drivers.",
+        "features": [
+          "Specially adapted vehicles",
+          "Experienced drivers",
+          "Help with boarding/alighting",
+          "Available 24/7",
+          "Hospital trips"
+        ],
+        "image": "/images/20240526_111711.jpg",
+        "ctaText": "Book Wheelchair Taxi",
+        "ctaLink": "/book"
+      },
+      {
+        "title": "Maxi Taxi",
+        "description": "Perfect for larger groups and families. Our Maxi Taxi can accommodate up to 16 passengers with luggage.",
+        "features": [
+          "Up to 16 passengers",
+          "Good space for luggage",
+          "Ideal for airport/ferry",
+          "Family and group trips",
+          "Corporate transport"
+        ],
+        "image": "/images/20230104_085911.jpg",
+        "ctaText": "Book Maxi Taxi",
+        "ctaLink": "/book"
+      },
+      {
+        "title": "Corporate Transport",
+        "description": "We offer tailored transport solutions for businesses. Invoicing agreements and fixed prices available.",
+        "features": [
+          "Invoicing agreements",
+          "Fixed prices",
+          "Monthly reporting",
+          "Priority service",
+          "Flexible solutions"
+        ],
+        "image": "/images/IMG_20211231_050221_808.jpg",
+        "ctaText": "Contact Us",
+        "ctaLink": "/contact"
+      }
+    ]
+  }
+}

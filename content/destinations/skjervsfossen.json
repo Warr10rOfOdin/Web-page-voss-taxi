@@ -1,0 +1,87 @@
+{
+  "slug": "skjervsfossen",
+  "no": {
+    "title": "Skjervsfossen",
+    "subtitle": "Tvillingfoss langs Norges vakreste turistveg",
+    "heroImage": "/images/20240604_211019.jpg",
+    "description": "Skjervsfossen er ein spektakulær tvillingfoss i Granvin kommune med ein total høgde på 125 meter. Fossen ligg ved riksvei 13, ein av Norges viktigaste turistvegar, og er lett tilgjengeleg frå vegen.",
+    "history": {
+      "title": "Historie",
+      "content": "Skjervsfossen ligg ved Skjervet, omtrent midt mellom Granvin og Voss. Riksvei 13 passerer på avsatsen mellom fossens øvre og nedre fall, noko som gjer fossen unik og lett tilgjengeleg.\n\nFossen er ein tvillingfoss i elva Storelvi med den øvre delen som den mest imponerende, med eit vertikal fall på 60 meter. Vatnet kaskar ned fjellsida i to parallelle straumar, noko som gjer dette til eit spektakulært syn.\n\nRiksvei 13 er ein nasjonal turistveg og er kjend for si natur og landskapsopplevingar. Fossen er 15 kilometer frå Voss sentrum, men det er viktig å hugse på å ta gamle veien og ikkje tunnelen for å sjå fossen!"
+    },
+    "highlights": {
+      "title": "Høgdepunkt",
+      "items": [
+        "Tvillingfoss med 125 meter totalt fall",
+        "60 meter vertikal fall på øvre del",
+        "Nasjonal turistveg R13",
+        "Lett tilgjengeleg frå vegen",
+        "Spektakulær utsikt",
+        "Populær fotostopp",
+        "Midtpunkt mellom Voss og Granvin"
+      ]
+    },
+    "info": {
+      "title": "Praktisk informasjon",
+      "items": [
+        "Avstand frå Voss: 15 km",
+        "Køyretid: Ca. 20 minutt",
+        "VIKTIG: Ta gamle vegen, IKKJE tunnelen",
+        "Parkering: Ved vegen",
+        "Tilgjengeleg: Heile året",
+        "Best tid: Mai - september"
+      ]
+    },
+    "gallery": [
+      "/images/20240604_211019.jpg",
+      "/images/20230509_190808.jpg",
+      "/images/20241014_140924.jpg",
+      "/images/20230907_151359.jpg"
+    ],
+    "price": "Frå 700 NOK per tur",
+    "bookTour": "Bestill tur til Skjervsfossen",
+    "backToDestinations": "Tilbake til alle destinasjonar"
+  },
+  "en": {
+    "title": "Skjervsfossen",
+    "subtitle": "Twin waterfall along Norway's most beautiful tourist route",
+    "heroImage": "/images/20240604_211019.jpg",
+    "description": "Skjervsfossen is a spectacular twin waterfall in Granvin municipality with a total height of 125 meters. The waterfall is located by Highway 13, one of Norway's most important tourist routes, and is easily accessible from the road.",
+    "history": {
+      "title": "History",
+      "content": "Skjervsfossen is located at Skjervet, approximately halfway between Granvin and Voss. Highway 13 passes on the ledge between the waterfall's upper and lower falls, making the waterfall unique and easily accessible.\n\nThe waterfall is a twin waterfall in the Storelvi river with the upper part being the most impressive, with a vertical drop of 60 meters. The water cascades down the mountainside in two parallel streams, making this a spectacular sight.\n\nHighway 13 is a national tourist route and is known for its nature and landscape experiences. The waterfall is 15 kilometers from Voss center, but it is important to remember to take the old road and not the tunnel to see the waterfall!"
+    },
+    "highlights": {
+      "title": "Highlights",
+      "items": [
+        "Twin waterfall with 125 meters total drop",
+        "60 meter vertical drop on upper part",
+        "National tourist route R13",
+        "Easily accessible from the road",
+        "Spectacular views",
+        "Popular photo stop",
+        "Midpoint between Voss and Granvin"
+      ]
+    },
+    "info": {
+      "title": "Practical Information",
+      "items": [
+        "Distance from Voss: 15 km",
+        "Driving time: Approx. 20 minutes",
+        "IMPORTANT: Take old road, NOT the tunnel",
+        "Parking: By the road",
+        "Available: All year",
+        "Best time: May - September"
+      ]
+    },
+    "gallery": [
+      "/images/20240604_211019.jpg",
+      "/images/20230509_190808.jpg",
+      "/images/20241014_140924.jpg",
+      "/images/20230907_151359.jpg"
+    ],
+    "price": "From 700 NOK per tour",
+    "bookTour": "Book tour to Skjervsfossen",
+    "backToDestinations": "Back to all destinations"
+  }
+}

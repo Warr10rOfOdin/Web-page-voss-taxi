@@ -1,0 +1,81 @@
+{
+  "slug": "flam",
+  "no": {
+    "title": "Flåm",
+    "subtitle": "Perla i Aurlandsfjorden",
+    "heroImage": "/images/20230502_184245.jpg",
+    "description": "Flåm er ein liten bygd i Aurlandsfjorden, omgitt av bratte fjellsider og spektakulær natur. Bygda er mest kjend for Flåmsbana, ei av verdas brattaste togbaner på normalspora.",
+    "history": {
+      "title": "Historie",
+      "content": "Flåm har vore ein viktig hamn og knutepunkt for reisande gjennom fleire hundre år. Namnet kjem frå det norrøne ordet \"flá\" som betyr \"flat mark mellom fjella\".\n\nFlåmsbana vart opna i 1940 og har sidan vorte ein av Noregs mest besøkte turistattraksjonar. Togbana går frå Flåm opp til Myrdal på 20 kilometer med ein høgdeforskjell på 863 meter.\n\nI dag er Flåm eit populært stopp for cruiseskip og turistar frå heile verda. Bygda har utvikla seg til eit viktig reiselivssenter med hotell, restaurantar og aktivitetstilbod."
+    },
+    "highlights": {
+      "title": "Høgdepunkt",
+      "items": [
+        "Flåmsbana - verdsberømt togtur",
+        "Aurlandsfjorden",
+        "Rallarvegen - sykkelveg",
+        "Flåm Railway Museum",
+        "Kajakk og fjordcruise",
+        "Vakker fjordlandskap"
+      ]
+    },
+    "info": {
+      "title": "Praktisk informasjon",
+      "items": [
+        "Avstand frå Voss: 65 km",
+        "Køyretid: Ca. 1 time",
+        "Parkering: Betalingsparkering i Flåm",
+        "Tilgjengeleg: Heile året",
+        "Sesong: Best mai - september"
+      ]
+    },
+    "gallery": [
+      "/images/20230502_184245.jpg",
+      "/images/20230502_184337.jpg",
+      "/images/20221120_001238.jpg",
+      "/images/20240523_140830.jpg"
+    ],
+    "bookTour": "Bestill tur til Flåm",
+    "backToDestinations": "Tilbake til alle destinasjonar"
+  },
+  "en": {
+    "title": "Flåm",
+    "subtitle": "Pearl of the Aurlandsfjord",
+    "heroImage": "/images/20230502_184245.jpg",
+    "description": "Flåm is a small village in the Aurlandsfjord, surrounded by steep mountainsides and spectacular nature. The village is best known for the Flåm Railway, one of the world's steepest standard gauge railways.",
+    "history": {
+      "title": "History",
+      "content": "Flåm has been an important harbor and hub for travelers for several hundred years. The name comes from the Norse word \"flá\" meaning \"flat land between mountains\".\n\nThe Flåm Railway was opened in 1940 and has since become one of Norway's most visited tourist attractions. The railway runs from Flåm up to Myrdal over 20 kilometers with an elevation difference of 863 meters.\n\nToday, Flåm is a popular stop for cruise ships and tourists from all over the world. The village has developed into an important tourism center with hotels, restaurants and activity offerings."
+    },
+    "highlights": {
+      "title": "Highlights",
+      "items": [
+        "Flåm Railway - world-famous train journey",
+        "Aurlandsfjord",
+        "Rallarvegen - cycling route",
+        "Flåm Railway Museum",
+        "Kayaking and fjord cruises",
+        "Beautiful fjord landscape"
+      ]
+    },
+    "info": {
+      "title": "Practical Information",
+      "items": [
+        "Distance from Voss: 65 km",
+        "Driving time: Approx. 1 hour",
+        "Parking: Paid parking in Flåm",
+        "Available: All year",
+        "Season: Best May - September"
+      ]
+    },
+    "gallery": [
+      "/images/20230502_184245.jpg",
+      "/images/20230502_184337.jpg",
+      "/images/20221120_001238.jpg",
+      "/images/20240523_140830.jpg"
+    ],
+    "bookTour": "Book tour to Flåm",
+    "backToDestinations": "Back to all destinations"
+  }
+}

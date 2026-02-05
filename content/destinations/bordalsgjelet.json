@@ -1,0 +1,83 @@
+{
+  "slug": "bordalsgjelet",
+  "no": {
+    "title": "Bordalsgjelet",
+    "subtitle": "Spektakulært juv og naturattraksjon",
+    "heroImage": "/images/20241014_140924.jpg",
+    "description": "Bordalsgjelet er eit spektakulært juv med fossar og dramatisk natur, lokalisert i nærleiken av Voss. Dette er ein av dei mest imponerande naturattraksjonane i området.",
+    "history": {
+      "title": "Historie",
+      "content": "Bordalsgjelet vart forma av elva som har erodert seg gjennom fjellet over tusenvis av år. Resultatet er eit smalt og dramatisk juv med høge fjellvegger på begge sider.\n\nJuvet har vore ei populær naturattraksjon i mange år, og det er bygd stiar og bruer som gjer det mogleg å oppleve denne spektakulære naturen på nært hald.\n\nVassføringen varierer med årstidene, og juve er mest imponerande om våren og forsommaren når snøen smeltar i fjellet."
+    },
+    "highlights": {
+      "title": "Høgdepunkt",
+      "items": [
+        "Dramatisk juv og fossar",
+        "Spektakulær natur",
+        "Tilrettelagde stiar og bruer",
+        "Fotomuligheter",
+        "Kort avstand frå Voss",
+        "Familie-vennleg"
+      ]
+    },
+    "info": {
+      "title": "Praktisk informasjon",
+      "items": [
+        "Avstand frå Voss: 10 km",
+        "Køyretid: Ca. 15 minutt",
+        "Vanskegrad: Lett",
+        "Parkering: Ved startpunktet",
+        "Best tid: Mai - september",
+        "Tid: 30-45 minutt rundtur"
+      ]
+    },
+    "gallery": [
+      "/images/20241014_140924.jpg",
+      "/images/20240618_074440.jpg",
+      "/images/20230509_190808.jpg",
+      "/images/20240604_211019.jpg"
+    ],
+    "bookTour": "Bestill tur til Bordalsgjelet",
+    "backToDestinations": "Tilbake til alle destinasjonar"
+  },
+  "en": {
+    "title": "Bordalsgjelet",
+    "subtitle": "Spectacular gorge and natural attraction",
+    "heroImage": "/images/20241014_140924.jpg",
+    "description": "Bordalsgjelet is a spectacular gorge with waterfalls and dramatic nature, located near Voss. This is one of the most impressive natural attractions in the area.",
+    "history": {
+      "title": "History",
+      "content": "Bordalsgjelet was formed by the river that has eroded through the mountain over thousands of years. The result is a narrow and dramatic gorge with high rock walls on both sides.\n\nThe gorge has been a popular natural attraction for many years, and trails and bridges have been built that make it possible to experience this spectacular nature up close.\n\nThe water flow varies with the seasons, and the gorge is most impressive in spring and early summer when the snow melts in the mountains."
+    },
+    "highlights": {
+      "title": "Highlights",
+      "items": [
+        "Dramatic gorge and waterfalls",
+        "Spectacular nature",
+        "Prepared trails and bridges",
+        "Photo opportunities",
+        "Short distance from Voss",
+        "Family-friendly"
+      ]
+    },
+    "info": {
+      "title": "Practical Information",
+      "items": [
+        "Distance from Voss: 10 km",
+        "Driving time: Approx. 15 minutes",
+        "Difficulty: Easy",
+        "Parking: At starting point",
+        "Best time: May - September",
+        "Time: 30-45 minutes round trip"
+      ]
+    },
+    "gallery": [
+      "/images/20241014_140924.jpg",
+      "/images/20240618_074440.jpg",
+      "/images/20230509_190808.jpg",
+      "/images/20240604_211019.jpg"
+    ],
+    "bookTour": "Book tour to Bordalsgjelet",
+    "backToDestinations": "Back to all destinations"
+  }
+}
