@@ -16,11 +16,11 @@
     "ctaSecondary": "Fare Estimate"
   },
   "highlights": {
-    "title": "Our Services",
     "247": {
       "title": "24/7 Service",
       "description": "We are available for you around the clock, every day of the year"
     },
+    "title": "Our Services",
     "airport": {
       "title": "Airport Transfer",
       "description": "Safe rides to and from Bergen Flesland and other airports"
@@ -163,5 +163,29 @@
     "callNow": "Call Now",
     "learnMore": "Learn More",
     "getEstimate": "Get Estimate"
+  },
+  "booking": {
+    "title": "Book Your Taxi",
+    "pickupLocation": "Pickup Location",
+    "destination": "Destination",
+    "contactInfo": "Contact Information",
+    "street": "Street Address",
+    "city": "City",
+    "postalCode": "Postal Code",
+    "name": "Full Name",
+    "phone": "Phone Number",
+    "pickupTime": "Pickup Time (Optional)",
+    "pickupTimeNote": "Leave empty for immediate pickup (ASAP)",
+    "messageOptional": "Message to Driver (Optional)",
+    "messagePlaceholder": "E.g., luggage, number of passengers, special requests...",
+    "privacyNote": "Your information will be used only for this booking and handled according to our privacy policy.",
+    "processing": "Processing...",
+    "errorTitle": "Booking Error",
+    "optionalDestination": "Optional - can be specified to driver",
+    "successTitle": "Booking Confirmed!",
+    "successMessage": "Your taxi has been booked successfully.",
+    "bookingReference": "Booking Reference",
+    "confirmationNote": "Please save your booking reference. The driver will contact you shortly.",
+    "bookAnother": "Book Another Taxi"
   }
 }

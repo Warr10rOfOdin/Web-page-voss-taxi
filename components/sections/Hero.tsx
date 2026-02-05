@@ -1,9 +1,13 @@
-import { useTranslations } from 'next-intl';
+'use client';
+
+import Link from 'next/link';
+import { useLocale, useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
 
 export function Hero() {
   const t = useTranslations('hero');
+  const locale = useLocale();
 
   return (
     <section className="relative bg-taxi-black text-white min-h-[600px] md:min-h-[700px] flex items-center">
@@ -23,12 +27,29 @@ export function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button size="lg" variant="primary">
-              {t('ctaPrimary')}
-            </Button>
-            <Button size="lg" variant="secondary">
-              {t('ctaSecondary')}
-            </Button>
+            <Link href={`/${locale}/book`}>
+              <Button size="lg" variant="primary" className="w-full sm:w-auto">
+                {t('ctaPrimary')}
+              </Button>
+            </Link>
+            <Link href={`/${locale}/calculator`}>
+              <Button size="lg" variant="secondary" className="w-full sm:w-auto">
+                {t('ctaSecondary')}
+              </Button>
+            </Link>
+          </div>
+
+          {/* Quick phone contact */}
+          <div className="mt-8 pt-8 border-t border-taxi-grey/30">
+            <p className="text-taxi-light-grey mb-2">
+              {locale === 'no' ? 'Ring direkte:' : 'Call directly:'}
+            </p>
+            <a
+              href="tel:+4756511340"
+              className="text-2xl md:text-3xl font-bold text-taxi-yellow hover:text-white transition-colors"
+            >
+              +47 56 51 13 40
+            </a>
           </div>
         </div>
       </Container>

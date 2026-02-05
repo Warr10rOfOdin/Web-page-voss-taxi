@@ -20,8 +20,6 @@ export function Header() {
     { name: t('nav.contact'), href: `/${locale}/contact` },
   ];
 
-  const otherLocale = locale === 'no' ? 'en' : 'no';
-
   return (
     <header className="sticky top-0 z-50 bg-taxi-black text-white shadow-lg">
       <Container>
@@ -97,9 +95,11 @@ export function Header() {
             </div>
 
             {/* CTA Button */}
-            <Button size="sm">
-              {t('hero.ctaPrimary')}
-            </Button>
+            <Link href={`/${locale}/book`}>
+              <Button size="sm">
+                {t('hero.ctaPrimary')}
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -204,9 +204,11 @@ export function Header() {
               </div>
 
               {/* Mobile CTA */}
-              <Button size="md" className="w-full">
-                {t('hero.ctaPrimary')}
-              </Button>
+              <Link href={`/${locale}/book`}>
+                <Button size="md" className="w-full">
+                  {t('hero.ctaPrimary')}
+                </Button>
+              </Link>
             </div>
           </div>
         )}

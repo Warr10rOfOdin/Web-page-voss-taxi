@@ -16,11 +16,11 @@
     "ctaSecondary": "Taxi Kalkulator"
   },
   "highlights": {
-    "title": "Våre Tenester",
     "247": {
       "title": "Døgnopen Service",
       "description": "Vi er tilgjengelege for deg 24/7, 365 dagar i året"
     },
+    "title": "Våre Tenester",
     "airport": {
       "title": "Flyplasstransport",
       "description": "Trygge turar til og frå Bergen Flesland og andre flyplass"
@@ -163,5 +163,29 @@
     "callNow": "Ring No",
     "learnMore": "Les Meir",
     "getEstimate": "Få Prisoverslag"
+  },
+  "booking": {
+    "title": "Bestill Taxi",
+    "pickupLocation": "Hentested",
+    "destination": "Destinasjon",
+    "contactInfo": "Kontaktinformasjon",
+    "street": "Gateadresse",
+    "city": "By",
+    "postalCode": "Postnummer",
+    "name": "Fullt namn",
+    "phone": "Telefonnummer",
+    "pickupTime": "Hentetid (Valfritt)",
+    "pickupTimeNote": "La stå tom for umiddelbar henting (så snart som mogleg)",
+    "messageOptional": "Melding til sjåfør (Valfritt)",
+    "messagePlaceholder": "T.d. bagasje, tal passasjerar, spesielle ønskje...",
+    "privacyNote": "Informasjonen din blir berre brukt til denne bestillinga og handtert i samsvar med personvernreglane våre.",
+    "processing": "Behandlar...",
+    "errorTitle": "Bestillingsfeil",
+    "optionalDestination": "Valfritt - kan oppgjevast til sjåføren",
+    "successTitle": "Bestilling Stadfesta!",
+    "successMessage": "Taxien din er bestilt.",
+    "bookingReference": "Bestillingsreferanse",
+    "confirmationNote": "Ver vennleg å lagra bestillingsreferansen din. Sjåføren vil kontakta deg snart.",
+    "bookAnother": "Bestill Ein Taxi Til"
   }
 }
