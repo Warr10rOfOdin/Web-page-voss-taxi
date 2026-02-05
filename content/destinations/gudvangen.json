@@ -1,0 +1,81 @@
+{
+  "slug": "gudvangen",
+  "no": {
+    "title": "Gudvangen",
+    "subtitle": "UNESCO-vernafj ord og vikingbygd",
+    "heroImage": "/images/20240523_140830.jpg",
+    "description": "Gudvangen ligg innerst i Nærøyfjorden, ein UNESCO-verna fjord. Den vesle bygda er omgitt av dramatiske fjellsider som stupar rett ned i fjorden.",
+    "history": {
+      "title": "Historie",
+      "content": "Gudvangen har ei lang historie som går tilbake til vikingtida. Namnet kjem frå norrønt og betyr \"garden til gudane\".\n\nI dag er Gudvangen kjend for Njardarheimr Viking Valley, ein levande vikingbygd der du kan oppleve korleis vikingane levde for over 1000 år sidan.\n\nGudvangen er også startpunktet for den berømte fjordcruisen til Flåm gjennom Nærøyfjorden og Aurlandsfjorden."
+    },
+    "highlights": {
+      "title": "Høgdepunkt",
+      "items": [
+        "UNESCO-verna Nærøyfjorden",
+        "Njardarheimr Viking Valley",
+        "Fjordcruise til Flåm",
+        "Dramatisk fjordlandskap",
+        "Vikingarv og kultur",
+        "Utgangspunkt for fjellturer"
+      ]
+    },
+    "info": {
+      "title": "Praktisk informasjon",
+      "items": [
+        "Avstand frå Voss: 50 km",
+        "Køyretid: Ca. 45 minutt",
+        "Parkering: Ved Gudvangen hamn",
+        "Tilgjengeleg: Heile året",
+        "Best tid: Mai - september"
+      ]
+    },
+    "gallery": [
+      "/images/20240523_140830.jpg",
+      "/images/20230502_184337.jpg",
+      "/images/20230502_184245.jpg",
+      "/images/IMG_20211231_050221_808.jpg"
+    ],
+    "bookTour": "Bestill tur til Gudvangen",
+    "backToDestinations": "Tilbake til alle destinasjonar"
+  },
+  "en": {
+    "title": "Gudvangen",
+    "subtitle": "UNESCO World Heritage fjord and Viking village",
+    "heroImage": "/images/20240523_140830.jpg",
+    "description": "Gudvangen is located at the innermost point of the Nærøyfjord, a UNESCO World Heritage fjord. The small village is surrounded by dramatic mountainsides that plunge straight into the fjord.",
+    "history": {
+      "title": "History",
+      "content": "Gudvangen has a long history dating back to the Viking Age. The name comes from Old Norse and means \"farm of the gods\".\n\nToday, Gudvangen is known for Njardarheimr Viking Valley, a living Viking village where you can experience how the Vikings lived over 1000 years ago.\n\nGudvangen is also the starting point for the famous fjord cruise to Flåm through the Nærøyfjord and Aurlandsfjord."
+    },
+    "highlights": {
+      "title": "Highlights",
+      "items": [
+        "UNESCO World Heritage Nærøyfjord",
+        "Njardarheimr Viking Valley",
+        "Fjord cruise to Flåm",
+        "Dramatic fjord landscape",
+        "Viking heritage and culture",
+        "Starting point for mountain hikes"
+      ]
+    },
+    "info": {
+      "title": "Practical Information",
+      "items": [
+        "Distance from Voss: 50 km",
+        "Driving time: Approx. 45 minutes",
+        "Parking: At Gudvangen harbor",
+        "Available: All year",
+        "Best time: May - September"
+      ]
+    },
+    "gallery": [
+      "/images/20240523_140830.jpg",
+      "/images/20230502_184337.jpg",
+      "/images/20230502_184245.jpg",
+      "/images/IMG_20211231_050221_808.jpg"
+    ],
+    "bookTour": "Book tour to Gudvangen",
+    "backToDestinations": "Back to all destinations"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "slug": "stalheimskleiva",
+  "no": {
+    "title": "Stalheimskleiva",
+    "subtitle": "Norges brattaste vegstrekke",
+    "heroImage": "/images/20230509_190808.jpg",
+    "description": "Stalheimskleiva er ei spektakulær fjellveg med 13 hårnålssvingar og ein gjennomsnittleg stigning på 20%. Dette er Norges brattaste ordinære vegstrekke.",
+    "history": {
+      "title": "Historie",
+      "content": "Stalheimskleiva vart bygd i 1842-1846 og var den første vegen over Stalheimskleiva. Vegen var i bruk fram til 1980, då den nye tunnelen gjennom fjellet vart opna.\n\nI dag er Stalheimskleiva ei populær turistattraksjon og er open for trafikk om sommare. Vegen er smal og krokete, og har framleis dei originale steinbroene frå 1846.\n\nFrå toppen av klevå har ein spektakulær utsikt over Nærøydalen og dei to fossane Stalheimsfossen og Sivlefossen."
+    },
+    "highlights": {
+      "title": "Høgdepunkt",
+      "items": [
+        "Norges brattaste veg med 20% stigning",
+        "13 hårnålssvingar",
+        "Utsikt over Stalheimsfossen og Sivlefossen",
+        "Historisk veg frå 1846",
+        "Fantastisk utsikt over Nærøydalen"
+      ]
+    },
+    "info": {
+      "title": "Praktisk informasjon",
+      "items": [
+        "Lengde: Ca. 1,5 km",
+        "Høgdeforskjell: 300 meter",
+        "Open: Mai - oktober (vêravhengig)",
+        "Parkering: Ved Stalheim Hotell",
+        "Køyretid frå Voss: Ca. 30 minutt"
+      ]
+    },
+    "gallery": [
+      "/images/20230509_190808.jpg",
+      "/images/20240315_122332.jpg",
+      "/images/20240910_123244.jpg",
+      "/images/20230907_151359.jpg"
+    ],
+    "bookTour": "Bestill tur til Stalheimskleiva",
+    "backToDestinations": "Tilbake til alle destinasjonar"
+  },
+  "en": {
+    "title": "Stalheimskleiva",
+    "subtitle": "Norway's steepest road stretch",
+    "heroImage": "/images/20230509_190808.jpg",
+    "description": "Stalheimskleiva is a spectacular mountain road with 13 hairpin bends and an average gradient of 20%. This is Norway's steepest regular road section.",
+    "history": {
+      "title": "History",
+      "content": "Stalheimskleiva was built in 1842-1846 and was the first road over Stalheimskleiva. The road was in use until 1980, when the new tunnel through the mountain was opened.\n\nToday, Stalheimskleiva is a popular tourist attraction and is open to traffic in summer. The road is narrow and winding, and still has the original stone bridges from 1846.\n\nFrom the top of the road you have a spectacular view over Nærøydalen valley and the two waterfalls Stalheimsfossen and Sivlefossen."
+    },
+    "highlights": {
+      "title": "Highlights",
+      "items": [
+        "Norway's steepest road with 20% gradient",
+        "13 hairpin bends",
+        "View of Stalheimsfossen and Sivlefossen waterfalls",
+        "Historic road from 1846",
+        "Fantastic view over Nærøydalen valley"
+      ]
+    },
+    "info": {
+      "title": "Practical Information",
+      "items": [
+        "Length: Approx. 1.5 km",
+        "Height difference: 300 meters",
+        "Open: May - October (weather dependent)",
+        "Parking: At Stalheim Hotel",
+        "Driving time from Voss: Approx. 30 minutes"
+      ]
+    },
+    "gallery": [
+      "/images/20230509_190808.jpg",
+      "/images/20240315_122332.jpg",
+      "/images/20240910_123244.jpg",
+      "/images/20230907_151359.jpg"
+    ],
+    "bookTour": "Book tour to Stalheimskleiva",
+    "backToDestinations": "Back to all destinations"
+  }
+}

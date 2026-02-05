@@ -14,9 +14,112 @@ public_folder: "/images"
 publish_mode: editorial_workflow
 
 collections:
+  # Destinations - All 9 destinations editable
+  - name: "destinations"
+    label: "Destinasjonar / Destinations"
+    folder: "content/destinations"
+    create: true
+    slug: "{{slug}}"
+    extension: "json"
+    format: "json"
+    fields:
+      - {label: "Slug (URL-namn)", name: "slug", widget: "string", hint: "Bruk små bokstavar og bindestrek. Døme: stalheimskleiva"}
+
+      # Norwegian Content
+      - label: "Norsk Innhald"
+        name: "no"
+        widget: "object"
+        fields:
+          - {label: "Tittel", name: "title", widget: "string"}
+          - {label: "Undertittel", name: "subtitle", widget: "string"}
+          - {label: "Hovudbilde", name: "heroImage", widget: "image"}
+          - {label: "Beskrivelse", name: "description", widget: "text"}
+
+          - label: "Historie"
+            name: "history"
+            widget: "object"
+            fields:
+              - {label: "Tittel", name: "title", widget: "string", default: "Historie"}
+              - {label: "Innhald", name: "content", widget: "markdown"}
+
+          - label: "Høgdepunkt"
+            name: "highlights"
+            widget: "object"
+            fields:
+              - {label: "Tittel", name: "title", widget: "string", default: "Høgdepunkt"}
+              - label: "Punkter"
+                name: "items"
+                widget: "list"
+                field: {label: "Punkt", name: "item", widget: "string"}
+
+          - label: "Praktisk Informasjon"
+            name: "info"
+            widget: "object"
+            fields:
+              - {label: "Tittel", name: "title", widget: "string", default: "Praktisk informasjon"}
+              - label: "Punkter"
+                name: "items"
+                widget: "list"
+                field: {label: "Punkt", name: "item", widget: "string"}
+
+          - label: "Bildegalleri"
+            name: "gallery"
+            widget: "list"
+            field: {label: "Bilde", name: "image", widget: "image"}
+
+          - {label: "Bestillingsknapp Tekst", name: "bookTour", widget: "string"}
+          - {label: "Tilbake-knapp Tekst", name: "backToDestinations", widget: "string"}
+          - {label: "Pris (valgfritt)", name: "price", widget: "string", required: false}
+
+      # English Content
+      - label: "English Content"
+        name: "en"
+        widget: "object"
+        fields:
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Subtitle", name: "subtitle", widget: "string"}
+          - {label: "Hero Image", name: "heroImage", widget: "image"}
+          - {label: "Description", name: "description", widget: "text"}
+
+          - label: "History"
+            name: "history"
+            widget: "object"
+            fields:
+              - {label: "Title", name: "title", widget: "string", default: "History"}
+              - {label: "Content", name: "content", widget: "markdown"}
+
+          - label: "Highlights"
+            name: "highlights"
+            widget: "object"
+            fields:
+              - {label: "Title", name: "title", widget: "string", default: "Highlights"}
+              - label: "Items"
+                name: "items"
+                widget: "list"
+                field: {label: "Item", name: "item", widget: "string"}
+
+          - label: "Practical Information"
+            name: "info"
+            widget: "object"
+            fields:
+              - {label: "Title", name: "title", widget: "string", default: "Practical Information"}
+              - label: "Items"
+                name: "items"
+                widget: "list"
+                field: {label: "Item", name: "item", widget: "string"}
+
+          - label: "Photo Gallery"
+            name: "gallery"
+            widget: "list"
+            field: {label: "Image", name: "image", widget: "image"}
+
+          - {label: "Book Tour Button Text", name: "bookTour", widget: "string"}
+          - {label: "Back Button Text", name: "backToDestinations", widget: "string"}
+          - {label: "Price (optional)", name: "price", widget: "string", required: false}
+
   # Norwegian Translations
   - name: "translations-no"
-    label: "Norske Oversettingar"
+    label: "Norske Oversettingar (Globalt)"
     files:
       - name: "norwegian"
         label: "Norsk Innhald"
@@ -25,6 +128,7 @@ collections:
           - label: "Navigasjon"
             name: "nav"
             widget: "object"
+            collapsed: true
             fields:
               - {label: "Heim", name: "home", widget: "string"}
               - {label: "Tenester", name: "services", widget: "string"}
@@ -37,18 +141,20 @@ collections:
               - {label: "Rullestol Taxi", name: "wheelchair", widget: "string"}
               - {label: "Bedrift", name: "business", widget: "string"}
 
-          - label: "Hero Seksjon"
+          - label: "Hero Seksjon (Framsida)"
             name: "hero"
             widget: "object"
+            collapsed: true
             fields:
               - {label: "Tittel", name: "title", widget: "string"}
               - {label: "Undertittel", name: "subtitle", widget: "string"}
               - {label: "Primærknapp", name: "ctaPrimary", widget: "string"}
               - {label: "Sekundærknapp", name: "ctaSecondary", widget: "string"}
 
-          - label: "Høgdepunkt"
+          - label: "Høgdepunkt (Framsida)"
             name: "highlights"
             widget: "object"
+            collapsed: true
             fields:
               - {label: "Tittel", name: "title", widget: "string"}
               - label: "24/7 Service"
@@ -82,9 +188,10 @@ collections:
                   - {label: "Tittel", name: "title", widget: "string"}
                   - {label: "Beskrivelse", name: "description", widget: "text"}
 
-          - label: "Kalkulator"
+          - label: "Kalkulator Seksjon"
             name: "calculator"
             widget: "object"
+            collapsed: true
             fields:
               - {label: "Tittel", name: "title", widget: "string"}
               - {label: "Undertittel", name: "subtitle", widget: "string"}
@@ -92,7 +199,7 @@ collections:
 
   # English Translations
   - name: "translations-en"
-    label: "English Translations"
+    label: "English Translations (Global)"
     files:
       - name: "english"
         label: "English Content"
@@ -101,6 +208,7 @@ collections:
           - label: "Navigation"
             name: "nav"
             widget: "object"
+            collapsed: true
             fields:
               - {label: "Home", name: "home", widget: "string"}
               - {label: "Services", name: "services", widget: "string"}
@@ -113,18 +221,20 @@ collections:
               - {label: "Wheelchair Taxi", name: "wheelchair", widget: "string"}
               - {label: "Business", name: "business", widget: "string"}
 
-          - label: "Hero Section"
+          - label: "Hero Section (Homepage)"
             name: "hero"
             widget: "object"
+            collapsed: true
             fields:
               - {label: "Title", name: "title", widget: "string"}
               - {label: "Subtitle", name: "subtitle", widget: "string"}
               - {label: "Primary CTA", name: "ctaPrimary", widget: "string"}
               - {label: "Secondary CTA", name: "ctaSecondary", widget: "string"}
 
-          - label: "Highlights"
+          - label: "Highlights (Homepage)"
             name: "highlights"
             widget: "object"
+            collapsed: true
             fields:
               - {label: "Title", name: "title", widget: "string"}
               - label: "24/7 Service"
@@ -158,9 +268,10 @@ collections:
                   - {label: "Title", name: "title", widget: "string"}
                   - {label: "Description", name: "description", widget: "text"}
 
-          - label: "Calculator"
+          - label: "Calculator Section"
             name: "calculator"
             widget: "object"
+            collapsed: true
             fields:
               - {label: "Title", name: "title", widget: "string"}
               - {label: "Subtitle", name: "subtitle", widget: "string"}

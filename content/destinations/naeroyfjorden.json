@@ -1,0 +1,81 @@
+{
+  "slug": "naeroyfjorden",
+  "no": {
+    "title": "Nærøyfjorden",
+    "subtitle": "UNESCO-verna fjord",
+    "heroImage": "/images/20240523_140830.jpg",
+    "description": "Nærøyfjorden er ein av verdas smalaste fjordar og er UNESCO-verna. Fjorden er berre 250 meter brei på det smalaste, omgitt av bratte fjellsider som reiser seg 1700 meter over havet.",
+    "history": {
+      "title": "Historie",
+      "content": "Nærøyfjorden vart tatt opp på UNESCOs verdarvliste i 2005 saman med Geirangerfjorden. Fjorden er eit meisters eksempel på norsk fjordlandskap.\n\nNærøyfjorden er 17 kilometer lang og går frå Gudvangen til Bakka der den møter Aurlandsfjorden. Langs fjorden er det fleire historiske garder og kulturminne.\n\nFjorden er ein del av den populære turistruta \"Norway in a Nutshell\" og blir besøkt av tusentals turistar kvart år."
+    },
+    "highlights": {
+      "title": "Høgdepunkt",
+      "items": [
+        "UNESCO verdarvstad",
+        "Ein av verdas smalaste fjordar",
+        "Dramatisk fjordlandskap",
+        "Fjordcruise frå Gudvangen til Flåm",
+        "Kajakk og RIB-tur",
+        "Spektakulær natur"
+      ]
+    },
+    "info": {
+      "title": "Praktisk informasjon",
+      "items": [
+        "Lengde: 17 km",
+        "Breidde: Ned til 250 meter",
+        "Fjellhøgde: Opp til 1700 meter",
+        "Best tid: Mai - september",
+        "Aktivitetar: Fjordcruise, kajakk, RIB-tur"
+      ]
+    },
+    "gallery": [
+      "/images/20240523_140830.jpg",
+      "/images/20230502_184337.jpg",
+      "/images/20240910_123244.jpg",
+      "/images/20230907_151359.jpg"
+    ],
+    "bookTour": "Bestill tur til Nærøyfjorden",
+    "backToDestinations": "Tilbake til alle destinasjonar"
+  },
+  "en": {
+    "title": "Nærøyfjord",
+    "subtitle": "UNESCO World Heritage fjord",
+    "heroImage": "/images/20240523_140830.jpg",
+    "description": "The Nærøyfjord is one of the world's narrowest fjords and is a UNESCO World Heritage site. The fjord is only 250 meters wide at its narrowest, surrounded by steep mountainsides rising 1700 meters above sea level.",
+    "history": {
+      "title": "History",
+      "content": "The Nærøyfjord was added to UNESCO's World Heritage List in 2005 together with the Geirangerfjord. The fjord is a masterpiece example of Norwegian fjord landscape.\n\nThe Nærøyfjord is 17 kilometers long and runs from Gudvangen to Bakka where it meets the Aurlandsfjord. Along the fjord there are several historic farms and cultural monuments.\n\nThe fjord is part of the popular tourist route \"Norway in a Nutshell\" and is visited by thousands of tourists every year."
+    },
+    "highlights": {
+      "title": "Highlights",
+      "items": [
+        "UNESCO World Heritage site",
+        "One of the world's narrowest fjords",
+        "Dramatic fjord landscape",
+        "Fjord cruise from Gudvangen to Flåm",
+        "Kayaking and RIB tours",
+        "Spectacular nature"
+      ]
+    },
+    "info": {
+      "title": "Practical Information",
+      "items": [
+        "Length: 17 km",
+        "Width: Down to 250 meters",
+        "Mountain height: Up to 1700 meters",
+        "Best time: May - September",
+        "Activities: Fjord cruise, kayaking, RIB tours"
+      ]
+    },
+    "gallery": [
+      "/images/20240523_140830.jpg",
+      "/images/20230502_184337.jpg",
+      "/images/20240910_123244.jpg",
+      "/images/20230907_151359.jpg"
+    ],
+    "bookTour": "Book tour to Nærøyfjord",
+    "backToDestinations": "Back to all destinations"
+  }
+}

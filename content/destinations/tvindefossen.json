@@ -1,0 +1,81 @@
+{
+  "slug": "tvindefossen",
+  "no": {
+    "title": "Tvindefossen",
+    "subtitle": "Norges mest besøkte foss",
+    "heroImage": "/images/20241014_140924.jpg",
+    "description": "Tvindefossen er ein 152 meter høg foss som ligg ca. 15 minutt frå Voss sentrum. Det er Norges mest besøkte foss og ein av dei mest fotograferte naturattraksjonane i landet.",
+    "history": {
+      "title": "Historie",
+      "content": "Tvindefossen har vore ein populær turistattraksjon sidan turisttrafikken tok til i Hordaland på 1800-talet. Namnet kjem frå det norrøne ordet \"tvinna\" som tyder \"den tvinnade\", fordi vatnet ser ut til å vri seg medan det fell nedover fjellsida.\n\nFossen har vore ein viktig stad for reisande gjennom tidene. I dag stoppar tusenvis av turistar her kvart år for å ta bilete og oppleve den imponerande fossen.\n\nFrå parkeringsplassen er det berre nokre få meter å gå for å kome tett på fossen. Det er også eit lite kafé og souvenir-butikk her."
+    },
+    "highlights": {
+      "title": "Høgdepunkt",
+      "items": [
+        "Norges mest besøkte foss",
+        "152 meter høg",
+        "Lett tilgjengeleg frå vegen",
+        "Kafé og souvenir-butikk",
+        "Spektakulært fotomotiv",
+        "Open heile året"
+      ]
+    },
+    "info": {
+      "title": "Praktisk informasjon",
+      "items": [
+        "Avstand frå Voss: 13 km",
+        "Køyretid: Ca. 15 minutt",
+        "Parkering: Gratis parkering ved fossen",
+        "Tilgjengeleg: Heile året",
+        "Fasiliteter: Kafé, toalett, souvenir-butikk"
+      ]
+    },
+    "gallery": [
+      "/images/20241014_140924.jpg",
+      "/images/20240604_211019.jpg",
+      "/images/20240526_111711.jpg",
+      "/images/20230901_141216.jpg"
+    ],
+    "bookTour": "Bestill tur til Tvindefossen",
+    "backToDestinations": "Tilbake til alle destinasjonar"
+  },
+  "en": {
+    "title": "Tvindefossen",
+    "subtitle": "Norway's most visited waterfall",
+    "heroImage": "/images/20241014_140924.jpg",
+    "description": "Tvindefossen is a 152 meter high waterfall located about 15 minutes from Voss center. It is Norway's most visited waterfall and one of the most photographed natural attractions in the country.",
+    "history": {
+      "title": "History",
+      "content": "Tvindefossen has been a popular tourist attraction since tourism began in Hordaland in the 1800s. The name comes from the Norse word \"tvinna\" meaning \"the twisted one\", because the water appears to twist as it falls down the mountainside.\n\nThe waterfall has been an important stop for travelers through the ages. Today, thousands of tourists stop here every year to take pictures and experience the impressive waterfall.\n\nFrom the parking lot, it is only a few meters walk to get close to the waterfall. There is also a small café and souvenir shop here."
+    },
+    "highlights": {
+      "title": "Highlights",
+      "items": [
+        "Norway's most visited waterfall",
+        "152 meters high",
+        "Easily accessible from the road",
+        "Café and souvenir shop",
+        "Spectacular photo opportunity",
+        "Open all year"
+      ]
+    },
+    "info": {
+      "title": "Practical Information",
+      "items": [
+        "Distance from Voss: 13 km",
+        "Driving time: Approx. 15 minutes",
+        "Parking: Free parking at the waterfall",
+        "Available: All year",
+        "Facilities: Café, toilet, souvenir shop"
+      ]
+    },
+    "gallery": [
+      "/images/20241014_140924.jpg",
+      "/images/20240604_211019.jpg",
+      "/images/20240526_111711.jpg",
+      "/images/20230901_141216.jpg"
+    ],
+    "bookTour": "Book tour to Tvindefossen",
+    "backToDestinations": "Back to all destinations"
+  }
+}

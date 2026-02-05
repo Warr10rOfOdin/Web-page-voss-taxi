@@ -61,24 +61,52 @@ For testing locally without OAuth setup:
 
 ## What You Can Edit
 
-### 1. **Norwegian Translations (Norske Oversettingar)**
+### 1. **Destinations (Destinasjonar / Destinations)** ⭐ NEW!
+Edit all content for the 9 destination pages:
+- **Stalheimskleiva** - Norway's steepest road
+- **Tvindefossen** - Norway's most visited waterfall
+- **Skjervsfossen** - Twin waterfall
+- **Flåm** - Fjord village and Flåm Railway
+- **Gudvangen** - UNESCO fjord and Viking village
+- **Nærøyfjorden** - UNESCO World Heritage fjord
+- **Bergen** - Capital of Western Norway
+- **Bordalsgjelet** - Spectacular gorge
+- **Mølstertunet** - Historic farm
+
+For each destination you can edit:
+- **Title and subtitle** (both Norwegian and English)
+- **Hero image** - Main photo at the top
+- **Description** - Introduction text
+- **History section** - Full content with markdown formatting
+- **Highlights** - Bullet points list
+- **Practical information** - Bullet points list
+- **Photo gallery** - Up to 4 images
+- **Button text** - Book tour and back buttons
+- **Price** (optional)
+
+**You can also create new destinations!**
+
+### 2. **Norwegian Translations (Norske Oversettingar - Globalt)**
+Global site-wide Norwegian text:
 - Navigation menu labels
 - Homepage hero section text
-- Service highlights
+- Service highlights (24/7, Airport, Sightseeing, Wheelchair, Maxi)
 - Calculator section
 - All Norwegian text throughout the site
 
-### 2. **English Translations**
+### 3. **English Translations (Global)**
+Global site-wide English text:
 - Navigation menu labels
 - Homepage hero section text
-- Service highlights
+- Service highlights (24/7, Airport, Sightseeing, Wheelchair, Maxi)
 - Calculator section
 - All English text throughout the site
 
-### 3. **Images (Bilder / Images)**
+### 4. **Images (Bilder / Images)**
 - Upload new images
 - Manage existing images
 - Images are stored in `/public/images/`
+- Used in destinations, hero sections, galleries, etc.
 
 ## How to Edit Content
 

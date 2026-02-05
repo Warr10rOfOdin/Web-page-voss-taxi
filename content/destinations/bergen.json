@@ -1,0 +1,81 @@
+{
+  "slug": "bergen",
+  "no": {
+    "title": "Bergen",
+    "subtitle": "Vestlandets hovudstad",
+    "heroImage": "/images/20230603_114041.jpg",
+    "description": "Bergen er Noregs nest største by og Vestlandets hovudstad. Byen er kjend for Bryggen, Fløyen, fisketorget og sin unike beliggenhet mellom sju fjell.",
+    "history": {
+      "title": "Historie",
+      "content": "Bergen vart grunnlagt i 1070 og var Noregs hovudstad fram til 1299. Byen har ei rik historie som handelsstad og var i mellomalderen ein viktig del av Hansaforbundet.\n\nBryggen, med sine fargerike trebygg, er UNESCO-verna og står som eit minne om Bergens stordomstid som handelsstad. Området har vore utsett for fleire brannar, men vart alltid bygd opp att i same stil.\n\nI dag er Bergen ein moderne by med eit rikt kulturliv, men byen har bevart si særeigne atmosfære og historiske sjarm."
+    },
+    "highlights": {
+      "title": "Høgdepunkt",
+      "items": [
+        "UNESCO-verna Bryggen",
+        "Fløibanen og utsikt frå Fløyen",
+        "Fisketorget",
+        "Akvariet i Bergen",
+        "KODE kunstmuseum",
+        "Troldhaugen - Griegs heim"
+      ]
+    },
+    "info": {
+      "title": "Praktisk informasjon",
+      "items": [
+        "Avstand frå Voss: 105 km",
+        "Køyretid: Ca. 1 time og 30 minutt",
+        "Flyplasstransport: Bergen Flesland",
+        "Parkering: Betalingsparkering i sentrum",
+        "Best tid: Heile året"
+      ]
+    },
+    "gallery": [
+      "/images/20230603_114041.jpg",
+      "/images/20230603_113847.jpg",
+      "/images/20230302_135038.jpg",
+      "/images/20240618_074440.jpg"
+    ],
+    "bookTour": "Bestill tur til Bergen",
+    "backToDestinations": "Tilbake til alle destinasjonar"
+  },
+  "en": {
+    "title": "Bergen",
+    "subtitle": "Capital of Western Norway",
+    "heroImage": "/images/20230603_114041.jpg",
+    "description": "Bergen is Norway's second largest city and the capital of Western Norway. The city is known for Bryggen, Fløyen, the fish market and its unique location between seven mountains.",
+    "history": {
+      "title": "History",
+      "content": "Bergen was founded in 1070 and was Norway's capital until 1299. The city has a rich history as a trading city and was an important part of the Hanseatic League in the Middle Ages.\n\nBryggen, with its colorful wooden buildings, is a UNESCO World Heritage site and stands as a reminder of Bergen's golden age as a trading city. The area has been hit by several fires, but was always rebuilt in the same style.\n\nToday, Bergen is a modern city with a rich cultural life, but the city has preserved its distinctive atmosphere and historical charm."
+    },
+    "highlights": {
+      "title": "Highlights",
+      "items": [
+        "UNESCO World Heritage Bryggen",
+        "Fløibanen funicular and view from Fløyen",
+        "Fish Market",
+        "Bergen Aquarium",
+        "KODE Art Museum",
+        "Troldhaugen - Grieg's home"
+      ]
+    },
+    "info": {
+      "title": "Practical Information",
+      "items": [
+        "Distance from Voss: 105 km",
+        "Driving time: Approx. 1 hour 30 minutes",
+        "Airport transfer: Bergen Flesland",
+        "Parking: Paid parking in center",
+        "Best time: All year"
+      ]
+    },
+    "gallery": [
+      "/images/20230603_114041.jpg",
+      "/images/20230603_113847.jpg",
+      "/images/20230302_135038.jpg",
+      "/images/20240618_074440.jpg"
+    ],
+    "bookTour": "Book tour to Bergen",
+    "backToDestinations": "Back to all destinations"
+  }
+}
