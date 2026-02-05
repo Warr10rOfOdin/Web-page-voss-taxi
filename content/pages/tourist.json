@@ -1,0 +1,77 @@
+{
+  "page": "tourist",
+  "no": {
+    "meta": {
+      "title": "Utflukter - Voss Taxi",
+      "description": "Opplev dei vakraste stadene i Voss og omegn. Vi tilbyr sightseeing-turar til Stalheimskleiva, Tvindefossen, Flåm, Nærøyfjorden og meir."
+    },
+    "hero": {
+      "title": "Opplev Voss og Omegn",
+      "subtitle": "Sightseeing-turar med lokale sjåførar",
+      "backgroundImage": "/images/20240910_123244.jpg"
+    },
+    "intro": {
+      "title": "Utforsk Voss-regionen",
+      "content": "Voss og omegn byr på nokre av dei mest spektakulære naturopplevingane i Noreg. Med Voss Taxi kan du oppleve alle dei vakraste stadene i området med komfort og stil.\n\nVåre erfarne sjåførar kjenner alle dei skjulte perla og kan fortelje deg om historia og kulturen i området. Vi tilpassar turen etter dine ønskjer og interesser."
+    },
+    "destinations": {
+      "title": "Populære Destinasjonar",
+      "subtitle": "Vel blant våre mest populære turar eller lag din eigen tur"
+    },
+    "customTours": {
+      "title": "Skreddarsydde Turar",
+      "description": "Vil du lage din eigen tur? Kontakt oss så planlegg vi den perfekte opplevinga for deg.",
+      "features": [
+        "Tilpassa rutar",
+        "Fleksibel tid",
+        "Grupperabatt",
+        "Fotostopp",
+        "Lokal guide"
+      ],
+      "ctaText": "Planlegg Din Tur",
+      "ctaLink": "/contact"
+    },
+    "pricing": {
+      "title": "Prising",
+      "description": "Vi tilbyr konkurransedyktige prisar og faste prisar på dei fleste rutar. Kontakt oss for eit tilbod tilpassa dine behov.",
+      "note": "Prisane varierer avhengig av reiseavstand, antal passasjerar og varigheit."
+    }
+  },
+  "en": {
+    "meta": {
+      "title": "Tours - Voss Taxi",
+      "description": "Experience the most beautiful places in Voss and surroundings. We offer sightseeing tours to Stalheimskleiva, Tvindefossen, Flåm, Nærøyfjord and more."
+    },
+    "hero": {
+      "title": "Experience Voss and Surroundings",
+      "subtitle": "Sightseeing tours with local drivers",
+      "backgroundImage": "/images/20240910_123244.jpg"
+    },
+    "intro": {
+      "title": "Explore the Voss Region",
+      "content": "Voss and surroundings offer some of the most spectacular nature experiences in Norway. With Voss Taxi you can experience all the most beautiful places in the area with comfort and style.\n\nOur experienced drivers know all the hidden gems and can tell you about the history and culture of the area. We customize the tour according to your wishes and interests."
+    },
+    "destinations": {
+      "title": "Popular Destinations",
+      "subtitle": "Choose from our most popular tours or create your own tour"
+    },
+    "customTours": {
+      "title": "Custom Tours",
+      "description": "Want to create your own tour? Contact us and we will plan the perfect experience for you.",
+      "features": [
+        "Customized routes",
+        "Flexible time",
+        "Group discount",
+        "Photo stops",
+        "Local guide"
+      ],
+      "ctaText": "Plan Your Tour",
+      "ctaLink": "/contact"
+    },
+    "pricing": {
+      "title": "Pricing",
+      "description": "We offer competitive prices and fixed prices on most routes. Contact us for a quote tailored to your needs.",
+      "note": "Prices vary depending on travel distance, number of passengers and duration."
+    }
+  }
+}

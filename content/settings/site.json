@@ -1,0 +1,86 @@
+{
+  "companyInfo": {
+    "name": "Voss Taxi",
+    "tagline": {
+      "no": "Du køyrer trygt, med oss frå Voss!",
+      "en": "Drive safe with us, from Voss!"
+    },
+    "phone": "+47 56 51 13 40",
+    "email": "post@vosstaxi.no",
+    "address": "Voss, Noreg",
+    "organizationNumber": "123456789"
+  },
+  "socialMedia": {
+    "facebook": "https://facebook.com/vosstaxi",
+    "instagram": "https://instagram.com/vosstaxi",
+    "twitter": ""
+  },
+  "footer": {
+    "no": {
+      "quickLinks": {
+        "title": "Snarvegar",
+        "links": [
+          {
+            "text": "Om Oss",
+            "url": "/no/about"
+          },
+          {
+            "text": "Utflukter",
+            "url": "/no/tourist"
+          },
+          {
+            "text": "Tilbakemeldingar",
+            "url": "/no/testimonials"
+          },
+          {
+            "text": "Nyheter",
+            "url": "/no/news"
+          }
+        ]
+      },
+      "contact": {
+        "title": "Kontakt",
+        "address": "Voss, Noreg",
+        "phone": "+47 56 51 13 40",
+        "email": "post@vosstaxi.no"
+      },
+      "followUs": "Følg Oss",
+      "privacy": "Personvern",
+      "terms": "Vilkår",
+      "copyright": "Alle rettar reservert."
+    },
+    "en": {
+      "quickLinks": {
+        "title": "Quick Links",
+        "links": [
+          {
+            "text": "About Us",
+            "url": "/en/about"
+          },
+          {
+            "text": "Tours",
+            "url": "/en/tourist"
+          },
+          {
+            "text": "Testimonials",
+            "url": "/en/testimonials"
+          },
+          {
+            "text": "News",
+            "url": "/en/news"
+          }
+        ]
+      },
+      "contact": {
+        "title": "Contact",
+        "address": "Voss, Norway",
+        "phone": "+47 56 51 13 40",
+        "email": "post@vosstaxi.no"
+      },
+      "followUs": "Follow Us",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "copyright": "All rights reserved."
+    }
+  }
+}

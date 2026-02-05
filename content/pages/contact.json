@@ -1,0 +1,135 @@
+{
+  "page": "contact",
+  "no": {
+    "meta": {
+      "title": "Kontakt Oss - Voss Taxi",
+      "description": "Ta kontakt med Voss Taxi. Ring oss på +47 56 51 13 40 eller send oss ein e-post. Vi er tilgjengelege 24/7."
+    },
+    "hero": {
+      "title": "Kontakt Oss",
+      "subtitle": "Vi er her for deg 24/7",
+      "backgroundImage": "/images/20240526_111711.jpg"
+    },
+    "contactInfo": {
+      "phone": {
+        "label": "Telefon",
+        "value": "+47 56 51 13 40",
+        "description": "Ring oss når som helst, vi er tilgjengelege døgnet rundt"
+      },
+      "email": {
+        "label": "E-post",
+        "value": "post@vosstaxi.no",
+        "description": "Send oss ein e-post, vi svarar innan 24 timar"
+      },
+      "address": {
+        "label": "Adresse",
+        "value": "Voss, Noreg",
+        "description": "Vi opererer i heile Voss-området og omegn"
+      },
+      "hours": {
+        "label": "Opningstider",
+        "value": "24/7 - 365 dagar i året",
+        "description": "Vi er alltid tilgjengelege for deg"
+      }
+    },
+    "contactForm": {
+      "title": "Send Oss Ein Melding",
+      "description": "Fyll ut skjemaet under så kontaktar vi deg så snart som mogleg.",
+      "fields": {
+        "name": "Namn",
+        "email": "E-post",
+        "phone": "Telefon",
+        "subject": "Emne",
+        "message": "Melding"
+      },
+      "submitButton": "Send Melding"
+    },
+    "faq": {
+      "title": "Ofte Stilte Spørsmål",
+      "items": [
+        {
+          "question": "Korleis bestiller eg ein taxi?",
+          "answer": "Du kan bestille taxi ved å ringe oss på +47 56 51 13 40, sende e-post til post@vosstaxi.no, eller bruke bestillingsskjemaet på nettsida vår."
+        },
+        {
+          "question": "Tilbyr de faste prisar?",
+          "answer": "Ja, vi tilbyr faste prisar på dei fleste populære rutene. Kontakt oss for eit prisoverslag."
+        },
+        {
+          "question": "Kan eg bestille på førehand?",
+          "answer": "Ja, du kan bestille taxi på førehand. Vi tilrår å bestille i god tid, spesielt for flyplasstransport og lengre turar."
+        },
+        {
+          "question": "Aksepterer de kredittkort?",
+          "answer": "Ja, vi aksepterer alle vanlege betalingsmåtar inkludert kontantar, kredittkort og Vipps."
+        }
+      ]
+    }
+  },
+  "en": {
+    "meta": {
+      "title": "Contact Us - Voss Taxi",
+      "description": "Get in touch with Voss Taxi. Call us at +47 56 51 13 40 or send us an email. We are available 24/7."
+    },
+    "hero": {
+      "title": "Contact Us",
+      "subtitle": "We are here for you 24/7",
+      "backgroundImage": "/images/20240526_111711.jpg"
+    },
+    "contactInfo": {
+      "phone": {
+        "label": "Phone",
+        "value": "+47 56 51 13 40",
+        "description": "Call us anytime, we are available around the clock"
+      },
+      "email": {
+        "label": "Email",
+        "value": "post@vosstaxi.no",
+        "description": "Send us an email, we respond within 24 hours"
+      },
+      "address": {
+        "label": "Address",
+        "value": "Voss, Norway",
+        "description": "We operate throughout the Voss area and surroundings"
+      },
+      "hours": {
+        "label": "Hours",
+        "value": "24/7 - 365 days a year",
+        "description": "We are always available for you"
+      }
+    },
+    "contactForm": {
+      "title": "Send Us A Message",
+      "description": "Fill out the form below and we will contact you as soon as possible.",
+      "fields": {
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "subject": "Subject",
+        "message": "Message"
+      },
+      "submitButton": "Send Message"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "items": [
+        {
+          "question": "How do I book a taxi?",
+          "answer": "You can book a taxi by calling us at +47 56 51 13 40, sending an email to post@vosstaxi.no, or using the booking form on our website."
+        },
+        {
+          "question": "Do you offer fixed prices?",
+          "answer": "Yes, we offer fixed prices on most popular routes. Contact us for a price estimate."
+        },
+        {
+          "question": "Can I book in advance?",
+          "answer": "Yes, you can book a taxi in advance. We recommend booking well ahead, especially for airport transfers and longer trips."
+        },
+        {
+          "question": "Do you accept credit cards?",
+          "answer": "Yes, we accept all common payment methods including cash, credit cards and Vipps."
+        }
+      ]
+    }
+  }
+}

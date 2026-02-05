@@ -14,9 +14,623 @@ public_folder: "/images"
 publish_mode: editorial_workflow
 
 collections:
-  # Destinations - All 9 destinations editable
+  # HOMEPAGE - Complete homepage editing
+  - name: "homepage"
+    label: "🏠 Framsida / Homepage"
+    files:
+      - name: "home"
+        label: "Framsida / Homepage"
+        file: "content/pages/home.json"
+        fields:
+          - {label: "Side", name: "page", widget: "hidden", default: "home"}
+
+          # Norwegian Homepage Content
+          - label: "🇳🇴 Norsk Innhald"
+            name: "no"
+            widget: "object"
+            collapsed: false
+            fields:
+              - label: "Meta (SEO)"
+                name: "meta"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Beskriving", name: "description", widget: "text"}
+
+              - label: "Hero Seksjon"
+                name: "hero"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Undertittel", name: "subtitle", widget: "string"}
+                  - {label: "Primærknapp Tekst", name: "ctaPrimary", widget: "string"}
+                  - {label: "Sekundærknapp Tekst", name: "ctaSecondary", widget: "string"}
+                  - {label: "Bakgrunnsbilde", name: "backgroundImage", widget: "image"}
+
+              - label: "Tenester Seksjon"
+                name: "highlights"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - label: "Tenester"
+                    name: "services"
+                    widget: "list"
+                    fields:
+                      - {label: "Ikon", name: "icon", widget: "select", options: ["clock", "plane", "camera", "wheelchair", "users"]}
+                      - {label: "Tittel", name: "title", widget: "string"}
+                      - {label: "Beskriving", name: "description", widget: "text"}
+
+              - label: "Kalkulator Seksjon"
+                name: "calculator"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Undertittel", name: "subtitle", widget: "string"}
+                  - {label: "Knapp Tekst", name: "cta", widget: "string"}
+
+              - label: "Kvifor Velje Oss Seksjon"
+                name: "trust"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - label: "Funksjonar"
+                    name: "features"
+                    widget: "list"
+                    fields:
+                      - {label: "Tittel", name: "title", widget: "string"}
+                      - {label: "Beskriving", name: "description", widget: "text"}
+
+          # English Homepage Content
+          - label: "🇬🇧 English Content"
+            name: "en"
+            widget: "object"
+            collapsed: true
+            fields:
+              - label: "Meta (SEO)"
+                name: "meta"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Description", name: "description", widget: "text"}
+
+              - label: "Hero Section"
+                name: "hero"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Subtitle", name: "subtitle", widget: "string"}
+                  - {label: "Primary CTA Text", name: "ctaPrimary", widget: "string"}
+                  - {label: "Secondary CTA Text", name: "ctaSecondary", widget: "string"}
+                  - {label: "Background Image", name: "backgroundImage", widget: "image"}
+
+              - label: "Services Section"
+                name: "highlights"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - label: "Services"
+                    name: "services"
+                    widget: "list"
+                    fields:
+                      - {label: "Icon", name: "icon", widget: "select", options: ["clock", "plane", "camera", "wheelchair", "users"]}
+                      - {label: "Title", name: "title", widget: "string"}
+                      - {label: "Description", name: "description", widget: "text"}
+
+              - label: "Calculator Section"
+                name: "calculator"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Subtitle", name: "subtitle", widget: "string"}
+                  - {label: "Button Text", name: "cta", widget: "string"}
+
+              - label: "Why Choose Us Section"
+                name: "trust"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - label: "Features"
+                    name: "features"
+                    widget: "list"
+                    fields:
+                      - {label: "Title", name: "title", widget: "string"}
+                      - {label: "Description", name: "description", widget: "text"}
+
+  # SERVICES PAGE
+  - name: "services-page"
+    label: "🚕 Tenester / Services Side"
+    files:
+      - name: "services"
+        label: "Tenester / Services"
+        file: "content/pages/services.json"
+        fields:
+          - {label: "Side", name: "page", widget: "hidden", default: "services"}
+
+          - label: "🇳🇴 Norsk Innhald"
+            name: "no"
+            widget: "object"
+            collapsed: false
+            fields:
+              - label: "Meta (SEO)"
+                name: "meta"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Beskriving", name: "description", widget: "text"}
+
+              - label: "Hero"
+                name: "hero"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Undertittel", name: "subtitle", widget: "string"}
+                  - {label: "Bakgrunnsbilde", name: "backgroundImage", widget: "image"}
+
+              - label: "Tenester"
+                name: "services"
+                widget: "list"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Beskriving", name: "description", widget: "text"}
+                  - label: "Funksjonar"
+                    name: "features"
+                    widget: "list"
+                    field: {label: "Funksjon", name: "feature", widget: "string"}
+                  - {label: "Bilde", name: "image", widget: "image"}
+                  - {label: "Knapp Tekst", name: "ctaText", widget: "string"}
+                  - {label: "Knapp Lenke", name: "ctaLink", widget: "string"}
+
+          - label: "🇬🇧 English Content"
+            name: "en"
+            widget: "object"
+            collapsed: true
+            fields:
+              - label: "Meta (SEO)"
+                name: "meta"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Description", name: "description", widget: "text"}
+
+              - label: "Hero"
+                name: "hero"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Subtitle", name: "subtitle", widget: "string"}
+                  - {label: "Background Image", name: "backgroundImage", widget: "image"}
+
+              - label: "Services"
+                name: "services"
+                widget: "list"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Description", name: "description", widget: "text"}
+                  - label: "Features"
+                    name: "features"
+                    widget: "list"
+                    field: {label: "Feature", name: "feature", widget: "string"}
+                  - {label: "Image", name: "image", widget: "image"}
+                  - {label: "Button Text", name: "ctaText", widget: "string"}
+                  - {label: "Button Link", name: "ctaLink", widget: "string"}
+
+  # ABOUT PAGE
+  - name: "about-page"
+    label: "ℹ️ Om Oss / About Side"
+    files:
+      - name: "about"
+        label: "Om Oss / About"
+        file: "content/pages/about.json"
+        fields:
+          - {label: "Side", name: "page", widget: "hidden", default: "about"}
+
+          - label: "🇳🇴 Norsk Innhald"
+            name: "no"
+            widget: "object"
+            collapsed: false
+            fields:
+              - label: "Meta (SEO)"
+                name: "meta"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Beskriving", name: "description", widget: "text"}
+
+              - label: "Hero"
+                name: "hero"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Undertittel", name: "subtitle", widget: "string"}
+                  - {label: "Bakgrunnsbilde", name: "backgroundImage", widget: "image"}
+
+              - label: "Vår Historie"
+                name: "story"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Innhald", name: "content", widget: "markdown"}
+
+              - label: "Våre Verdiar"
+                name: "values"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - label: "Verdiar"
+                    name: "items"
+                    widget: "list"
+                    fields:
+                      - {label: "Tittel", name: "title", widget: "string"}
+                      - {label: "Beskriving", name: "description", widget: "text"}
+
+              - label: "Vårt Team"
+                name: "team"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Beskriving", name: "description", widget: "text"}
+
+              - label: "CTA Seksjon"
+                name: "cta"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Undertittel", name: "subtitle", widget: "string"}
+                  - {label: "Knapp Tekst", name: "buttonText", widget: "string"}
+                  - {label: "Knapp Lenke", name: "buttonLink", widget: "string"}
+
+          - label: "🇬🇧 English Content"
+            name: "en"
+            widget: "object"
+            collapsed: true
+            fields:
+              - label: "Meta (SEO)"
+                name: "meta"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Description", name: "description", widget: "text"}
+
+              - label: "Hero"
+                name: "hero"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Subtitle", name: "subtitle", widget: "string"}
+                  - {label: "Background Image", name: "backgroundImage", widget: "image"}
+
+              - label: "Our Story"
+                name: "story"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Content", name: "content", widget: "markdown"}
+
+              - label: "Our Values"
+                name: "values"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - label: "Values"
+                    name: "items"
+                    widget: "list"
+                    fields:
+                      - {label: "Title", name: "title", widget: "string"}
+                      - {label: "Description", name: "description", widget: "text"}
+
+              - label: "Our Team"
+                name: "team"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Description", name: "description", widget: "text"}
+
+              - label: "CTA Section"
+                name: "cta"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Subtitle", name: "subtitle", widget: "string"}
+                  - {label: "Button Text", name: "buttonText", widget: "string"}
+                  - {label: "Button Link", name: "buttonLink", widget: "string"}
+
+  # CONTACT PAGE
+  - name: "contact-page"
+    label: "📞 Kontakt / Contact Side"
+    files:
+      - name: "contact"
+        label: "Kontakt / Contact"
+        file: "content/pages/contact.json"
+        fields:
+          - {label: "Side", name: "page", widget: "hidden", default: "contact"}
+
+          - label: "🇳🇴 Norsk Innhald"
+            name: "no"
+            widget: "object"
+            collapsed: false
+            fields:
+              - label: "Meta (SEO)"
+                name: "meta"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Beskriving", name: "description", widget: "text"}
+
+              - label: "Hero"
+                name: "hero"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Undertittel", name: "subtitle", widget: "string"}
+                  - {label: "Bakgrunnsbilde", name: "backgroundImage", widget: "image"}
+
+              - label: "Kontaktinformasjon"
+                name: "contactInfo"
+                widget: "object"
+                fields:
+                  - label: "Telefon"
+                    name: "phone"
+                    widget: "object"
+                    fields:
+                      - {label: "Etikett", name: "label", widget: "string"}
+                      - {label: "Verdi", name: "value", widget: "string"}
+                      - {label: "Beskriving", name: "description", widget: "string"}
+                  - label: "E-post"
+                    name: "email"
+                    widget: "object"
+                    fields:
+                      - {label: "Etikett", name: "label", widget: "string"}
+                      - {label: "Verdi", name: "value", widget: "string"}
+                      - {label: "Beskriving", name: "description", widget: "string"}
+                  - label: "Adresse"
+                    name: "address"
+                    widget: "object"
+                    fields:
+                      - {label: "Etikett", name: "label", widget: "string"}
+                      - {label: "Verdi", name: "value", widget: "string"}
+                      - {label: "Beskriving", name: "description", widget: "string"}
+                  - label: "Opningstider"
+                    name: "hours"
+                    widget: "object"
+                    fields:
+                      - {label: "Etikett", name: "label", widget: "string"}
+                      - {label: "Verdi", name: "value", widget: "string"}
+                      - {label: "Beskriving", name: "description", widget: "string"}
+
+              - label: "Kontaktskjema"
+                name: "contactForm"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Beskriving", name: "description", widget: "text"}
+                  - label: "Felt"
+                    name: "fields"
+                    widget: "object"
+                    fields:
+                      - {label: "Namn", name: "name", widget: "string"}
+                      - {label: "E-post", name: "email", widget: "string"}
+                      - {label: "Telefon", name: "phone", widget: "string"}
+                      - {label: "Emne", name: "subject", widget: "string"}
+                      - {label: "Melding", name: "message", widget: "string"}
+                  - {label: "Send Knapp", name: "submitButton", widget: "string"}
+
+              - label: "FAQ"
+                name: "faq"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - label: "Spørsmål"
+                    name: "items"
+                    widget: "list"
+                    fields:
+                      - {label: "Spørsmål", name: "question", widget: "string"}
+                      - {label: "Svar", name: "answer", widget: "text"}
+
+          - label: "🇬🇧 English Content"
+            name: "en"
+            widget: "object"
+            collapsed: true
+            fields:
+              - label: "Meta (SEO)"
+                name: "meta"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Description", name: "description", widget: "text"}
+
+              - label: "Hero"
+                name: "hero"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Subtitle", name: "subtitle", widget: "string"}
+                  - {label: "Background Image", name: "backgroundImage", widget: "image"}
+
+              - label: "Contact Information"
+                name: "contactInfo"
+                widget: "object"
+                fields:
+                  - label: "Phone"
+                    name: "phone"
+                    widget: "object"
+                    fields:
+                      - {label: "Label", name: "label", widget: "string"}
+                      - {label: "Value", name: "value", widget: "string"}
+                      - {label: "Description", name: "description", widget: "string"}
+                  - label: "Email"
+                    name: "email"
+                    widget: "object"
+                    fields:
+                      - {label: "Label", name: "label", widget: "string"}
+                      - {label: "Value", name: "value", widget: "string"}
+                      - {label: "Description", name: "description", widget: "string"}
+                  - label: "Address"
+                    name: "address"
+                    widget: "object"
+                    fields:
+                      - {label: "Label", name: "label", widget: "string"}
+                      - {label: "Value", name: "value", widget: "string"}
+                      - {label: "Description", name: "description", widget: "string"}
+                  - label: "Hours"
+                    name: "hours"
+                    widget: "object"
+                    fields:
+                      - {label: "Label", name: "label", widget: "string"}
+                      - {label: "Value", name: "value", widget: "string"}
+                      - {label: "Description", name: "description", widget: "string"}
+
+              - label: "Contact Form"
+                name: "contactForm"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Description", name: "description", widget: "text"}
+                  - label: "Fields"
+                    name: "fields"
+                    widget: "object"
+                    fields:
+                      - {label: "Name", name: "name", widget: "string"}
+                      - {label: "Email", name: "email", widget: "string"}
+                      - {label: "Phone", name: "phone", widget: "string"}
+                      - {label: "Subject", name: "subject", widget: "string"}
+                      - {label: "Message", name: "message", widget: "string"}
+                  - {label: "Submit Button", name: "submitButton", widget: "string"}
+
+              - label: "FAQ"
+                name: "faq"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - label: "Questions"
+                    name: "items"
+                    widget: "list"
+                    fields:
+                      - {label: "Question", name: "question", widget: "string"}
+                      - {label: "Answer", name: "answer", widget: "text"}
+
+  # TOURIST/TOURS PAGE
+  - name: "tourist-page"
+    label: "🗺️ Utflukter / Tours Side"
+    files:
+      - name: "tourist"
+        label: "Utflukter / Tours"
+        file: "content/pages/tourist.json"
+        fields:
+          - {label: "Side", name: "page", widget: "hidden", default: "tourist"}
+
+          - label: "🇳🇴 Norsk Innhald"
+            name: "no"
+            widget: "object"
+            collapsed: false
+            fields:
+              - label: "Meta (SEO)"
+                name: "meta"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Beskriving", name: "description", widget: "text"}
+
+              - label: "Hero"
+                name: "hero"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Undertittel", name: "subtitle", widget: "string"}
+                  - {label: "Bakgrunnsbilde", name: "backgroundImage", widget: "image"}
+
+              - label: "Intro"
+                name: "intro"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Innhald", name: "content", widget: "markdown"}
+
+              - label: "Destinasjonar Seksjon"
+                name: "destinations"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Undertittel", name: "subtitle", widget: "string"}
+
+              - label: "Skreddarsydde Turar"
+                name: "customTours"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Beskriving", name: "description", widget: "text"}
+                  - label: "Funksjonar"
+                    name: "features"
+                    widget: "list"
+                    field: {label: "Funksjon", name: "feature", widget: "string"}
+                  - {label: "Knapp Tekst", name: "ctaText", widget: "string"}
+                  - {label: "Knapp Lenke", name: "ctaLink", widget: "string"}
+
+              - label: "Prising"
+                name: "pricing"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Beskriving", name: "description", widget: "text"}
+                  - {label: "Merknad", name: "note", widget: "string"}
+
+          - label: "🇬🇧 English Content"
+            name: "en"
+            widget: "object"
+            collapsed: true
+            fields:
+              - label: "Meta (SEO)"
+                name: "meta"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Description", name: "description", widget: "text"}
+
+              - label: "Hero"
+                name: "hero"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Subtitle", name: "subtitle", widget: "string"}
+                  - {label: "Background Image", name: "backgroundImage", widget: "image"}
+
+              - label: "Intro"
+                name: "intro"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Content", name: "content", widget: "markdown"}
+
+              - label: "Destinations Section"
+                name: "destinations"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Subtitle", name: "subtitle", widget: "string"}
+
+              - label: "Custom Tours"
+                name: "customTours"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Description", name: "description", widget: "text"}
+                  - label: "Features"
+                    name: "features"
+                    widget: "list"
+                    field: {label: "Feature", name: "feature", widget: "string"}
+                  - {label: "Button Text", name: "ctaText", widget: "string"}
+                  - {label: "Button Link", name: "ctaLink", widget: "string"}
+
+              - label: "Pricing"
+                name: "pricing"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Description", name: "description", widget: "text"}
+                  - {label: "Note", name: "note", widget: "string"}
+
+  # DESTINATIONS - All destination pages
   - name: "destinations"
-    label: "Destinasjonar / Destinations"
+    label: "📍 Destinasjonar / Destinations"
     folder: "content/destinations"
     create: true
     slug: "{{slug}}"
@@ -25,10 +639,10 @@ collections:
     fields:
       - {label: "Slug (URL-namn)", name: "slug", widget: "string", hint: "Bruk små bokstavar og bindestrek. Døme: stalheimskleiva"}
 
-      # Norwegian Content
-      - label: "Norsk Innhald"
+      - label: "🇳🇴 Norsk Innhald"
         name: "no"
         widget: "object"
+        collapsed: false
         fields:
           - {label: "Tittel", name: "title", widget: "string"}
           - {label: "Undertittel", name: "subtitle", widget: "string"}
@@ -71,10 +685,10 @@ collections:
           - {label: "Tilbake-knapp Tekst", name: "backToDestinations", widget: "string"}
           - {label: "Pris (valgfritt)", name: "price", widget: "string", required: false}
 
-      # English Content
-      - label: "English Content"
+      - label: "🇬🇧 English Content"
         name: "en"
         widget: "object"
+        collapsed: true
         fields:
           - {label: "Title", name: "title", widget: "string"}
           - {label: "Subtitle", name: "subtitle", widget: "string"}
@@ -117,18 +731,114 @@ collections:
           - {label: "Back Button Text", name: "backToDestinations", widget: "string"}
           - {label: "Price (optional)", name: "price", widget: "string", required: false}
 
-  # Norwegian Translations
+  # SITE SETTINGS (Footer, Company Info, etc.)
+  - name: "site-settings"
+    label: "⚙️ Innstillingar / Settings"
+    files:
+      - name: "site"
+        label: "Nettstad Innstillingar / Site Settings"
+        file: "content/settings/site.json"
+        fields:
+          - label: "Selskapsinfo / Company Info"
+            name: "companyInfo"
+            widget: "object"
+            fields:
+              - {label: "Namn", name: "name", widget: "string"}
+              - label: "Slagord"
+                name: "tagline"
+                widget: "object"
+                fields:
+                  - {label: "Norsk", name: "no", widget: "string"}
+                  - {label: "English", name: "en", widget: "string"}
+              - {label: "Telefon", name: "phone", widget: "string"}
+              - {label: "E-post", name: "email", widget: "string"}
+              - {label: "Adresse", name: "address", widget: "string"}
+              - {label: "Organisasjonsnummer", name: "organizationNumber", widget: "string"}
+
+          - label: "Sosiale Medier / Social Media"
+            name: "socialMedia"
+            widget: "object"
+            fields:
+              - {label: "Facebook URL", name: "facebook", widget: "string", required: false}
+              - {label: "Instagram URL", name: "instagram", widget: "string", required: false}
+              - {label: "Twitter URL", name: "twitter", widget: "string", required: false}
+
+          - label: "Footer"
+            name: "footer"
+            widget: "object"
+            fields:
+              - label: "🇳🇴 Norsk"
+                name: "no"
+                widget: "object"
+                fields:
+                  - label: "Snarvegar"
+                    name: "quickLinks"
+                    widget: "object"
+                    fields:
+                      - {label: "Tittel", name: "title", widget: "string"}
+                      - label: "Lenker"
+                        name: "links"
+                        widget: "list"
+                        fields:
+                          - {label: "Tekst", name: "text", widget: "string"}
+                          - {label: "URL", name: "url", widget: "string"}
+
+                  - label: "Kontakt"
+                    name: "contact"
+                    widget: "object"
+                    fields:
+                      - {label: "Tittel", name: "title", widget: "string"}
+                      - {label: "Adresse", name: "address", widget: "string"}
+                      - {label: "Telefon", name: "phone", widget: "string"}
+                      - {label: "E-post", name: "email", widget: "string"}
+
+                  - {label: "Følg Oss", name: "followUs", widget: "string"}
+                  - {label: "Personvern", name: "privacy", widget: "string"}
+                  - {label: "Vilkår", name: "terms", widget: "string"}
+                  - {label: "Copyright Tekst", name: "copyright", widget: "string"}
+
+              - label: "🇬🇧 English"
+                name: "en"
+                widget: "object"
+                fields:
+                  - label: "Quick Links"
+                    name: "quickLinks"
+                    widget: "object"
+                    fields:
+                      - {label: "Title", name: "title", widget: "string"}
+                      - label: "Links"
+                        name: "links"
+                        widget: "list"
+                        fields:
+                          - {label: "Text", name: "text", widget: "string"}
+                          - {label: "URL", name: "url", widget: "string"}
+
+                  - label: "Contact"
+                    name: "contact"
+                    widget: "object"
+                    fields:
+                      - {label: "Title", name: "title", widget: "string"}
+                      - {label: "Address", name: "address", widget: "string"}
+                      - {label: "Phone", name: "phone", widget: "string"}
+                      - {label: "Email", name: "email", widget: "string"}
+
+                  - {label: "Follow Us", name: "followUs", widget: "string"}
+                  - {label: "Privacy", name: "privacy", widget: "string"}
+                  - {label: "Terms", name: "terms", widget: "string"}
+                  - {label: "Copyright Text", name: "copyright", widget: "string"}
+
+  # GLOBAL TRANSLATIONS (Navigation, etc.)
   - name: "translations-no"
-    label: "Norske Oversettingar (Globalt)"
+    label: "🌐 Oversettingar NO / Translations NO"
     files:
       - name: "norwegian"
-        label: "Norsk Innhald"
+        label: "Norsk Oversettingar"
         file: "messages/no.json"
         fields:
           - label: "Navigasjon"
             name: "nav"
             widget: "object"
-            collapsed: true
+            collapsed: false
             fields:
               - {label: "Heim", name: "home", widget: "string"}
               - {label: "Tenester", name: "services", widget: "string"}
@@ -141,74 +851,17 @@ collections:
               - {label: "Rullestol Taxi", name: "wheelchair", widget: "string"}
               - {label: "Bedrift", name: "business", widget: "string"}
 
-          - label: "Hero Seksjon (Framsida)"
-            name: "hero"
-            widget: "object"
-            collapsed: true
-            fields:
-              - {label: "Tittel", name: "title", widget: "string"}
-              - {label: "Undertittel", name: "subtitle", widget: "string"}
-              - {label: "Primærknapp", name: "ctaPrimary", widget: "string"}
-              - {label: "Sekundærknapp", name: "ctaSecondary", widget: "string"}
-
-          - label: "Høgdepunkt (Framsida)"
-            name: "highlights"
-            widget: "object"
-            collapsed: true
-            fields:
-              - {label: "Tittel", name: "title", widget: "string"}
-              - label: "24/7 Service"
-                name: "247"
-                widget: "object"
-                fields:
-                  - {label: "Tittel", name: "title", widget: "string"}
-                  - {label: "Beskrivelse", name: "description", widget: "text"}
-              - label: "Flyplasstransport"
-                name: "airport"
-                widget: "object"
-                fields:
-                  - {label: "Tittel", name: "title", widget: "string"}
-                  - {label: "Beskrivelse", name: "description", widget: "text"}
-              - label: "Sightseeing"
-                name: "sightseeing"
-                widget: "object"
-                fields:
-                  - {label: "Tittel", name: "title", widget: "string"}
-                  - {label: "Beskrivelse", name: "description", widget: "text"}
-              - label: "Rullestol Taxi"
-                name: "wheelchair"
-                widget: "object"
-                fields:
-                  - {label: "Tittel", name: "title", widget: "string"}
-                  - {label: "Beskrivelse", name: "description", widget: "text"}
-              - label: "Maxi Taxi"
-                name: "maxi"
-                widget: "object"
-                fields:
-                  - {label: "Tittel", name: "title", widget: "string"}
-                  - {label: "Beskrivelse", name: "description", widget: "text"}
-
-          - label: "Kalkulator Seksjon"
-            name: "calculator"
-            widget: "object"
-            collapsed: true
-            fields:
-              - {label: "Tittel", name: "title", widget: "string"}
-              - {label: "Undertittel", name: "subtitle", widget: "string"}
-              - {label: "CTA Knapp", name: "cta", widget: "string"}
-
-  # English Translations
   - name: "translations-en"
-    label: "English Translations (Global)"
+    label: "🌐 Translations EN"
     files:
       - name: "english"
-        label: "English Content"
+        label: "English Translations"
         file: "messages/en.json"
         fields:
           - label: "Navigation"
             name: "nav"
             widget: "object"
-            collapsed: true
+            collapsed: false
             fields:
               - {label: "Home", name: "home", widget: "string"}
               - {label: "Services", name: "services", widget: "string"}
@@ -221,65 +874,9 @@ collections:
               - {label: "Wheelchair Taxi", name: "wheelchair", widget: "string"}
               - {label: "Business", name: "business", widget: "string"}
 
-          - label: "Hero Section (Homepage)"
-            name: "hero"
-            widget: "object"
-            collapsed: true
-            fields:
-              - {label: "Title", name: "title", widget: "string"}
-              - {label: "Subtitle", name: "subtitle", widget: "string"}
-              - {label: "Primary CTA", name: "ctaPrimary", widget: "string"}
-              - {label: "Secondary CTA", name: "ctaSecondary", widget: "string"}
-
-          - label: "Highlights (Homepage)"
-            name: "highlights"
-            widget: "object"
-            collapsed: true
-            fields:
-              - {label: "Title", name: "title", widget: "string"}
-              - label: "24/7 Service"
-                name: "247"
-                widget: "object"
-                fields:
-                  - {label: "Title", name: "title", widget: "string"}
-                  - {label: "Description", name: "description", widget: "text"}
-              - label: "Airport Transfer"
-                name: "airport"
-                widget: "object"
-                fields:
-                  - {label: "Title", name: "title", widget: "string"}
-                  - {label: "Description", name: "description", widget: "text"}
-              - label: "Sightseeing"
-                name: "sightseeing"
-                widget: "object"
-                fields:
-                  - {label: "Title", name: "title", widget: "string"}
-                  - {label: "Description", name: "description", widget: "text"}
-              - label: "Wheelchair Taxi"
-                name: "wheelchair"
-                widget: "object"
-                fields:
-                  - {label: "Title", name: "title", widget: "string"}
-                  - {label: "Description", name: "description", widget: "text"}
-              - label: "Maxi Taxi"
-                name: "maxi"
-                widget: "object"
-                fields:
-                  - {label: "Title", name: "title", widget: "string"}
-                  - {label: "Description", name: "description", widget: "text"}
-
-          - label: "Calculator Section"
-            name: "calculator"
-            widget: "object"
-            collapsed: true
-            fields:
-              - {label: "Title", name: "title", widget: "string"}
-              - {label: "Subtitle", name: "subtitle", widget: "string"}
-              - {label: "CTA Button", name: "cta", widget: "string"}
-
-  # Media Library
+  # MEDIA LIBRARY
   - name: "media"
-    label: "Bilder / Images"
+    label: "🖼️ Bilder / Images"
     folder: "public/images"
     create: true
     media_folder: ""
