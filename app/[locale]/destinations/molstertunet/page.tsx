@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
 
-export default async function NaeroyfjordenPage({
+export default async function MolstertunetPage({
   params,
 }: {
   params: Promise<{ locale: string }>;
@@ -13,79 +13,81 @@ export default async function NaeroyfjordenPage({
 
   const content = {
     no: {
-      title: 'Nærøyfjorden',
-      subtitle: 'UNESCO Verdensarvfjord',
-      description: 'Nærøyfjorden er ein av verdas vakreste og mest dramatiske fjordarmar. Fjorden er ein del av UNESCO Verdensarven Vestnorsk fjordlandskap og strekker seg 17 km frå Gudvangen til Styvi.',
+      title: 'Mølstertunet',
+      subtitle: 'Voss Folkemuseum - autentisk kulturhistorie',
+      description: 'Voss Folkemuseum på Mølster vart grunnlagt i 1917 og er ein av tre autentiske gårdstun som museet eig og konserverer. Her står alle bygningane framleis akkurat der dei var då folk budde der.',
       history: {
-        title: 'Historie og verdensarv',
-        content: `Nærøyfjorden vart kåra til UNESCO Verdensarv i 2005, saman med Geirangerfjorden. Fjorden er omgitt av høge, bratte fjell som når opptil 1400 meter, med spektakulære fossar som rasar ned fjellsidene.
+        title: 'Historie',
+        content: `Voss Folkemuseum si første oppgåve var å kjøpe gårdstun på Mølster. I dag er dette ein av tre autentiske gårdstun som eies og konservert av museet, der alle bygningane framleis er plassert akkurat der dei var då folk bodde der.
 
-Namnet kjem frå det norrøne "Njörvasund", som tyder "den smale sundet". På det smalaste er fjorden berre 250 meter brei, noko som gir ein dramatisk kjensle av å vere omslutta av naturen.
+På Mølster gård, som lett kan sjåast i åssiden ovanfor Vossevangen, er det ein nyare museumsbygning. Her finn du permanente og midlertidige utstillingar som gir den besøkande større kunnskap om den lokale kulturen.
 
-Området har vore busett sidan vikingtida, og det er fleire gamle gardar langs fjorden. Den historiske postvegen mellom Oslo og Bergen gjekk også gjennom dette området.`,
+Det er også ein museumsbutikk, og om sommaren har dei vanlegvis høner og sauer på gården. Dette gir særleg born ein heilskapleg oppleving av korleis livet på ein gard var før i tida.`,
       },
       highlights: {
         title: 'Høgdepunkt',
         items: [
-          'UNESCO Verdensarv sidan 2005',
-          'Fjell opptil 1400 meter på kvar side',
-          'Spektakulære fossar',
-          'På det smalaste berre 250 meter brei',
-          'Fjordcruise frå Gudvangen eller Flåm',
-          'Fantastiske kayakkmoglegheiter',
+          'Autentisk gårdstun frå 1917',
+          'Originale bygningar på opprinnelig plass',
+          'Permanente og midlertidige utstillingar',
+          'Museumsbutikk',
+          'Levande gård med dyr om sommaren',
+          'Flott utsikt over Vossevangen',
+          'Lett tilgjengeleg til fots eller med bil',
         ],
       },
       info: {
         title: 'Praktisk informasjon',
         items: [
-          'Lengde: 17 km',
-          'Djupne: Opptil 500 meter',
-          'Båtturar: Heile året',
-          'Kayakk: Mai - september',
-          'Køyretid frå Voss: Ca. 45 minutt til Gudvangen',
-          'Best utsiktspunkt: Stegastein',
+          'Avstand frå Voss sentrum: 2-3 km',
+          'Køyretid: 5-10 minutt',
+          'Kan også nås til fots',
+          'Opningstider: Varierer etter sesong',
+          'Best tid: Mai - september',
+          'Eigna for familiar og grupper',
         ],
       },
-      price: 'Frå 1500 NOK per tur',
-      bookTour: 'Bestill tur til Nærøyfjorden',
+      price: 'Frå 500 NOK per tur',
+      bookTour: 'Bestill tur til Mølstertunet',
       backToDestinations: 'Tilbake til alle destinasjonar',
     },
     en: {
-      title: 'Nærøyfjorden',
-      subtitle: 'UNESCO World Heritage Fjord',
-      description: 'Nærøyfjorden is one of the world\'s most beautiful and dramatic fjord arms. The fjord is part of the UNESCO World Heritage West Norwegian Fjord Landscape and stretches 17 km from Gudvangen to Styvi.',
+      title: 'Mølstertunet',
+      subtitle: 'Voss Folk Museum - authentic cultural history',
+      description: 'The Voss Folk Museum at Mølster was founded in 1917 and is one of three authentic farmsteads that the museum owns and preserves. Here, all the buildings still stand exactly where they were when people lived there.',
       history: {
-        title: 'History and World Heritage',
-        content: `Nærøyfjorden was designated as a UNESCO World Heritage Site in 2005, together with Geirangerfjorden. The fjord is surrounded by high, steep mountains reaching up to 1400 meters, with spectacular waterfalls cascading down the mountainsides.
+        title: 'History',
+        content: `The first task of the Voss Folk Museum was to purchase the farmstead at Mølster. Today, this is one of three authentic farmsteads owned and preserved by the museum, where all the buildings are still located exactly where they were when people lived there.
 
-The name comes from the Old Norse "Njörvasund", meaning "the narrow strait". At its narrowest, the fjord is only 250 meters wide, giving a dramatic feeling of being embraced by nature.
+At Mølster farm, which can easily be seen on the hillside above Vossevangen, there is a newer museum building. Here you will find permanent and temporary exhibitions that give visitors greater knowledge about the local culture.
 
-The area has been inhabited since Viking times, and there are several old farms along the fjord. The historic postal route between Oslo and Bergen also passed through this area.`,
+There is also a museum shop, and in summer they usually have chickens and sheep on the farm. This gives children in particular a holistic experience of what life on a farm was like in the past.`,
       },
       highlights: {
         title: 'Highlights',
         items: [
-          'UNESCO World Heritage since 2005',
-          'Mountains up to 1400 meters on each side',
-          'Spectacular waterfalls',
-          'Only 250 meters wide at its narrowest',
-          'Fjord cruise from Gudvangen or Flåm',
-          'Fantastic kayaking opportunities',
+          'Authentic farmstead from 1917',
+          'Original buildings in original location',
+          'Permanent and temporary exhibitions',
+          'Museum shop',
+          'Living farm with animals in summer',
+          'Great view over Vossevangen',
+          'Easily accessible on foot or by car',
         ],
       },
       info: {
         title: 'Practical Information',
         items: [
-          'Length: 17 km',
-          'Depth: Up to 500 meters',
-          'Boat tours: All year',
-          'Kayaking: May - September',
-          'Driving time from Voss: Approx. 45 minutes to Gudvangen',
-          'Best viewpoint: Stegastein',
+          'Distance from Voss center: 2-3 km',
+          'Driving time: 5-10 minutes',
+          'Can also be reached on foot',
+          'Opening hours: Varies by season',
+          'Best time: May - September',
+          'Suitable for families and groups',
         ],
       },
-      price: 'From 1500 NOK per tour',
-      bookTour: 'Book tour to Nærøyfjorden',
+      price: 'From 500 NOK per tour',
+      bookTour: 'Book tour to Mølstertunet',
       backToDestinations: 'Back to all destinations',
     },
   };
@@ -95,7 +97,7 @@ The area has been inhabited since Viking times, and there are several old farms 
   return (
     <div className="py-16 md:py-24 bg-gradient-to-b from-white to-taxi-light-grey">
       <Container>
-        <Link href={`/${locale}/tourist`} className="inline-flex items-center text-taxi-grey hover:text-taxi-yellow transition-colors mb-8">
+        <Link href={\`/\${locale}/tourist\`} className="inline-flex items-center text-taxi-grey hover:text-taxi-yellow transition-colors mb-8">
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
@@ -168,19 +170,14 @@ The area has been inhabited since Viking times, and there are several old farms 
                 ))}
               </ul>
 
-              {/* Price */}
               <div className="bg-taxi-yellow/10 rounded-lg p-4 mb-6">
-                <p className="text-sm text-taxi-grey font-medium mb-1">
-                  {locale === 'no' ? 'Prisestimat' : 'Price estimate'}
-                </p>
+                <p className="text-sm text-taxi-grey font-medium mb-1">{locale === 'no' ? 'Prisestimat' : 'Price estimate'}</p>
                 <p className="text-2xl font-bold text-taxi-black">{t.price}</p>
-                <p className="text-xs text-taxi-grey mt-1">
-                  {locale === 'no' ? 'Varierer etter sesong og gruppe' : 'Varies by season and group'}
-                </p>
+                <p className="text-xs text-taxi-grey mt-1">{locale === 'no' ? 'Varierer etter sesong og gruppe' : 'Varies by season and group'}</p>
               </div>
 
               <div className="border-t border-taxi-light-grey pt-6 space-y-3">
-                <Link href={`/${locale}/book`}>
+                <Link href={\`/\${locale}/book\`}>
                   <Button className="w-full" size="lg">{t.bookTour}</Button>
                 </Link>
                 <a href="tel:+4756511340">

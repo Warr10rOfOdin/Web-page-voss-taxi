@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
 
-export default async function NaeroyfjordenPage({
+export default async function SkjervsfossenPage({
   params,
 }: {
   params: Promise<{ locale: string }>;
@@ -13,79 +13,81 @@ export default async function NaeroyfjordenPage({
 
   const content = {
     no: {
-      title: 'Nærøyfjorden',
-      subtitle: 'UNESCO Verdensarvfjord',
-      description: 'Nærøyfjorden er ein av verdas vakreste og mest dramatiske fjordarmar. Fjorden er ein del av UNESCO Verdensarven Vestnorsk fjordlandskap og strekker seg 17 km frå Gudvangen til Styvi.',
+      title: 'Skjervsfossen',
+      subtitle: 'Tvillingfoss langs Norges vakreste turistveg',
+      description: 'Skjervsfossen er ein spektakulær tvillingfoss i Granvin kommune med ein total høgde på 125 meter. Fossen ligg ved riksvei 13, ein av Norges viktigaste turistvegar, og er lett tilgjengeleg frå vegen.',
       history: {
-        title: 'Historie og verdensarv',
-        content: `Nærøyfjorden vart kåra til UNESCO Verdensarv i 2005, saman med Geirangerfjorden. Fjorden er omgitt av høge, bratte fjell som når opptil 1400 meter, med spektakulære fossar som rasar ned fjellsidene.
+        title: 'Historie',
+        content: `Skjervsfossen ligg ved Skjervet, omtrent midt mellom Granvin og Voss. Riksvei 13 passerer på avsatsen mellom fossens øvre og nedre fall, noko som gjer fossen unik og lett tilgjengeleg.
 
-Namnet kjem frå det norrøne "Njörvasund", som tyder "den smale sundet". På det smalaste er fjorden berre 250 meter brei, noko som gir ein dramatisk kjensle av å vere omslutta av naturen.
+Fossen er ein tvillingfoss i elva Storelvi med den øvre delen som den mest imponerende, med eit vertikal fall på 60 meter. Vatnet kaskar ned fjellsida i to parallelle straumar, noko som gjer dette til eit spektakulært syn.
 
-Området har vore busett sidan vikingtida, og det er fleire gamle gardar langs fjorden. Den historiske postvegen mellom Oslo og Bergen gjekk også gjennom dette området.`,
+Riksvei 13 er ein nasjonal turistveg og er kjend for si natur og landskapsopplevingar. Fossen er 15 kilometer frå Voss sentrum, men det er viktig å hugse på å ta gamle veien og ikkje tunnelen for å sjå fossen!`,
       },
       highlights: {
         title: 'Høgdepunkt',
         items: [
-          'UNESCO Verdensarv sidan 2005',
-          'Fjell opptil 1400 meter på kvar side',
-          'Spektakulære fossar',
-          'På det smalaste berre 250 meter brei',
-          'Fjordcruise frå Gudvangen eller Flåm',
-          'Fantastiske kayakkmoglegheiter',
+          'Tvillingfoss med 125 meter totalt fall',
+          '60 meter vertikal fall på øvre del',
+          'Nasjonal turistveg R13',
+          'Lett tilgjengeleg frå vegen',
+          'Spektakulær utsikt',
+          'Populær fotostopp',
+          'Midtpunkt mellom Voss og Granvin',
         ],
       },
       info: {
         title: 'Praktisk informasjon',
         items: [
-          'Lengde: 17 km',
-          'Djupne: Opptil 500 meter',
-          'Båtturar: Heile året',
-          'Kayakk: Mai - september',
-          'Køyretid frå Voss: Ca. 45 minutt til Gudvangen',
-          'Best utsiktspunkt: Stegastein',
+          'Avstand frå Voss: 15 km',
+          'Køyretid: Ca. 20 minutt',
+          'VIKTIG: Ta gamle vegen, IKKJE tunnelen',
+          'Parkering: Ved vegen',
+          'Tilgjengeleg: Heile året',
+          'Best tid: Mai - september',
         ],
       },
-      price: 'Frå 1500 NOK per tur',
-      bookTour: 'Bestill tur til Nærøyfjorden',
+      price: 'Frå 700 NOK per tur',
+      bookTour: 'Bestill tur til Skjervsfossen',
       backToDestinations: 'Tilbake til alle destinasjonar',
     },
     en: {
-      title: 'Nærøyfjorden',
-      subtitle: 'UNESCO World Heritage Fjord',
-      description: 'Nærøyfjorden is one of the world\'s most beautiful and dramatic fjord arms. The fjord is part of the UNESCO World Heritage West Norwegian Fjord Landscape and stretches 17 km from Gudvangen to Styvi.',
+      title: 'Skjervsfossen',
+      subtitle: 'Twin waterfall along Norway\'s most beautiful tourist route',
+      description: 'Skjervsfossen is a spectacular twin waterfall in Granvin municipality with a total height of 125 meters. The waterfall is located by Highway 13, one of Norway\'s most important tourist routes, and is easily accessible from the road.',
       history: {
-        title: 'History and World Heritage',
-        content: `Nærøyfjorden was designated as a UNESCO World Heritage Site in 2005, together with Geirangerfjorden. The fjord is surrounded by high, steep mountains reaching up to 1400 meters, with spectacular waterfalls cascading down the mountainsides.
+        title: 'History',
+        content: `Skjervsfossen is located at Skjervet, approximately halfway between Granvin and Voss. Highway 13 passes on the ledge between the waterfall's upper and lower falls, making the waterfall unique and easily accessible.
 
-The name comes from the Old Norse "Njörvasund", meaning "the narrow strait". At its narrowest, the fjord is only 250 meters wide, giving a dramatic feeling of being embraced by nature.
+The waterfall is a twin waterfall in the Storelvi river with the upper part being the most impressive, with a vertical drop of 60 meters. The water cascades down the mountainside in two parallel streams, making this a spectacular sight.
 
-The area has been inhabited since Viking times, and there are several old farms along the fjord. The historic postal route between Oslo and Bergen also passed through this area.`,
+Highway 13 is a national tourist route and is known for its nature and landscape experiences. The waterfall is 15 kilometers from Voss center, but it is important to remember to take the old road and not the tunnel to see the waterfall!`,
       },
       highlights: {
         title: 'Highlights',
         items: [
-          'UNESCO World Heritage since 2005',
-          'Mountains up to 1400 meters on each side',
-          'Spectacular waterfalls',
-          'Only 250 meters wide at its narrowest',
-          'Fjord cruise from Gudvangen or Flåm',
-          'Fantastic kayaking opportunities',
+          'Twin waterfall with 125 meters total drop',
+          '60 meter vertical drop on upper part',
+          'National tourist route R13',
+          'Easily accessible from the road',
+          'Spectacular views',
+          'Popular photo stop',
+          'Midpoint between Voss and Granvin',
         ],
       },
       info: {
         title: 'Practical Information',
         items: [
-          'Length: 17 km',
-          'Depth: Up to 500 meters',
-          'Boat tours: All year',
-          'Kayaking: May - September',
-          'Driving time from Voss: Approx. 45 minutes to Gudvangen',
-          'Best viewpoint: Stegastein',
+          'Distance from Voss: 15 km',
+          'Driving time: Approx. 20 minutes',
+          'IMPORTANT: Take old road, NOT the tunnel',
+          'Parking: By the road',
+          'Available: All year',
+          'Best time: May - September',
         ],
       },
-      price: 'From 1500 NOK per tour',
-      bookTour: 'Book tour to Nærøyfjorden',
+      price: 'From 700 NOK per tour',
+      bookTour: 'Book tour to Skjervsfossen',
       backToDestinations: 'Back to all destinations',
     },
   };
@@ -95,7 +97,7 @@ The area has been inhabited since Viking times, and there are several old farms 
   return (
     <div className="py-16 md:py-24 bg-gradient-to-b from-white to-taxi-light-grey">
       <Container>
-        <Link href={`/${locale}/tourist`} className="inline-flex items-center text-taxi-grey hover:text-taxi-yellow transition-colors mb-8">
+        <Link href={\`/\${locale}/tourist\`} className="inline-flex items-center text-taxi-grey hover:text-taxi-yellow transition-colors mb-8">
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
@@ -168,19 +170,14 @@ The area has been inhabited since Viking times, and there are several old farms 
                 ))}
               </ul>
 
-              {/* Price */}
               <div className="bg-taxi-yellow/10 rounded-lg p-4 mb-6">
-                <p className="text-sm text-taxi-grey font-medium mb-1">
-                  {locale === 'no' ? 'Prisestimat' : 'Price estimate'}
-                </p>
+                <p className="text-sm text-taxi-grey font-medium mb-1">{locale === 'no' ? 'Prisestimat' : 'Price estimate'}</p>
                 <p className="text-2xl font-bold text-taxi-black">{t.price}</p>
-                <p className="text-xs text-taxi-grey mt-1">
-                  {locale === 'no' ? 'Varierer etter sesong og gruppe' : 'Varies by season and group'}
-                </p>
+                <p className="text-xs text-taxi-grey mt-1">{locale === 'no' ? 'Varierer etter sesong og gruppe' : 'Varies by season and group'}</p>
               </div>
 
               <div className="border-t border-taxi-light-grey pt-6 space-y-3">
-                <Link href={`/${locale}/book`}>
+                <Link href={\`/\${locale}/book\`}>
                   <Button className="w-full" size="lg">{t.bookTour}</Button>
                 </Link>
                 <a href="tel:+4756511340">
