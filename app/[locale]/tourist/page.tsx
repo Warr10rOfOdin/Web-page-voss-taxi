@@ -1,5 +1,6 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
+import Link from 'next/link';
+import Image from 'next/image';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
 
@@ -14,12 +15,54 @@ export default async function TouristPage({
   const tCta = await getTranslations('cta');
 
   const destinations = [
-    { name: 'Stalheimskleiva', description: 'Scenic mountain road with waterfalls' },
-    { name: 'Tvindefossen', description: 'Beautiful waterfall' },
-    { name: 'Nærøyfjorden', description: 'UNESCO World Heritage fjord' },
-    { name: 'Bergen', description: 'Historic city and gateway to the fjords' },
-    { name: 'Flåm', description: 'Famous railway and fjord scenery' },
-    { name: 'Gudvangen', description: 'Viking village and fjord destination' },
+    {
+      slug: 'stalheimskleiva',
+      name: 'Stalheimskleiva',
+      description: locale === 'no' 
+        ? 'Scenisk fjellveg med fossar' 
+        : 'Scenic mountain road with waterfalls',
+      image: '/images/destinations/stalheimskleiva.jpg',
+    },
+    {
+      slug: 'tvindefossen',
+      name: 'Tvindefossen',
+      description: locale === 'no' 
+        ? 'Vakker foss' 
+        : 'Beautiful waterfall',
+      image: '/images/destinations/tvindefossen.jpg',
+    },
+    {
+      slug: 'naeroyfjorden',
+      name: 'Nærøyfjorden',
+      description: locale === 'no' 
+        ? 'UNESCO Verdensarvfjord' 
+        : 'UNESCO World Heritage fjord',
+      image: '/images/destinations/naeroyfjorden.jpg',
+    },
+    {
+      slug: 'bergen',
+      name: 'Bergen',
+      description: locale === 'no' 
+        ? 'Historisk by og port til fjordane' 
+        : 'Historic city and gateway to the fjords',
+      image: '/images/destinations/bergen.jpg',
+    },
+    {
+      slug: 'flam',
+      name: 'Flåm',
+      description: locale === 'no' 
+        ? 'Berømt jernbane og fjordlandskap' 
+        : 'Famous railway and fjord scenery',
+      image: '/images/destinations/flam.jpg',
+    },
+    {
+      slug: 'gudvangen',
+      name: 'Gudvangen',
+      description: locale === 'no' 
+        ? 'Vikinglandsby og fjorddestinasjon' 
+        : 'Viking village and fjord destination',
+      image: '/images/destinations/gudvangen.jpg',
+    },
   ];
 
   return (
@@ -45,16 +88,66 @@ export default async function TouristPage({
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {destinations.map((destination) => (
-              <Card key={destination.name} variant="hover">
-                <CardHeader>
-                  <CardTitle className="text-xl">{destination.name}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-base">
-                    {destination.description}
-                  </CardDescription>
-                </CardContent>
-              </Card>
+              <Link
+                key={destination.slug}
+                href={`/${locale}/destinations/${destination.slug}`}
+                className="group block"
+              >
+                <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                  {/* Image */}
+                  <div className="relative h-64 bg-gradient-to-br from-taxi-grey to-taxi-black overflow-hidden">
+                    <div className="absolute inset-0 bg-taxi-yellow/10 group-hover:bg-taxi-yellow/20 transition-colors duration-300" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-white text-center p-6">
+                        <svg
+                          className="w-16 h-16 mx-auto mb-4 opacity-50"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={1.5}
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                          />
+                        </svg>
+                        <p className="text-sm opacity-75">
+                          {locale === 'no' ? 'Bilete kjem snart' : 'Image coming soon'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6">
+                    <h3 className="text-2xl font-bold mb-2 group-hover:text-taxi-yellow transition-colors">
+                      {destination.name}
+                    </h3>
+                    <p className="text-taxi-grey mb-4">
+                      {destination.description}
+                    </p>
+                    <div className="flex items-center text-taxi-yellow font-medium">
+                      <span className="mr-2">
+                        {locale === 'no' ? 'Les meir' : 'Read more'}
+                      </span>
+                      <svg
+                        className="w-5 h-5 group-hover:translate-x-1 transition-transform"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -76,7 +169,11 @@ export default async function TouristPage({
               </div>
               <div className="bg-white rounded-xl p-6">
                 <h3 className="font-bold text-xl mb-2">24/7</h3>
-                <p className="text-taxi-grey">Available every day, all year round</p>
+                <p className="text-taxi-grey">
+                  {locale === 'no' 
+                    ? 'Tilgjengeleg kvar dag, heile året' 
+                    : 'Available every day, all year round'}
+                </p>
               </div>
             </div>
 
