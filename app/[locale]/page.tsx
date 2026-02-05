@@ -28,7 +28,7 @@ export default async function HomePage({
       <ServiceHighlights content={pageContent.highlights} />
       <FareEstimator content={pageContent.calculator} />
       <WhyChooseUs content={pageContent.trust} />
-      <TouristSpotlight locale={locale} />
+      <TouristSpotlight />
     </>
   );
 }
