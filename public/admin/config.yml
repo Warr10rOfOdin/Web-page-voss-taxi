@@ -1,0 +1,178 @@
+backend:
+  name: github
+  repo: Warr10rOfOdin/Web-page-voss-taxi
+  branch: main
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
+
+# Uncomment below if you want to use a local proxy for development
+# local_backend: true
+
+media_folder: "public/images"
+public_folder: "/images"
+
+publish_mode: editorial_workflow
+
+collections:
+  # Norwegian Translations
+  - name: "translations-no"
+    label: "Norske Oversettingar"
+    files:
+      - name: "norwegian"
+        label: "Norsk Innhald"
+        file: "messages/no.json"
+        fields:
+          - label: "Navigasjon"
+            name: "nav"
+            widget: "object"
+            fields:
+              - {label: "Heim", name: "home", widget: "string"}
+              - {label: "Tenester", name: "services", widget: "string"}
+              - {label: "Utflukter", name: "tourist", widget: "string"}
+              - {label: "Om Oss", name: "about", widget: "string"}
+              - {label: "Tilbakemeldingar", name: "testimonials", widget: "string"}
+              - {label: "Nyheter", name: "news", widget: "string"}
+              - {label: "Kalkulator", name: "calculator", widget: "string"}
+              - {label: "Kontakt", name: "contact", widget: "string"}
+              - {label: "Rullestol Taxi", name: "wheelchair", widget: "string"}
+              - {label: "Bedrift", name: "business", widget: "string"}
+
+          - label: "Hero Seksjon"
+            name: "hero"
+            widget: "object"
+            fields:
+              - {label: "Tittel", name: "title", widget: "string"}
+              - {label: "Undertittel", name: "subtitle", widget: "string"}
+              - {label: "Primærknapp", name: "ctaPrimary", widget: "string"}
+              - {label: "Sekundærknapp", name: "ctaSecondary", widget: "string"}
+
+          - label: "Høgdepunkt"
+            name: "highlights"
+            widget: "object"
+            fields:
+              - {label: "Tittel", name: "title", widget: "string"}
+              - label: "24/7 Service"
+                name: "247"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Beskrivelse", name: "description", widget: "text"}
+              - label: "Flyplasstransport"
+                name: "airport"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Beskrivelse", name: "description", widget: "text"}
+              - label: "Sightseeing"
+                name: "sightseeing"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Beskrivelse", name: "description", widget: "text"}
+              - label: "Rullestol Taxi"
+                name: "wheelchair"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Beskrivelse", name: "description", widget: "text"}
+              - label: "Maxi Taxi"
+                name: "maxi"
+                widget: "object"
+                fields:
+                  - {label: "Tittel", name: "title", widget: "string"}
+                  - {label: "Beskrivelse", name: "description", widget: "text"}
+
+          - label: "Kalkulator"
+            name: "calculator"
+            widget: "object"
+            fields:
+              - {label: "Tittel", name: "title", widget: "string"}
+              - {label: "Undertittel", name: "subtitle", widget: "string"}
+              - {label: "CTA Knapp", name: "cta", widget: "string"}
+
+  # English Translations
+  - name: "translations-en"
+    label: "English Translations"
+    files:
+      - name: "english"
+        label: "English Content"
+        file: "messages/en.json"
+        fields:
+          - label: "Navigation"
+            name: "nav"
+            widget: "object"
+            fields:
+              - {label: "Home", name: "home", widget: "string"}
+              - {label: "Services", name: "services", widget: "string"}
+              - {label: "Tours", name: "tourist", widget: "string"}
+              - {label: "About", name: "about", widget: "string"}
+              - {label: "Testimonials", name: "testimonials", widget: "string"}
+              - {label: "News", name: "news", widget: "string"}
+              - {label: "Calculator", name: "calculator", widget: "string"}
+              - {label: "Contact", name: "contact", widget: "string"}
+              - {label: "Wheelchair Taxi", name: "wheelchair", widget: "string"}
+              - {label: "Business", name: "business", widget: "string"}
+
+          - label: "Hero Section"
+            name: "hero"
+            widget: "object"
+            fields:
+              - {label: "Title", name: "title", widget: "string"}
+              - {label: "Subtitle", name: "subtitle", widget: "string"}
+              - {label: "Primary CTA", name: "ctaPrimary", widget: "string"}
+              - {label: "Secondary CTA", name: "ctaSecondary", widget: "string"}
+
+          - label: "Highlights"
+            name: "highlights"
+            widget: "object"
+            fields:
+              - {label: "Title", name: "title", widget: "string"}
+              - label: "24/7 Service"
+                name: "247"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Description", name: "description", widget: "text"}
+              - label: "Airport Transfer"
+                name: "airport"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Description", name: "description", widget: "text"}
+              - label: "Sightseeing"
+                name: "sightseeing"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Description", name: "description", widget: "text"}
+              - label: "Wheelchair Taxi"
+                name: "wheelchair"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Description", name: "description", widget: "text"}
+              - label: "Maxi Taxi"
+                name: "maxi"
+                widget: "object"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Description", name: "description", widget: "text"}
+
+          - label: "Calculator"
+            name: "calculator"
+            widget: "object"
+            fields:
+              - {label: "Title", name: "title", widget: "string"}
+              - {label: "Subtitle", name: "subtitle", widget: "string"}
+              - {label: "CTA Button", name: "cta", widget: "string"}
+
+  # Media Library
+  - name: "media"
+    label: "Bilder / Images"
+    folder: "public/images"
+    create: true
+    media_folder: ""
+    public_folder: "/images"
+    fields:
+      - {label: "Bilde / Image", name: "image", widget: "image"}
+      - {label: "Bildetekst / Caption", name: "caption", widget: "string", required: false}
