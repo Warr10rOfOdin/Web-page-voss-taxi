@@ -1,26 +1,36 @@
-import { setRequestLocale } from 'next-intl/server';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
-import { getDestinationContent } from '@/lib/content';
 
-export default async function StalheimskleivalPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+interface DestinationContent {
+  title: string;
+  subtitle: string;
+  heroImage: string;
+  description: string;
+  history: {
+    title: string;
+    content: string;
+  };
+  highlights: {
+    title: string;
+    items: string[];
+  };
+  info: {
+    title: string;
+    items: string[];
+  };
+  gallery: string[];
+  bookTour: string;
+  backToDestinations: string;
+  price?: string;
+}
 
-  // Read content from CMS JSON file
-  const content = await getDestinationContent('stalheimskleiva');
+interface DestinationTemplateProps {
+  content: DestinationContent;
+  locale: string;
+}
 
-  if (!content) {
-    return <div>Content not found</div>;
-  }
-
-  const t = content[locale as 'no' | 'en'];
-
+export function DestinationTemplate({ content, locale }: DestinationTemplateProps) {
   return (
     <div className="py-16 md:py-24 bg-gradient-to-b from-white to-taxi-light-grey">
       <Container>
@@ -42,21 +52,21 @@ export default async function StalheimskleivalPage({
               d="M15 19l-7-7 7-7"
             />
           </svg>
-          {t.backToDestinations}
+          {content.backToDestinations}
         </Link>
 
         {/* Hero Image */}
         <div className="relative h-96 rounded-2xl overflow-hidden mb-12">
           <img
-            src={t.heroImage}
-            alt={t.title}
+            src={content.heroImage}
+            alt={content.title}
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-taxi-black/80 via-taxi-black/40 to-transparent" />
           <div className="absolute inset-0 flex items-center justify-center text-white">
             <div className="text-center">
-              <h1 className="text-5xl font-display font-bold mb-2 drop-shadow-lg">{t.title}</h1>
-              <p className="text-xl opacity-90 drop-shadow-lg">{t.subtitle}</p>
+              <h1 className="text-5xl font-display font-bold mb-2 drop-shadow-lg">{content.title}</h1>
+              <p className="text-xl opacity-90 drop-shadow-lg">{content.subtitle}</p>
             </div>
           </div>
         </div>
@@ -67,27 +77,27 @@ export default async function StalheimskleivalPage({
             {/* Description */}
             <div className="bg-white rounded-xl p-8 shadow-md">
               <p className="text-lg text-taxi-grey leading-relaxed">
-                {t.description}
+                {content.description}
               </p>
             </div>
 
             {/* History */}
             <div className="bg-white rounded-xl p-8 shadow-md">
               <h2 className="text-3xl font-display font-bold mb-6">
-                {t.history.title}
+                {content.history.title}
               </h2>
               <div className="text-taxi-grey leading-relaxed whitespace-pre-line">
-                {t.history.content}
+                {content.history.content}
               </div>
             </div>
 
             {/* Highlights */}
             <div className="bg-white rounded-xl p-8 shadow-md">
               <h2 className="text-3xl font-display font-bold mb-6">
-                {t.highlights.title}
+                {content.highlights.title}
               </h2>
               <ul className="space-y-3">
-                {t.highlights.items.map((item: string, index: number) => (
+                {content.highlights.items.map((item, index) => (
                   <li key={index} className="flex items-start">
                     <svg
                       className="w-6 h-6 text-taxi-yellow mt-0.5 mr-3 flex-shrink-0"
@@ -112,9 +122,13 @@ export default async function StalheimskleivalPage({
                 {locale === 'no' ? 'Bilete' : 'Photos'}
               </h2>
               <div className="grid grid-cols-2 gap-4">
-                {t.gallery.map((img: string, i: number) => (
+                {content.gallery.map((img, i) => (
                   <div key={i} className="aspect-video rounded-lg overflow-hidden">
-                    <img src={img} alt={`${t.title} ${i + 1}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
+                    <img
+                      src={img}
+                      alt={`${content.title} ${i + 1}`}
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    />
                   </div>
                 ))}
               </div>
@@ -126,10 +140,10 @@ export default async function StalheimskleivalPage({
             {/* Practical Info */}
             <div className="bg-white rounded-xl p-6 shadow-md sticky top-24">
               <h3 className="text-2xl font-display font-bold mb-4">
-                {t.info.title}
+                {content.info.title}
               </h3>
               <ul className="space-y-3 mb-6">
-                {t.info.items.map((item: string, index: number) => (
+                {content.info.items.map((item, index) => (
                   <li key={index} className="text-sm text-taxi-grey flex items-start">
                     <svg
                       className="w-5 h-5 text-taxi-yellow mt-0.5 mr-2 flex-shrink-0"
@@ -147,16 +161,16 @@ export default async function StalheimskleivalPage({
                 ))}
               </ul>
 
-              {t.price && (
+              {content.price && (
                 <div className="mb-6 p-4 bg-taxi-yellow/10 rounded-lg">
-                  <p className="text-sm font-semibold text-taxi-black">{t.price}</p>
+                  <p className="text-sm font-semibold text-taxi-black">{content.price}</p>
                 </div>
               )}
 
               <div className="border-t border-taxi-light-grey pt-6 space-y-3">
                 <Link href={`/${locale}/book`}>
                   <Button className="w-full" size="lg">
-                    {t.bookTour}
+                    {content.bookTour}
                   </Button>
                 </Link>
                 <a href="tel:+4756511340">
