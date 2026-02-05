@@ -1,0 +1,167 @@
+{
+  "nav": {
+    "home": "Heim",
+    "services": "Tenester",
+    "calculator": "Taxi Kalkulator",
+    "about": "Om Oss",
+    "contact": "Kontakt",
+    "tourist": "Utflukter",
+    "wheelchair": "Rullestol Taxi",
+    "business": "Bedrift"
+  },
+  "hero": {
+    "title": "Du køyrer trygt, med oss frå Voss!",
+    "subtitle": "På vegen for deg, 24/7 - 365 dagar i året",
+    "ctaPrimary": "Bestill Taxi",
+    "ctaSecondary": "Taxi Kalkulator"
+  },
+  "highlights": {
+    "title": "Våre Tenester",
+    "247": {
+      "title": "Døgnopen Service",
+      "description": "Vi er tilgjengelege for deg 24/7, 365 dagar i året"
+    },
+    "airport": {
+      "title": "Flyplasstransport",
+      "description": "Trygge turar til og frå Bergen Flesland og andre flyplass"
+    },
+    "sightseeing": {
+      "title": "Sightseeing & Utflukter",
+      "description": "Opplev Voss og omegn med lokale sjåførar som kjenner området"
+    },
+    "wheelchair": {
+      "title": "Rullestol Taxi",
+      "description": "Tilgjengeleg transport for alle"
+    },
+    "maxi": {
+      "title": "Maxi Taxi",
+      "description": "Plass til store grupper, opp til 16 passasjerar"
+    }
+  },
+  "calculator": {
+    "title": "Taxi Kalkulator",
+    "subtitle": "Få eit prisoverslag på turen din",
+    "cta": "Opne Kalkulator"
+  },
+  "trust": {
+    "title": "Kvifor Velje Voss Taxi?",
+    "established": {
+      "title": "Langvarig Erfaring",
+      "description": "Vi har køyrt trygt i Voss i mange år"
+    },
+    "local": {
+      "title": "Lokale Sjåførar",
+      "description": "Kjennskap til området og dei beste rutene"
+    },
+    "safe": {
+      "title": "Trygt & Regulert",
+      "description": "Godkjent taxiverksemd med alle nødvendige løyve"
+    },
+    "available": {
+      "title": "Alltid Tilgjengeleg",
+      "description": "Ring oss når som helst på +47 56 51 13 40"
+    }
+  },
+  "testimonials": {
+    "title": "Kva Kundane Våre Seier"
+  },
+  "touristSpotlight": {
+    "title": "Utforsk Voss med Oss",
+    "description": "Opplev dei vakraste stadene i Voss og omegn med våre sightseeing-turar",
+    "cta": "Les Meir om Utflukter"
+  },
+  "footer": {
+    "address": "Uttrågata 19, 5700 Voss",
+    "phone": "+47 56 51 13 40",
+    "email": "post@vosstaxi.no",
+    "privacy": "Personvern",
+    "terms": "Vilkår",
+    "followUs": "Følg Oss"
+  },
+  "contact": {
+    "title": "Kontakt Oss",
+    "subtitle": "Vi er her for å hjelpe deg",
+    "phone": "Telefon",
+    "email": "E-post",
+    "address": "Adresse",
+    "hours": "Opningstider",
+    "hoursValue": "24/7 - Alltid open"
+  },
+  "services": {
+    "title": "Våre Tenester",
+    "subtitle": "Alt frå lokale kjøreturar til sightseeing-turar",
+    "local": {
+      "title": "Lokale Turar",
+      "description": "Raske og trygge turar rundt i Voss"
+    },
+    "airport": {
+      "title": "Flyplasstransport",
+      "description": "Transport til og frå Bergen Flesland, Oslo Gardermoen og andre flyplass. Påliteleg service med plass til bagasje."
+    },
+    "sightseeing": {
+      "title": "Sightseeing & Turar",
+      "description": "Opplev Voss sine vakraste stader med våre guidete turar. Frå små grupper til opp til 16 passasjerar."
+    },
+    "wheelchair": {
+      "title": "Rullestol-tilgjengeleg",
+      "description": "Spesialtilpassa køyretøy for rullestolbrukarar"
+    },
+    "business": {
+      "title": "Bedriftstenester",
+      "description": "Fakturering, faste kundar og prioritert service for bedrifter"
+    },
+    "maxi": {
+      "title": "Maxi Taxi",
+      "description": "Stor kapasitet for grupper, arrangement og familiereiser"
+    }
+  },
+  "tourist": {
+    "title": "Utflukter & Sightseeing",
+    "subtitle": "Opplev det beste av Voss og omegn",
+    "intro": "Voss er omkransa av fantastisk natur. Lat oss vise deg dei beste stadene!",
+    "popular": "Populære Destinasjonar",
+    "customTours": "Skreddarsydde Turar",
+    "customToursDescription": "Vi lagar turar tilpassa dine ønskje. Kontakt oss for å planlegge din perfekte tur.",
+    "capacity": "Kapasitet",
+    "capacityDescription": "Frå små grupper til opp til 16 passasjerar i våre maxi-taxiar"
+  },
+  "wheelchair": {
+    "title": "Rullestol-tilgjengeleg Taxi",
+    "subtitle": "Transport for alle",
+    "description": "Vi tilbyr spesialtilpassa kjøretøy for rullestolbrukarar. Trygg og komfortabel transport.",
+    "features": "Eigenskapar",
+    "booking": "Bestilling",
+    "bookingDescription": "Ring oss på +47 56 51 13 40 for å bestille rullestol-taxi"
+  },
+  "business": {
+    "title": "Bedriftstenester",
+    "subtitle": "Påliteleg transport for bedrifter",
+    "description": "Vi tilbyr skreddarsydde løysingar for bedrifter med behov for regelmessig transport.",
+    "invoicing": {
+      "title": "Fakturering",
+      "description": "Enkel fakturaløysing for bedrifter"
+    },
+    "priority": {
+      "title": "Prioritert Service",
+      "description": "Raske responsar og påliteleg service"
+    },
+    "accounts": {
+      "title": "Faste Kundar",
+      "description": "Spesielle avtalar for faste kundar"
+    }
+  },
+  "privacy": {
+    "title": "Personvern",
+    "lastUpdated": "Sist oppdatert"
+  },
+  "terms": {
+    "title": "Vilkår",
+    "lastUpdated": "Sist oppdatert"
+  },
+  "cta": {
+    "bookNow": "Bestill No",
+    "callNow": "Ring No",
+    "learnMore": "Les Meir",
+    "getEstimate": "Få Prisoverslag"
+  }
+}

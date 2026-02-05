@@ -1,0 +1,167 @@
+{
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "calculator": "Fare Estimate",
+    "about": "About",
+    "contact": "Contact",
+    "tourist": "Tours",
+    "wheelchair": "Wheelchair Taxi",
+    "business": "Business"
+  },
+  "hero": {
+    "title": "Drive safe with us, from Voss!",
+    "subtitle": "On the road for you, 24/7 - 365 days a year",
+    "ctaPrimary": "Book Taxi",
+    "ctaSecondary": "Fare Estimate"
+  },
+  "highlights": {
+    "title": "Our Services",
+    "247": {
+      "title": "24/7 Service",
+      "description": "We are available for you around the clock, every day of the year"
+    },
+    "airport": {
+      "title": "Airport Transfer",
+      "description": "Safe rides to and from Bergen Flesland and other airports"
+    },
+    "sightseeing": {
+      "title": "Sightseeing & Tours",
+      "description": "Experience Voss and surroundings with local drivers who know the area"
+    },
+    "wheelchair": {
+      "title": "Wheelchair Taxi",
+      "description": "Accessible transport for everyone"
+    },
+    "maxi": {
+      "title": "Maxi Taxi",
+      "description": "Room for large groups, up to 16 passengers"
+    }
+  },
+  "calculator": {
+    "title": "Fare Estimate",
+    "subtitle": "Get an instant price estimate for your trip",
+    "cta": "Open Calculator"
+  },
+  "trust": {
+    "title": "Why Choose Voss Taxi?",
+    "established": {
+      "title": "Long-standing Experience",
+      "description": "We have been providing safe transport in Voss for many years"
+    },
+    "local": {
+      "title": "Local Drivers",
+      "description": "Knowledge of the area and the best routes"
+    },
+    "safe": {
+      "title": "Safe & Regulated",
+      "description": "Licensed taxi service with all necessary permits"
+    },
+    "available": {
+      "title": "Always Available",
+      "description": "Call us anytime at +47 56 51 13 40"
+    }
+  },
+  "testimonials": {
+    "title": "What Our Customers Say"
+  },
+  "touristSpotlight": {
+    "title": "Explore Voss with Us",
+    "description": "Experience the most beautiful places in Voss and surroundings with our sightseeing tours",
+    "cta": "Learn More About Tours"
+  },
+  "footer": {
+    "address": "Uttrågata 19, 5700 Voss",
+    "phone": "+47 56 51 13 40",
+    "email": "post@vosstaxi.no",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "followUs": "Follow Us"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "We are here to help you",
+    "phone": "Phone",
+    "email": "Email",
+    "address": "Address",
+    "hours": "Hours",
+    "hoursValue": "24/7 - Always Open"
+  },
+  "services": {
+    "title": "Our Services",
+    "subtitle": "Everything from local rides to sightseeing tours",
+    "local": {
+      "title": "Local Rides",
+      "description": "Fast and safe rides around Voss"
+    },
+    "airport": {
+      "title": "Airport Transfer",
+      "description": "Transport to and from Bergen Flesland, Oslo Gardermoen and other airports. Reliable service with room for luggage."
+    },
+    "sightseeing": {
+      "title": "Sightseeing & Tours",
+      "description": "Experience Voss's most beautiful places with our guided tours. From small groups to up to 16 passengers."
+    },
+    "wheelchair": {
+      "title": "Wheelchair Accessible",
+      "description": "Specially adapted vehicles for wheelchair users"
+    },
+    "business": {
+      "title": "Business Services",
+      "description": "Invoicing, regular customers and priority service for businesses"
+    },
+    "maxi": {
+      "title": "Maxi Taxi",
+      "description": "Large capacity for groups, events and family trips"
+    }
+  },
+  "tourist": {
+    "title": "Tours & Sightseeing",
+    "subtitle": "Experience the best of Voss and surroundings",
+    "intro": "Voss is surrounded by amazing nature. Let us show you the best places!",
+    "popular": "Popular Destinations",
+    "customTours": "Custom Tours",
+    "customToursDescription": "We create tours tailored to your wishes. Contact us to plan your perfect trip.",
+    "capacity": "Capacity",
+    "capacityDescription": "From small groups to up to 16 passengers in our maxi taxis"
+  },
+  "wheelchair": {
+    "title": "Wheelchair Accessible Taxi",
+    "subtitle": "Transport for everyone",
+    "description": "We offer specially adapted vehicles for wheelchair users. Safe and comfortable transport.",
+    "features": "Features",
+    "booking": "Booking",
+    "bookingDescription": "Call us at +47 56 51 13 40 to book wheelchair accessible taxi"
+  },
+  "business": {
+    "title": "Business Services",
+    "subtitle": "Reliable transport for businesses",
+    "description": "We offer customized solutions for businesses with regular transport needs.",
+    "invoicing": {
+      "title": "Invoicing",
+      "description": "Simple invoicing solution for businesses"
+    },
+    "priority": {
+      "title": "Priority Service",
+      "description": "Fast responses and reliable service"
+    },
+    "accounts": {
+      "title": "Regular Customers",
+      "description": "Special agreements for regular customers"
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated"
+  },
+  "terms": {
+    "title": "Terms & Conditions",
+    "lastUpdated": "Last updated"
+  },
+  "cta": {
+    "bookNow": "Book Now",
+    "callNow": "Call Now",
+    "learnMore": "Learn More",
+    "getEstimate": "Get Estimate"
+  }
+}
