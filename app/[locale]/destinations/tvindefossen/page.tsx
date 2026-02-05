@@ -14,75 +14,79 @@ export default async function TvindefossenPage({
   const content = {
     no: {
       title: 'Tvindefossen',
-      subtitle: 'Ein av Vestlandets vakreste fossar',
-      description: 'Tvindefossen er ein 152 meter høg foss som ligg like ved Riksveg 7 mellom Voss og Granvin. Fossen er lett tilgjengeleg og ein av dei mest fotograferte fossane på Vestlandet.',
+      subtitle: 'Legendarisk foss med foryngelseskrefter',
+      description: 'Tvindefossen er den 98. høyeste fossen i Norge regnet ut frå totalt fall, med eit fall på 110 meter. Fossen er ein kjent turistattraksjon like ved E-16, og er berømt for det legendariske vannet med foryngande krefter.',
       history: {
-        title: 'Historie og mytologi',
-        content: `Tvindefossen har lenge vore ein kjend attraksjon langs den gamle vegen mellom Voss og Hardanger. Namnet kjem av det gamle norrøne ordet "tvinna" som tyder å tvinna eller fletta saman, noko som siktar til måten vatnet fløymer nedover fjellet.
+        title: 'Historie og legende',
+        content: \`Tvindefossen ligg ved Tvinde i Voss kommune, 12 km nord for Voss sentrum. Vannet frå fossen kjem frå Kroelva og renn ut i Strandaelva. Det lengste fallet er 85 meter, noko som gjer fossen til eit spektakulært syn.
 
-I gamle dagar var det tradisjon for at brudepar som køyrde forbi fossen skulle stoppe og drikke av fossevatnet. Det vart sagt at dette skulle bringe lykke i ekteskapet.
+På slutten av 1990-talet skapte vatnet i Tvindefossen eit rykte for foryngelse og gjenoppliving av seksuell styrke. Dette gjorde det til ein av dei viktigaste naturlege turistattraksjonane i Vest-Norge, med så mange som 200 000 menneske i året frå USA, Japan og Russland som besøkte og fylte containere med vannet.
 
-I dag er Tvindefossen ein populær stoppeplass for turistar, med kafé, suvenirbutikk og gode fotomoglegheiter. Fossen er særleg imponerande om våren når snøen smeltar, og vatnet er på sitt mest kraftfulle.`,
+På eit tidspunkt var det Norges niende mest besøkte naturlige attraksjon, med 272 000 besøkende. I dag er fossen framleis populær, både for sin naturlege skjønnheit og den fascinerende historia.\`,
       },
       highlights: {
         title: 'Høgdepunkt',
         items: [
-          '152 meter høg foss',
-          'Spektakulært om våren med smeltevann',
-          'Lett tilgjengeleg frå vegen',
-          'Kafé og suvenirbutikk',
-          'Populær fotostopplass',
-          'Nær Vossevangen (15 min)',
+          '110 meter totalt fall',
+          '85 meter lengste fall',
+          'Legendarisk foryngelsesvatn',
+          'Like ved E-16, lett tilgjengeleg',
+          'Kafé og fasiliteter',
+          'Populær fotograferingsplass',
+          'Naturskjønn omgjevnad',
         ],
       },
       info: {
         title: 'Praktisk informasjon',
         items: [
-          'Høgde: 152 meter',
-          'Alltid open og gratis adgang',
-          'Parkering: Like ved fossen',
-          'Fasiliteter: Toalett, kafé, butikk',
-          'Køyretid frå Voss: Ca. 15 minutt',
-          'Best tidspunkt: Vår/sommar',
+          'Avstand frå Voss: Ca. 12 km nord',
+          'Køyretid: Ca. 15-20 minutt',
+          'Parkering: Gratis parkering ved fossen',
+          'Tilgjengeleg: Heile året',
+          'Fasiliteter: Kafé, toalett, souvenirbutikk',
+          'Brudepar: Populær brudekjole-tradisjon',
         ],
       },
+      price: 'Frå 600 NOK per tur',
       bookTour: 'Bestill tur til Tvindefossen',
       backToDestinations: 'Tilbake til alle destinasjonar',
     },
     en: {
       title: 'Tvindefossen',
-      subtitle: 'One of Western Norway\'s most beautiful waterfalls',
-      description: 'Tvindefossen is a 152-meter high waterfall located right by Highway 7 between Voss and Granvin. The waterfall is easily accessible and one of the most photographed waterfalls in Western Norway.',
+      subtitle: 'Legendary waterfall with rejuvenation powers',
+      description: 'Tvindefossen is the 98th highest waterfall in Norway by total drop, with a fall of 110 meters. The waterfall is a well-known tourist attraction right by Highway E-16, and is famous for its legendary water with rejuvenating powers.',
       history: {
-        title: 'History and Mythology',
-        content: `Tvindefossen has long been a well-known attraction along the old road between Voss and Hardanger. The name comes from the Old Norse word "tvinna" meaning to twine or braid together, referring to the way the water flows down the mountain.
+        title: 'History and legend',
+        content: \`Tvindefossen is located at Tvinde in Voss municipality, 12 km north of Voss center. The water from the waterfall comes from the Kroelva river and flows into the Strandaelva. The longest drop is 85 meters, making the waterfall a spectacular sight.
 
-In the old days, it was tradition for bridal couples passing by the waterfall to stop and drink from the waterfall water. It was said that this would bring happiness to the marriage.
+In the late 1990s, the water in Tvindefossen created a reputation for rejuvenation and revival of sexual strength. This made it one of the most important natural tourist attractions in Western Norway, with as many as 200,000 people per year from the USA, Japan and Russia visiting and filling containers with the water.
 
-Today, Tvindefossen is a popular stop for tourists, with a café, souvenir shop, and great photo opportunities. The waterfall is particularly impressive in spring when the snow melts and the water is at its most powerful.`,
+At one point it was Norway\\'s ninth most visited natural attraction, with 272,000 visitors. Today, the waterfall is still popular, both for its natural beauty and the fascinating history.\`,
       },
       highlights: {
         title: 'Highlights',
         items: [
-          '152-meter high waterfall',
-          'Spectacular in spring with meltwater',
-          'Easily accessible from the road',
-          'Café and souvenir shop',
-          'Popular photo stop',
-          'Near Vossevangen (15 min)',
+          '110 meters total drop',
+          '85 meters longest drop',
+          'Legendary rejuvenation water',
+          'Right by Highway E-16, easily accessible',
+          'Café and facilities',
+          'Popular photography spot',
+          'Beautiful natural surroundings',
         ],
       },
       info: {
         title: 'Practical Information',
         items: [
-          'Height: 152 meters',
-          'Always open and free admission',
-          'Parking: Right by the waterfall',
-          'Facilities: Restroom, café, shop',
-          'Driving time from Voss: Approx. 15 minutes',
-          'Best time: Spring/summer',
+          'Distance from Voss: Approx. 12 km north',
+          'Driving time: Approx. 15-20 minutes',
+          'Parking: Free parking at the waterfall',
+          'Available: All year',
+          'Facilities: Café, toilet, souvenir shop',
+          'Bridal couples: Popular bridal dress tradition',
         ],
       },
+      price: 'From 600 NOK per tour',
       bookTour: 'Book tour to Tvindefossen',
       backToDestinations: 'Back to all destinations',
     },
@@ -94,7 +98,7 @@ Today, Tvindefossen is a popular stop for tourists, with a café, souvenir shop,
     <div className="py-16 md:py-24 bg-gradient-to-b from-white to-taxi-light-grey">
       <Container>
         <Link
-          href={`/${locale}/tourist`}
+          href={\`/\${locale}/tourist\`}
           className="inline-flex items-center text-taxi-grey hover:text-taxi-yellow transition-colors mb-8"
         >
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -169,8 +173,14 @@ Today, Tvindefossen is a popular stop for tourists, with a café, souvenir shop,
                 ))}
               </ul>
 
+              <div className="bg-taxi-yellow/10 rounded-lg p-4 mb-6">
+                <p className="text-sm text-taxi-grey font-medium mb-1">{locale === 'no' ? 'Prisestimat' : 'Price estimate'}</p>
+                <p className="text-2xl font-bold text-taxi-black">{t.price}</p>
+                <p className="text-xs text-taxi-grey mt-1">{locale === 'no' ? 'Varierer etter sesong og gruppe' : 'Varies by season and group'}</p>
+              </div>
+
               <div className="border-t border-taxi-light-grey pt-6 space-y-3">
-                <Link href={`/${locale}/book`}>
+                <Link href={\`/\${locale}/book\`}>
                   <Button className="w-full" size="lg">{t.bookTour}</Button>
                 </Link>
                 <a href="tel:+4756511340">
