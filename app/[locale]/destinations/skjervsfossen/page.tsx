@@ -104,15 +104,17 @@ Highway 13 is a national tourist route and is known for its nature and landscape
           {t.backToDestinations}
         </Link>
 
-        <div className="relative h-96 bg-gradient-to-br from-taxi-grey to-taxi-black rounded-2xl overflow-hidden mb-12">
-          <div className="absolute inset-0 bg-taxi-yellow/10" />
+        <div className="relative h-96 rounded-2xl overflow-hidden mb-12">
+          <img
+            src="/images/20240604_211019.jpg"
+            alt="Skjervsfossen"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-taxi-black/80 via-taxi-black/40 to-transparent" />
           <div className="absolute inset-0 flex items-center justify-center text-white">
             <div className="text-center">
-              <svg className="w-24 h-24 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <h1 className="text-5xl font-display font-bold mb-2">{t.title}</h1>
-              <p className="text-xl opacity-90">{t.subtitle}</p>
+              <h1 className="text-5xl font-display font-bold mb-2 drop-shadow-lg">{t.title}</h1>
+              <p className="text-xl opacity-90 drop-shadow-lg">{t.subtitle}</p>
             </div>
           </div>
         </div>
@@ -145,11 +147,11 @@ Highway 13 is a national tourist route and is known for its nature and landscape
             <div className="bg-white rounded-xl p-8 shadow-md">
               <h2 className="text-3xl font-display font-bold mb-6">{locale === 'no' ? 'Bilete' : 'Photos'}</h2>
               <div className="grid grid-cols-2 gap-4">
-                {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="aspect-video bg-gradient-to-br from-taxi-grey to-taxi-black rounded-lg flex items-center justify-center">
-                    <svg className="w-12 h-12 text-white opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
+                {[
+                  '/images/20240604_211019.jpg', '/images/20230509_190808.jpg', '/images/20241014_140924.jpg', '/images/20230907_151359.jpg'
+                ].map((img, i) => (
+                  <div key={i} className="aspect-video rounded-lg overflow-hidden">
+                    <img src={img} alt={`Skjervsfossen ${i + 1}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
                   </div>
                 ))}
               </div>

@@ -36,10 +36,10 @@ export function Footer() {
                 {locale === 'no' ? 'Om Oss' : 'About Us'}
               </Link>
               <Link
-                href={`/${locale}/packages`}
+                href={`/${locale}/tourist`}
                 className="block hover:text-taxi-yellow transition-colors"
               >
-                {locale === 'no' ? 'Pakkar' : 'Packages'}
+                {locale === 'no' ? 'Utflukter' : 'Tours'}
               </Link>
               <Link
                 href={`/${locale}/testimonials`}
