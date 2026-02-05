@@ -2,10 +2,11 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Container } from '@/components/ui/Container';
 
 export default async function PrivacyPage({
-  params: { locale },
+  params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations('privacy');
 

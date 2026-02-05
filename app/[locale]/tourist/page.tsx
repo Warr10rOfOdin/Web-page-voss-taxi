@@ -4,10 +4,11 @@ import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
 
 export default async function TouristPage({
-  params: { locale },
+  params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations('tourist');
   const tCta = await getTranslations('cta');
