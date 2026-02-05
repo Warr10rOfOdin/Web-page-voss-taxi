@@ -1,13 +1,23 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
 
-export function Hero() {
-  const t = useTranslations('hero');
-  const locale = useLocale();
+interface HeroContent {
+  title: string;
+  subtitle: string;
+  ctaPrimary: string;
+  ctaSecondary: string;
+  backgroundImage?: string;
+}
+
+interface HeroProps {
+  content: HeroContent;
+  locale: string;
+}
+
+export function Hero({ content, locale }: HeroProps) {
 
   return (
     <section className="relative bg-taxi-black text-white min-h-[600px] md:min-h-[700px] flex items-center">
@@ -20,21 +30,21 @@ export function Hero() {
       <Container className="relative z-10">
         <div className="max-w-3xl">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold mb-6 text-balance">
-            {t('title')}
+            {content.title}
           </h1>
           <p className="text-xl md:text-2xl text-taxi-light-grey mb-8 text-balance">
-            {t('subtitle')}
+            {content.subtitle}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
             <Link href={`/${locale}/book`}>
               <Button size="lg" variant="primary" className="w-full sm:w-auto">
-                {t('ctaPrimary')}
+                {content.ctaPrimary}
               </Button>
             </Link>
             <Link href={`/${locale}/calculator`}>
               <Button size="lg" variant="secondary" className="w-full sm:w-auto">
-                {t('ctaSecondary')}
+                {content.ctaSecondary}
               </Button>
             </Link>
           </div>
