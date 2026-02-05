@@ -2,10 +2,13 @@
   "nav": {
     "home": "Heim",
     "services": "Tenester",
-    "calculator": "Taxi Kalkulator",
-    "about": "Om Oss",
-    "contact": "Kontakt",
+    "packages": "Pakkar",
     "tourist": "Utflukter",
+    "about": "Om Oss",
+    "testimonials": "Tilbakemeldingar",
+    "news": "Nyheter",
+    "calculator": "Taxi Kalkulator",
+    "contact": "Kontakt",
     "wheelchair": "Rullestol Taxi",
     "business": "Bedrift"
   },
