@@ -10,7 +10,14 @@ export const config = {
   // - Favicon and other public files
   // - /admin route and files (for CMS)
   matcher: [
-    // Skip middleware for these patterns
-    '/((?!_next|api|admin|favicon.ico).*)',
+    /*
+     * Match all request paths except for the ones starting with:
+     * - admin (CMS)
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!admin|api|_next/static|_next/image|favicon.ico).*)',
   ],
 };

@@ -13,6 +13,29 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: [],
   },
+  // Configure headers for CMS admin files
+  async headers() {
+    return [
+      {
+        source: '/admin/:path*',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'text/html; charset=utf-8',
+          },
+        ],
+      },
+      {
+        source: '/admin/config.yml',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'text/yaml; charset=utf-8',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 module.exports = withNextIntl(nextConfig);
