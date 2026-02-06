@@ -6,8 +6,10 @@ import { NextRequest, NextResponse } from 'next/server';
 const intlMiddleware = createMiddleware(routing);
 
 export default function middleware(request: NextRequest) {
-  // Skip middleware for admin paths
-  if (request.nextUrl.pathname.startsWith('/admin')) {
+  const pathname = request.nextUrl.pathname;
+
+  // Skip middleware for admin paths entirely
+  if (pathname.startsWith('/admin')) {
     return NextResponse.next();
   }
 
@@ -17,17 +19,19 @@ export default function middleware(request: NextRequest) {
 
 export const config = {
   // Match all pathnames except for
+  // - admin (CMS)
   // - API routes
   // - Static files (_next/static, images, etc.)
   // - Favicon and other public files
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
+     * - admin (CMS)
      * - api (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    '/((?!admin|api|_next/static|_next/image|favicon.ico).*)',
   ],
 };
