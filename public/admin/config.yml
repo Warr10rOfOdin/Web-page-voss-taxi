@@ -1,12 +1,14 @@
 backend:
-  name: github
-  repo: Warr10rOfOdin/Web-page-voss-taxi
-  branch: main
-  base_url: https://api.netlify.com
-  auth_endpoint: auth
+  name: test-repo
 
-# Uncomment below if you want to use a local proxy for development
-# local_backend: true
+# For production, you'll need to set up GitHub OAuth
+# See CMS_SETUP.md for instructions
+# Uncomment and configure the backend below after setting up OAuth:
+#
+# backend:
+#   name: github
+#   repo: Warr10rOfOdin/Web-page-voss-taxi
+#   branch: main
 
 media_folder: "public/images"
 public_folder: "/images"
