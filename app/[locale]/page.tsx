@@ -22,6 +22,11 @@ export default async function HomePage({
 
   const pageContent = content[locale as 'no' | 'en'];
 
+  if (!pageContent || !pageContent.hero) {
+    console.error('Invalid content structure for locale:', locale);
+    return <div>Error loading page content</div>;
+  }
+
   return (
     <>
       <Hero content={pageContent.hero} locale={locale} />

@@ -1,6 +1,6 @@
 import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 // Create the next-intl middleware
 const intlMiddleware = createMiddleware(routing);
@@ -8,7 +8,7 @@ const intlMiddleware = createMiddleware(routing);
 export default function middleware(request: NextRequest) {
   // Skip middleware for admin paths
   if (request.nextUrl.pathname.startsWith('/admin')) {
-    return;
+    return NextResponse.next();
   }
 
   // Apply next-intl middleware for all other paths
