@@ -28,6 +28,7 @@ export function FareEstimator({ content }: FareEstimatorProps) {
               fill
               className="object-cover"
               quality={85}
+              unoptimized
             />
             {/* Overlay for text readability */}
             <div className="absolute inset-0 bg-gradient-to-br from-taxi-yellow/90 via-taxi-yellow/85 to-yellow-500/80" />

@@ -19,6 +19,7 @@ export function TouristSpotlight() {
             fill
             className="object-cover"
             quality={85}
+            unoptimized
           />
           {/* Dark overlay for text readability */}
           <div className="absolute inset-0 bg-gradient-to-r from-taxi-black/80 via-taxi-black/70 to-taxi-black/60" />

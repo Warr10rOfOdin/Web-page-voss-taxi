@@ -32,6 +32,7 @@ export function Hero({ content, locale }: HeroProps) {
             className="object-cover"
             priority
             quality={90}
+            unoptimized
           />
         )}
         {/* Dark overlay for text readability */}

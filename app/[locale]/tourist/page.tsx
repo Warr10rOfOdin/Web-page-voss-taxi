@@ -55,6 +55,7 @@ export default async function TouristPage({
               fill
               className="object-cover opacity-30"
               priority
+              unoptimized
             />
           )}
         </div>
@@ -114,6 +115,7 @@ export default async function TouristPage({
                         alt={destContent.title}
                         fill
                         className="object-cover group-hover:scale-110 transition-transform duration-300"
+                        unoptimized
                       />
                       {/* Price badge */}
                       {destContent.price && (

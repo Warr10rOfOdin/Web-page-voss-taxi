@@ -85,6 +85,7 @@ export function WhyChooseUs({ content }: WhyChooseUsProps) {
           fill
           className="object-cover opacity-5"
           quality={60}
+          unoptimized
         />
       </div>
 
