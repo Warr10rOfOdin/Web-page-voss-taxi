@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { Container } from '@/components/ui/Container';
 
 interface Feature {
@@ -75,8 +76,20 @@ const getIcon = (index: number) => {
 export function WhyChooseUs({ content }: WhyChooseUsProps) {
 
   return (
-    <section className="py-16 md:py-24 bg-taxi-light-grey">
-      <Container>
+    <section className="relative py-16 md:py-24 bg-taxi-light-grey overflow-hidden">
+      {/* Subtle background image */}
+      <div className="absolute inset-0">
+        <Image
+          src="/images/20240526_111711.jpg"
+          alt="Voss Taxi background"
+          fill
+          className="object-cover opacity-5"
+          quality={60}
+          unoptimized
+        />
+      </div>
+
+      <Container className="relative z-10">
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-center mb-12 md:mb-16">
           {content.title}
         </h2>
