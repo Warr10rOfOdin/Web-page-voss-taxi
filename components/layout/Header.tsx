@@ -18,6 +18,7 @@ export function Header() {
     { name: t('nav.tourist'), href: `/${locale}/tourist` },
     { name: t('nav.about'), href: `/${locale}/about` },
     { name: t('nav.testimonials'), href: `/${locale}/testimonials` },
+    { name: t('nav.careers'), href: `/${locale}/careers` },
     { name: t('nav.news'), href: `/${locale}/news` },
     { name: t('nav.contact'), href: `/${locale}/contact` },
   ];
