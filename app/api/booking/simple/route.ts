@@ -7,41 +7,38 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
+    // Get central code from environment or use default
+    const centralCode = process.env.TAXI4U_CENTRAL_CODE || 'VOSS';
+
     // Calculate zone numbers from postal codes/cities
     const fromZoneNo = getZoneNumber(body.fromPostalCode, body.fromCity);
     const toZoneNo = body.toPostalCode || body.toCity
       ? getZoneNumber(body.toPostalCode, body.toCity)
       : undefined;
 
-    // Build booking payload with passengers array structure
+    // Build booking payload with flat structure (Taxi4U API format)
     const bookingData = {
-      // Top-level booking fields
-      messageToCar: body.messageToCar || '',
-      orderedBy: body.orderedBy || 'Website',
+      centralCode,
+      // From location
+      fromStreet: body.fromStreet,
+      fromCity: body.fromCity,
+      fromPostalCode: body.fromPostalCode,
+      fromZoneNo,
+      // To location (with defaults for optional destination)
+      toStreet: body.toStreet || 'Ikke oppgitt', // "Not specified" in Norwegian
+      toCity: body.toCity || '',
+      toPostalCode: body.toPostalCode || '',
+      toZoneNo: toZoneNo || 0, // 0 for unknown/unspecified
+      // Customer information
+      customerName: body.customerName,
+      tel: body.tel,
       pickupTime: body.pickupTime,
-      attributes: body.attributes || '',
-      priority: 5, // Default priority (1-9 scale)
-
-      // Passengers array with location and customer data
-      passengers: [
-        {
-          seqNo: 0, // First passenger
-          taxiAccountNo: body.accountNumber || '', // Account number
-          clientName: body.customerName,
-          tel: body.tel,
-          pickupTime: body.pickupTime,
-          // From location
-          fromStreet: body.fromStreet,
-          fromCity: body.fromCity,
-          fromPostalCode: body.fromPostalCode,
-          fromZoneNo,
-          // To location (with defaults for optional destination)
-          toStreet: body.toStreet || 'Ikke oppgitt',
-          toCity: body.toCity || '',
-          toPostalCode: body.toPostalCode || '',
-          toZoneNo: toZoneNo || 0,
-        }
-      ]
+      orderedBy: body.orderedBy || 'Website',
+      accountNumber: body.accountNumber || '', // Account/customer number
+      // Optional fields
+      messageToDriver: body.messageToDriver || '', // Empty string if not provided
+      messageToBooking: body.messageToBooking || '', // Message to booking/dispatcher
+      attributes: body.attributes || '', // Empty string if not provided
     };
 
     // Call Taxi4U API with authentication
