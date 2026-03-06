@@ -18,9 +18,23 @@ export async function POST(request: NextRequest) {
 
     const bookingData = {
       centralCode,
-      ...body,
+      fromStreet: body.fromStreet,
+      fromCity: body.fromCity,
+      fromPostalCode: body.fromPostalCode,
       fromZoneNo,
-      toZoneNo,
+      // Destination fields - use provided values or defaults
+      toStreet: body.toStreet || 'Ikke oppgitt', // "Not specified" in Norwegian
+      toCity: body.toCity || '',
+      toPostalCode: body.toPostalCode || '',
+      toZoneNo: toZoneNo || 0, // 0 for unknown/unspecified
+      // Customer info
+      customerName: body.customerName,
+      tel: body.tel,
+      pickupTime: body.pickupTime,
+      orderedBy: body.orderedBy || 'Website',
+      // Optional fields
+      messageToCar: body.messageToCar,
+      attributes: body.attributes,
     };
 
     // Call Taxi4U API with authentication
