@@ -11,11 +11,19 @@ export async function POST(request: NextRequest) {
     const centralCode = process.env.TAXI4U_CENTRAL_CODE || 'VS';
 
     // Process passengers to add zone numbers (required by API)
-    const processedPassengers = body.passengers.map((passenger: any) => ({
-      ...passenger,
-      fromZoneNo: getZoneNumber(passenger.fromPostalCode, passenger.fromCity),
-      toZoneNo: getZoneNumber(passenger.toPostalCode, passenger.toCity),
-    }));
+    // Try both fromZone and fromZoneNo field names for compatibility
+    const processedPassengers = body.passengers.map((passenger: any) => {
+      const fromZone = getZoneNumber(passenger.fromPostalCode, passenger.fromCity);
+      const toZone = getZoneNumber(passenger.toPostalCode, passenger.toCity);
+
+      return {
+        ...passenger,
+        fromZone,
+        toZone,
+        fromZoneNo: fromZone,
+        toZoneNo: toZone,
+      };
+    });
 
     // Build enhanced booking payload
     const bookingData = {
