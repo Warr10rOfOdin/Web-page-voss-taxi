@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       // Required fields (even if empty)
       messageToCar: body.messageToDriver || body.messageToCar || '',
       messageToBooking: body.messageToBooking || '',
-      taxiAccountNo: body.accountNumber || '',
+      taxiAccountNo: body.accountNumber || process.env.TAXI4U_DEFAULT_ACCOUNT_NO || '0',
       // attributes expects a comma-separated string, not an array
       attributes: Array.isArray(body.attributes)
         ? body.attributes.join(',')
