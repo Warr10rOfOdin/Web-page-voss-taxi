@@ -46,11 +46,72 @@ export function BookingForm({ locale }: BookingFormProps) {
   ]);
 
   const [messageToCar, setMessageToCar] = useState('');
-  const [carGroupId, setCarGroupId] = useState(1); // Default to standard taxi
+  const [carGroupId, setCarGroupId] = useState<number>(0); // No default - require explicit selection
   const [loading, setLoading] = useState(false);
+  const [loadingLocation, setLoadingLocation] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [bookRef, setBookRef] = useState<string | null>(null);
+
+  // Get current GPS location and reverse geocode to address
+  const useMyLocation = async (passengerId: string) => {
+    setLoadingLocation(true);
+    setError(null);
+
+    try {
+      // Get GPS coordinates
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        if (!navigator.geolocation) {
+          reject(new Error(locale === 'no' ? 'GPS er ikke tilgjengeleg i nettlesaren din' : 'Geolocation is not supported by your browser'));
+          return;
+        }
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0,
+        });
+      });
+
+      const { latitude, longitude } = position.coords;
+
+      // Reverse geocode using Nominatim (OpenStreetMap)
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`,
+        {
+          headers: {
+            'Accept-Language': locale === 'no' ? 'no,nn,nb' : 'en',
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(locale === 'no' ? 'Kunne ikkje hente adresse' : 'Could not fetch address');
+      }
+
+      const data = await response.json();
+      const address = data.address;
+
+      // Update passenger location fields
+      updatePassenger(passengerId, 'fromStreet', address.road || address.suburb || '');
+      updatePassenger(passengerId, 'fromCity', address.town || address.city || address.village || 'Voss');
+      updatePassenger(passengerId, 'fromPostalCode', address.postcode || '5700');
+
+    } catch (err) {
+      if (err instanceof GeolocationPositionError) {
+        if (err.code === err.PERMISSION_DENIED) {
+          setError(locale === 'no' ? 'Du må gi løyve til å bruke GPS-posisjonen din' : 'You must allow location access');
+        } else if (err.code === err.POSITION_UNAVAILABLE) {
+          setError(locale === 'no' ? 'Posisjon er ikkje tilgjengeleg' : 'Location unavailable');
+        } else {
+          setError(locale === 'no' ? 'Tidsavbrot ved henting av posisjon' : 'Location request timed out');
+        }
+      } else {
+        setError(err instanceof Error ? err.message : (locale === 'no' ? 'Kunne ikkje hente posisjon' : 'Could not get location'));
+      }
+    } finally {
+      setLoadingLocation(false);
+    }
+  };
 
   const addPassenger = () => {
     const newPassenger: Passenger = {
@@ -89,6 +150,13 @@ export function BookingForm({ locale }: BookingFormProps) {
     setLoading(true);
     setError(null);
     setSuccess(false);
+
+    // Validate vehicle type is selected
+    if (carGroupId === 0) {
+      setError(locale === 'no' ? 'Velg en kjøretøytype' : 'Please select a vehicle type');
+      setLoading(false);
+      return;
+    }
 
     try {
       // Prepare booking data for API
@@ -136,6 +204,27 @@ export function BookingForm({ locale }: BookingFormProps) {
 
       setSuccess(true);
       setBookRef(data.bookRef);
+
+      // Send SMS confirmation (non-blocking - don't fail booking if SMS fails)
+      try {
+        const pickupTimeFormatted = passengers[0].pickupTime
+          ? new Date(passengers[0].pickupTime).toLocaleString(locale === 'no' ? 'no-NO' : 'en-US')
+          : (locale === 'no' ? 'Snarast mogleg' : 'As soon as possible');
+
+        await fetch('/api/sms/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            to: passengers[0].tel,
+            bookRef: data.bookRef,
+            pickupTime: pickupTimeFormatted,
+            from: `${passengers[0].fromStreet}, ${passengers[0].fromCity}`,
+          }),
+        });
+      } catch (smsError) {
+        // SMS failure doesn't affect booking success
+        console.error('SMS send failed:', smsError);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -161,7 +250,7 @@ export function BookingForm({ locale }: BookingFormProps) {
       },
     ]);
     setMessageToCar('');
-    setCarGroupId(1);
+    setCarGroupId(0);
     setSuccess(false);
     setBookRef(null);
   };
@@ -256,12 +345,29 @@ export function BookingForm({ locale }: BookingFormProps) {
 
               {/* Pickup Location */}
               <div className="space-y-4">
-                <h4 className="text-sm font-bold text-taxi-grey flex items-center">
-                  <svg className="w-4 h-4 text-taxi-yellow mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <circle cx="10" cy="10" r="8" />
-                  </svg>
-                  {t('pickupLocation')}
-                </h4>
+                <div className="flex items-center justify-between">
+                  <h4 className="text-sm font-bold text-taxi-grey flex items-center">
+                    <svg className="w-4 h-4 text-taxi-yellow mr-2" fill="currentColor" viewBox="0 0 20 20">
+                      <circle cx="10" cy="10" r="8" />
+                    </svg>
+                    {t('pickupLocation')}
+                  </h4>
+                  <button
+                    type="button"
+                    onClick={() => useMyLocation(passenger.id)}
+                    disabled={loadingLocation}
+                    className="text-xs font-medium text-taxi-yellow hover:text-taxi-black transition-colors flex items-center gap-1 disabled:opacity-50"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    {loadingLocation
+                      ? (locale === 'no' ? 'Hentar...' : 'Getting...')
+                      : (locale === 'no' ? 'Bruk min posisjon' : 'Use my location')
+                    }
+                  </button>
+                </div>
 
                 <div>
                   <label className="block text-sm font-medium mb-1">
@@ -399,13 +505,17 @@ export function BookingForm({ locale }: BookingFormProps) {
           {/* Vehicle Type Selection */}
           <div>
             <label className="block text-sm font-medium mb-1">
-              {locale === 'no' ? 'Kjøretøytype' : 'Vehicle Type'}
+              {locale === 'no' ? 'Kjøretøytype *' : 'Vehicle Type *'}
             </label>
             <select
               value={carGroupId}
               onChange={(e) => setCarGroupId(Number(e.target.value))}
+              required
               className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
             >
+              <option value={0} disabled>
+                {locale === 'no' ? '-- Velg kjøretøytype --' : '-- Select vehicle type --'}
+              </option>
               <option value={1}>
                 {locale === 'no' ? 'Standard Taxi (1-4 personer)' : 'Standard Taxi (1-4 people)'}
               </option>
