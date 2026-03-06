@@ -6,6 +6,31 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
+    // Validate required fields
+    if (!body.customerName || typeof body.customerName !== 'string' || body.customerName.trim() === '') {
+      console.error('Validation error: Missing or invalid customerName');
+      return NextResponse.json(
+        { error: 'Invalid request', details: 'Customer name is required' },
+        { status: 400 }
+      );
+    }
+
+    if (!body.tel || typeof body.tel !== 'string' || body.tel.trim() === '') {
+      console.error('Validation error: Missing or invalid phone number');
+      return NextResponse.json(
+        { error: 'Invalid request', details: 'Phone number is required' },
+        { status: 400 }
+      );
+    }
+
+    if (!body.fromStreet || typeof body.fromStreet !== 'string' || body.fromStreet.trim() === '') {
+      console.error('Validation error: Missing or invalid pickup address');
+      return NextResponse.json(
+        { error: 'Invalid request', details: 'Pickup address is required' },
+        { status: 400 }
+      );
+    }
+
     // Get central code from environment or use default
     const centralCode = process.env.TAXI4U_CENTRAL_CODE || 'VS';
 
@@ -47,23 +72,58 @@ export async function POST(request: NextRequest) {
     });
 
     if (!response.ok) {
-      const error = await response.text();
-      console.error('Booking failed:', { status: response.status, error, sentData: bookingData });
+      const errorText = await response.text();
+      let errorDetails = errorText;
+
+      // Try to parse error as JSON for better error messages
+      try {
+        const errorJson = JSON.parse(errorText);
+        errorDetails = errorJson.message || errorJson.error || errorText;
+
+        console.error('Simple booking API error:', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorJson,
+          timestamp: new Date().toISOString(),
+        });
+      } catch {
+        console.error('Simple booking API error:', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorText,
+          timestamp: new Date().toISOString(),
+        });
+      }
+
       return NextResponse.json(
-        { error: 'Booking failed', details: error },
+        {
+          error: 'Booking failed',
+          details: errorDetails,
+          statusCode: response.status
+        },
         { status: response.status }
       );
     }
 
     const data = await response.json();
 
-    // Check for error in response
+    // Check for error in response data
     if (data.errorMessage) {
+      console.error('Simple booking response error:', {
+        errorMessage: data.errorMessage,
+        timestamp: new Date().toISOString(),
+      });
       return NextResponse.json(
         { error: 'Booking failed', details: data.errorMessage },
         { status: 400 }
       );
     }
+
+    // Log successful booking
+    console.log('Simple booking successful:', {
+      bookRef: data.bookRef,
+      timestamp: new Date().toISOString(),
+    });
 
     return NextResponse.json({
       success: true,
@@ -71,9 +131,19 @@ export async function POST(request: NextRequest) {
       data,
     });
   } catch (error) {
-    console.error('Booking error:', error);
+    // Enhanced error logging
+    console.error('Simple booking unexpected error:', {
+      error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      timestamp: new Date().toISOString(),
+    });
+
     return NextResponse.json(
-      { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
+      {
+        error: 'Internal server error',
+        details: error instanceof Error ? error.message : 'An unexpected error occurred',
+        type: 'server_error'
+      },
       { status: 500 }
     );
   }

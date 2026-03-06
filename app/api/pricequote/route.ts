@@ -42,9 +42,35 @@ export async function POST(req: NextRequest) {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Price quote API error:', response.status, errorText);
+      let errorDetails = errorText;
+
+      // Try to parse error as JSON for better error messages
+      try {
+        const errorJson = JSON.parse(errorText);
+        errorDetails = errorJson.message || errorJson.error || errorText;
+
+        console.error('Price quote API error:', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorJson,
+          timestamp: new Date().toISOString(),
+        });
+      } catch {
+        console.error('Price quote API error:', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorText,
+          timestamp: new Date().toISOString(),
+        });
+      }
+
       return NextResponse.json(
-        { success: false, error: `API error: ${response.status}` },
+        {
+          success: false,
+          error: 'Failed to get price quote',
+          details: errorDetails,
+          statusCode: response.status
+        },
         { status: response.status }
       );
     }
@@ -53,11 +79,22 @@ export async function POST(req: NextRequest) {
 
     // Check if API returned an error message
     if (result.errorMessage) {
+      console.error('Price quote response error:', {
+        errorMessage: result.errorMessage,
+        timestamp: new Date().toISOString(),
+      });
       return NextResponse.json(
         { success: false, error: result.errorMessage },
         { status: 400 }
       );
     }
+
+    // Log successful price quote
+    console.log('Price quote successful:', {
+      price: result.price,
+      tariff: result.tariff,
+      timestamp: new Date().toISOString(),
+    });
 
     return NextResponse.json({
       success: true,
@@ -66,9 +103,20 @@ export async function POST(req: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Price quote error:', error);
+    // Enhanced error logging
+    console.error('Price quote unexpected error:', {
+      error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      timestamp: new Date().toISOString(),
+    });
+
     return NextResponse.json(
-      { success: false, error: error instanceof Error ? error.message : 'Failed to get price quote' },
+      {
+        success: false,
+        error: 'Internal server error',
+        details: error instanceof Error ? error.message : 'An unexpected error occurred',
+        type: 'server_error'
+      },
       { status: 500 }
     );
   }
