@@ -15,6 +15,8 @@ export async function POST(request: NextRequest) {
     };
 
     // Call Taxi4U API with authentication
+    console.log('Sending booking request:', JSON.stringify(bookingData, null, 2));
+
     const response = await taxi4uFetch('https://api.taxi4u.cab/api/book', {
       method: 'POST',
       headers: {
@@ -25,6 +27,7 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       const error = await response.text();
+      console.error('Booking failed:', { status: response.status, error, sentData: bookingData });
       return NextResponse.json(
         { error: 'Booking failed', details: error },
         { status: response.status }
