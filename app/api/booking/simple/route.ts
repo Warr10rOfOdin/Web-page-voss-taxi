@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { taxi4uFetch } from '@/lib/taxi4u-auth';
 
 // Simple booking endpoint (single passenger)
 export async function POST(request: NextRequest) {
@@ -13,17 +14,11 @@ export async function POST(request: NextRequest) {
       ...body,
     };
 
-    // Call Taxi4U API
-    // Using Basic Auth with username (centralCode) and password (API key)
-    const username = centralCode;
-    const password = process.env.TAXI4U_API_KEY || '';
-    const authString = Buffer.from(`${username}:${password}`).toString('base64');
-
-    const response = await fetch('https://api.taxi4u.cab/api/book', {
+    // Call Taxi4U API with authentication
+    const response = await taxi4uFetch('https://api.taxi4u.cab/api/book', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Basic ${authString}`,
       },
       body: JSON.stringify(bookingData),
     });
