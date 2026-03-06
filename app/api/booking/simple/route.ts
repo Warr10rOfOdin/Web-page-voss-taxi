@@ -36,18 +36,19 @@ export async function POST(request: NextRequest) {
       orderedBy: body.orderedBy || 'Website',
     };
 
-    // Add optional fields only if they have values (API rejects empty strings)
+    // Add optional fields per API documentation (only if they have values)
+    // API spec: https://api.taxi4u.cab/swagger (POST /api/book)
     if (body.accountNumber) {
-      bookingData.kontonr = body.accountNumber;
+      bookingData.taxiAccountNo = body.accountNumber; // API uses English field names
     }
 
     const messageToDriver = body.messageToDriver || body.messageToCar;
     if (messageToDriver) {
-      bookingData.meldingtilbil = messageToDriver;
+      bookingData.messageToCar = messageToDriver; // API uses English field names
     }
 
     if (body.messageToBooking) {
-      bookingData.meldingtilbooking = body.messageToBooking;
+      bookingData.messageToBooking = body.messageToBooking; // API uses English field names
     }
 
     if (body.attributes) {
