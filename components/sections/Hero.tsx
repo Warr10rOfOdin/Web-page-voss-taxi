@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
 
@@ -22,9 +23,20 @@ export function Hero({ content, locale }: HeroProps) {
   return (
     <section className="relative bg-taxi-black text-white min-h-[600px] md:min-h-[700px] flex items-center">
       {/* Background Image with Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-taxi-black via-taxi-black/80 to-transparent z-0">
-        {/* Placeholder for hero image - can be replaced with actual image */}
-        <div className="absolute inset-0 bg-gradient-to-br from-taxi-grey to-taxi-black opacity-50" />
+      <div className="absolute inset-0 z-0">
+        {content.backgroundImage && (
+          <Image
+            src={content.backgroundImage}
+            alt={content.title}
+            fill
+            className="object-cover"
+            priority
+            quality={90}
+            unoptimized
+          />
+        )}
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-taxi-black via-taxi-black/80 to-taxi-black/60" />
       </div>
 
       <Container className="relative z-10">
