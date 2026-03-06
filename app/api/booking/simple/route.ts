@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
       : undefined;
 
     // Build booking payload with flat structure (Taxi4U API format)
-    const bookingData = {
+    const bookingData: any = {
       centralCode,
       // From location
       fromStreet: body.fromStreet,
@@ -34,12 +34,25 @@ export async function POST(request: NextRequest) {
       tel: body.tel,
       pickupTime: body.pickupTime,
       orderedBy: body.orderedBy || 'Website',
-      kontonr: body.accountNumber || '', // Account/customer number (Norwegian: kontonr)
-      // Optional fields
-      meldingtilbil: body.messageToDriver || body.messageToCar || '', // Message to driver/car (Norwegian: meldingtilbil)
-      meldingtilbooking: body.messageToBooking || '', // Message to booking/dispatcher (Norwegian: meldingtilbooking)
-      attributes: body.attributes || '', // Empty string if not provided
     };
+
+    // Add optional fields only if they have values (API rejects empty strings)
+    if (body.accountNumber) {
+      bookingData.kontonr = body.accountNumber;
+    }
+
+    const messageToDriver = body.messageToDriver || body.messageToCar;
+    if (messageToDriver) {
+      bookingData.meldingtilbil = messageToDriver;
+    }
+
+    if (body.messageToBooking) {
+      bookingData.meldingtilbooking = body.messageToBooking;
+    }
+
+    if (body.attributes) {
+      bookingData.attributes = body.attributes;
+    }
 
     // Call Taxi4U API with authentication
     console.log('Sending booking request:', JSON.stringify(bookingData, null, 2));
