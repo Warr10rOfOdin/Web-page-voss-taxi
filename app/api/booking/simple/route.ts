@@ -37,6 +37,7 @@ export async function POST(request: NextRequest) {
       accountNumber: body.accountNumber || '', // Account/customer number
       // Optional fields
       messageToCar: body.messageToDriver || body.messageToCar || '', // Message to driver/car
+      messageToBooking: body.messageToBooking || '', // Message to booking/dispatcher
       attributes: body.attributes || '', // Empty string if not provided
     };
 
