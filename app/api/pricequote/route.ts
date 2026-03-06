@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { taxi4uFetch } from '@/lib/taxi4u-auth';
 
 const TAXI4U_API_BASE = process.env.TAXI4U_API_BASE || 'https://api.taxi4u.cab';
-const TAXI4U_BEARER_TOKEN = process.env.TAXI4U_BEARER_TOKEN;
 const TAXI4U_CENTRAL_CODE = process.env.TAXI4U_CENTRAL_CODE || 'vs';
 
 export async function POST(req: NextRequest) {
@@ -17,15 +17,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!TAXI4U_BEARER_TOKEN) {
-      console.error('TAXI4U_BEARER_TOKEN is not configured');
-      return NextResponse.json(
-        { success: false, error: 'API authentication not configured' },
-        { status: 500 }
-      );
-    }
-
-    // Call Taxi4U price quote API
+    // Call Taxi4U price quote API using the same authentication as booking
     const apiUrl = `${TAXI4U_API_BASE}/api/pricequote?centralCode=${TAXI4U_CENTRAL_CODE}`;
 
     const priceQuoteData = {
@@ -41,11 +33,10 @@ export async function POST(req: NextRequest) {
       pickupTime: pickupTime || new Date().toISOString(),
     };
 
-    const response = await fetch(apiUrl, {
+    const response = await taxi4uFetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${TAXI4U_BEARER_TOKEN}`,
         'Accept': 'application/json',
       },
       body: JSON.stringify(priceQuoteData),
