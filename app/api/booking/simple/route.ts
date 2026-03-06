@@ -14,11 +14,16 @@ export async function POST(request: NextRequest) {
     };
 
     // Call Taxi4U API
+    // Using Basic Auth with username (centralCode) and password (API key)
+    const username = centralCode;
+    const password = process.env.TAXI4U_API_KEY || '';
+    const authString = Buffer.from(`${username}:${password}`).toString('base64');
+
     const response = await fetch('https://api.taxi4u.cab/api/book', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.TAXI4U_API_KEY}`,
+        'Authorization': `Basic ${authString}`,
       },
       body: JSON.stringify(bookingData),
     });
