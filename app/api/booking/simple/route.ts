@@ -34,10 +34,10 @@ export async function POST(request: NextRequest) {
       tel: body.tel,
       pickupTime: body.pickupTime,
       orderedBy: body.orderedBy || 'Website',
-      accountNumber: body.accountNumber || '', // Account/customer number
+      kontonr: body.accountNumber || '', // Account/customer number (Norwegian: kontonr)
       // Optional fields
-      messageToCar: body.messageToDriver || body.messageToCar || '', // Message to driver/car
-      messageToBooking: body.messageToBooking || '', // Message to booking/dispatcher
+      meldingtilbil: body.messageToDriver || body.messageToCar || '', // Message to driver/car (Norwegian: meldingtilbil)
+      meldingtilbooking: body.messageToBooking || '', // Message to booking/dispatcher (Norwegian: meldingtilbooking)
       attributes: body.attributes || '', // Empty string if not provided
     };
 
