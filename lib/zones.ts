@@ -1,6 +1,13 @@
 /**
- * Zone mapping for Voss area
- * Maps postal codes to zone numbers
+ * Zone mapping for Voss Taxi area
+ * Maps postal codes and cities to official Taxi4U zone numbers (100-903)
+ *
+ * Zone structure based on official zone maps:
+ * - Zone 100: Central Vossevangen
+ * - Zone 200-304: Nearby suburbs and villages
+ * - Zone 400-504: Outer areas
+ * - Zone 600-703: Further regions (Raundalen, etc.)
+ * - Zone 800-903: Remote areas
  */
 
 interface Zone {
@@ -9,39 +16,55 @@ interface Zone {
   zoneNo: number;
 }
 
-// Default zones for Voss area (will be populated from API)
+// Official zone mappings for Voss area
+// Note: These are the actual zone codes expected by Taxi4U API (100-903 range)
 const vossZones: Zone[] = [
-  { postalCode: '5700', city: 'VOSS', zoneNo: 1 }, // Central Voss
-  { postalCode: '5704', city: 'VOSS', zoneNo: 1 },
-  { postalCode: '5706', city: 'VOSS', zoneNo: 1 },
-  { postalCode: '5710', city: 'SKULESTADMO', zoneNo: 2 },
-  { postalCode: '5715', city: 'VOSSESTRAND', zoneNo: 3 },
+  // Zone 100 - Central Vossevangen
+  { postalCode: '5700', city: 'VOSSEVANGEN', zoneNo: 100 },
+  { postalCode: '5700', city: 'VOSS', zoneNo: 100 },
+  { postalCode: '5704', city: 'VOSS', zoneNo: 100 },
+
+  // Zone 200 - Nearby areas
+  { postalCode: '5706', city: 'VOSS', zoneNo: 200 },
+
+  // Zone 300 - Suburbs
+  { postalCode: '5710', city: 'SKULESTADMO', zoneNo: 500 },
+
+  // Zone 700 - Raundalen and surrounding
+  { postalCode: '5715', city: 'VOSSESTRAND', zoneNo: 700 },
+
+  // Add more mappings as needed based on actual usage
 ];
 
 /**
  * Get zone number from postal code
  */
 export function getZoneFromPostalCode(postalCode: string): number {
+  if (!postalCode) return 100;
+
   const zone = vossZones.find(z => z.postalCode === postalCode);
-  return zone ? zone.zoneNo : 1; // Default to zone 1 (central Voss)
+  return zone ? zone.zoneNo : 100; // Default to zone 100 (central Voss)
 }
 
 /**
  * Get zone number from city name
  */
 export function getZoneFromCity(city: string): number {
+  if (!city) return 100;
+
   const normalizedCity = city.toUpperCase().trim();
   const zone = vossZones.find(z => z.city === normalizedCity);
-  return zone ? zone.zoneNo : 1; // Default to zone 1
+  return zone ? zone.zoneNo : 100; // Default to zone 100
 }
 
 /**
  * Get zone number (tries postal code first, then city)
+ * Returns official Taxi4U zone codes (100-903 range)
  */
 export function getZoneNumber(postalCode?: string, city?: string): number {
   if (postalCode) {
     const zoneFromPostal = getZoneFromPostalCode(postalCode);
-    if (zoneFromPostal) return zoneFromPostal;
+    if (zoneFromPostal !== 100 || !city) return zoneFromPostal;
   }
 
   if (city) {
@@ -49,6 +72,6 @@ export function getZoneNumber(postalCode?: string, city?: string): number {
     if (zoneFromCity) return zoneFromCity;
   }
 
-  // Default to zone 1 (central Voss)
-  return 1;
+  // Default to zone 100 (central Voss)
+  return 100;
 }

@@ -10,25 +10,18 @@ export async function POST(request: NextRequest) {
     // Get central code from environment or use default
     const centralCode = process.env.TAXI4U_CENTRAL_CODE || 'VS';
 
-    // Calculate zone numbers from postal codes/cities
-    const fromZoneNo = getZoneNumber(body.fromPostalCode, body.fromCity);
-    const toZoneNo = body.toPostalCode || body.toCity
-      ? getZoneNumber(body.toPostalCode, body.toCity)
-      : undefined;
-
     // Build booking payload with flat structure (Taxi4U API format)
+    // Let Taxi4U API determine zones from full addresses
     const bookingData: any = {
       centralCode,
       // From location
       fromStreet: body.fromStreet,
       fromCity: body.fromCity,
       fromPostalCode: body.fromPostalCode,
-      fromZoneNo,
       // To location (with defaults for optional destination)
       toStreet: body.toStreet || 'Ikke oppgitt', // "Not specified" in Norwegian
       toCity: body.toCity || '',
       toPostalCode: body.toPostalCode || '',
-      toZoneNo: toZoneNo || 0, // 0 for unknown/unspecified
       // Customer information
       customerName: body.customerName,
       tel: body.tel,
