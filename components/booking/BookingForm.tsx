@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
@@ -9,25 +9,11 @@ interface BookingFormProps {
   locale: string;
 }
 
-// Predefined message options
-const MESSAGE_OPTIONS = {
-  no: [
-    { value: 'wheelchair', label: 'Rullestol' },
-    { value: 'manual_wheelchair', label: 'Manuell rullestol' },
-    { value: 'low_entrance', label: 'Lavt innsteg' },
-    { value: 'child_seat', label: 'Barnesete' },
-    { value: 'extra_luggage', label: 'Ekstra bagasje' },
-    { value: 'pet', label: 'Husdyr' },
-  ],
-  en: [
-    { value: 'wheelchair', label: 'Wheelchair' },
-    { value: 'manual_wheelchair', label: 'Manual wheelchair' },
-    { value: 'low_entrance', label: 'Low entrance' },
-    { value: 'child_seat', label: 'Child seat' },
-    { value: 'extra_luggage', label: 'Extra luggage' },
-    { value: 'pet', label: 'Pet' },
-  ],
-};
+interface TripAttribute {
+  attributeCode: number;
+  description: string;
+  attributeType: number;
+}
 
 export function BookingForm({ locale }: BookingFormProps) {
   const t = useTranslations('booking');
@@ -50,19 +36,43 @@ export function BookingForm({ locale }: BookingFormProps) {
   const [childAge, setChildAge] = useState('');
   const [skisCount, setSkisCount] = useState(0);
   const [baggageCount, setBaggageCount] = useState(0);
-  const [selectedMessages, setSelectedMessages] = useState<string[]>([]);
+  const [selectedAttributes, setSelectedAttributes] = useState<number[]>([]);
   const [additionalNote, setAdditionalNote] = useState('');
+
+  // Trip attributes from API
+  const [attributes, setAttributes] = useState<TripAttribute[]>([]);
+  const [attributesLoading, setAttributesLoading] = useState(true);
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [bookRef, setBookRef] = useState<string | null>(null);
 
-  const toggleMessage = (value: string) => {
-    setSelectedMessages(prev =>
-      prev.includes(value)
-        ? prev.filter(v => v !== value)
-        : [...prev, value]
+  // Fetch available trip attributes on mount
+  useEffect(() => {
+    const fetchAttributes = async () => {
+      try {
+        const response = await fetch('/api/booking/attributes');
+        const data = await response.json();
+
+        if (data.success && data.attributes) {
+          setAttributes(data.attributes);
+        }
+      } catch (err) {
+        console.error('Failed to fetch attributes:', err);
+      } finally {
+        setAttributesLoading(false);
+      }
+    };
+
+    fetchAttributes();
+  }, []);
+
+  const toggleAttribute = (code: number) => {
+    setSelectedAttributes(prev =>
+      prev.includes(code)
+        ? prev.filter(c => c !== code)
+        : [...prev, code]
     );
   };
 
@@ -76,13 +86,6 @@ export function BookingForm({ locale }: BookingFormProps) {
       // Build message to car
       const messages: string[] = [];
 
-      // Add selected predefined messages
-      const messageOptions = MESSAGE_OPTIONS[locale as keyof typeof MESSAGE_OPTIONS];
-      selectedMessages.forEach(value => {
-        const option = messageOptions.find(opt => opt.value === value);
-        if (option) messages.push(option.label);
-      });
-
       // Add equipment info
       if (passengerCount > 1) messages.push(`${passengerCount} ${locale === 'no' ? 'passasjerar' : 'passengers'}`);
       if (hasChildren && childAge) messages.push(`${locale === 'no' ? 'Barn' : 'Child'} ${childAge} ${locale === 'no' ? 'år' : 'years'}`);
@@ -92,34 +95,25 @@ export function BookingForm({ locale }: BookingFormProps) {
 
       const messageToCar = messages.join(', ');
 
-      // Prepare booking data
+      // Prepare booking data using simple /api/book endpoint structure
       const bookingData = {
-        orderedBy: 'Website',
+        fromStreet,
+        fromCity,
+        fromPostalCode,
+        toStreet: toStreet || undefined,
+        toCity: toCity || undefined,
+        toPostalCode: toPostalCode || undefined,
+        customerName: clientName,
+        tel,
         messageToCar: messageToCar || undefined,
         pickupTime: pickupTime
           ? new Date(pickupTime).toISOString()
           : new Date(Date.now() + 15 * 60000).toISOString(),
-        passengers: [
-          {
-            seqNo: 1,
-            clientName,
-            tel,
-            fromStreet,
-            fromCity,
-            fromPostalCode,
-            toStreet: toStreet || undefined,
-            toCity: toCity || undefined,
-            toPostalCode: toPostalCode || undefined,
-            pickupTime: pickupTime
-              ? new Date(pickupTime).toISOString()
-              : new Date(Date.now() + 15 * 60000).toISOString(),
-            clientNote: messageToCar || undefined,
-            clientNoteToCar: true,
-          },
-        ],
+        orderedBy: 'Website',
+        attributes: selectedAttributes.length > 0 ? selectedAttributes.join(',') : undefined,
       };
 
-      const response = await fetch('/api/booking/general', {
+      const response = await fetch('/api/booking/simple', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -157,7 +151,7 @@ export function BookingForm({ locale }: BookingFormProps) {
     setChildAge('');
     setSkisCount(0);
     setBaggageCount(0);
-    setSelectedMessages([]);
+    setSelectedAttributes([]);
     setAdditionalNote('');
     setSuccess(false);
     setBookRef(null);
@@ -192,8 +186,6 @@ export function BookingForm({ locale }: BookingFormProps) {
       </Card>
     );
   }
-
-  const messageOptions = MESSAGE_OPTIONS[locale as keyof typeof MESSAGE_OPTIONS];
 
   return (
     <Card>
@@ -443,32 +435,34 @@ export function BookingForm({ locale }: BookingFormProps) {
             </div>
           </div>
 
-          {/* Predefined Messages */}
-          <div className="space-y-3">
-            <label className="block text-sm font-medium">
-              {locale === 'no' ? 'Spesielle behov (vel fleire)' : 'Special requirements (select multiple)'}
-            </label>
-            <div className="grid md:grid-cols-2 gap-3">
-              {messageOptions.map(option => (
-                <label
-                  key={option.value}
-                  className={`flex items-center p-3 border rounded-lg cursor-pointer transition-colors ${
-                    selectedMessages.includes(option.value)
-                      ? 'border-taxi-yellow bg-taxi-yellow/10'
-                      : 'border-taxi-grey/30 hover:border-taxi-yellow/50'
-                  }`}
-                >
-                  <input
-                    type="checkbox"
-                    checked={selectedMessages.includes(option.value)}
-                    onChange={() => toggleMessage(option.value)}
-                    className="w-4 h-4 text-taxi-yellow border-taxi-grey rounded focus:ring-taxi-yellow"
-                  />
-                  <span className="ml-2 text-sm">{option.label}</span>
-                </label>
-              ))}
+          {/* Trip Attributes from API */}
+          {!attributesLoading && attributes.length > 0 && (
+            <div className="space-y-3">
+              <label className="block text-sm font-medium">
+                {locale === 'no' ? 'Spesielle behov (vel fleire)' : 'Special requirements (select multiple)'}
+              </label>
+              <div className="grid md:grid-cols-2 gap-3">
+                {attributes.map(attr => (
+                  <label
+                    key={attr.attributeCode}
+                    className={`flex items-center p-3 border rounded-lg cursor-pointer transition-colors ${
+                      selectedAttributes.includes(attr.attributeCode)
+                        ? 'border-taxi-yellow bg-taxi-yellow/10'
+                        : 'border-taxi-grey/30 hover:border-taxi-yellow/50'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedAttributes.includes(attr.attributeCode)}
+                      onChange={() => toggleAttribute(attr.attributeCode)}
+                      className="w-4 h-4 text-taxi-yellow border-taxi-grey rounded focus:ring-taxi-yellow"
+                    />
+                    <span className="ml-2 text-sm">{attr.description}</span>
+                  </label>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Additional Note */}
           <div>
