@@ -10,17 +10,6 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const locale = useLocale();
 
-  const navigation = [
-    { name: t('nav.home'), href: `/${locale}` },
-    { name: t('nav.services'), href: `/${locale}/services` },
-    { name: t('nav.tourist'), href: `/${locale}/tourist` },
-    { name: t('nav.about'), href: `/${locale}/about` },
-    { name: t('nav.testimonials'), href: `/${locale}/testimonials` },
-    { name: t('nav.careers'), href: `/${locale}/careers` },
-    { name: t('nav.news'), href: `/${locale}/news` },
-    { name: t('nav.contact'), href: `/${locale}/contact` },
-  ];
-
   return (
     <header className="sticky top-0 z-50 bg-taxi-black text-white shadow-lg">
       <Container>
