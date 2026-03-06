@@ -12,16 +12,6 @@ export function Header() {
   const t = useTranslations();
   const locale = useLocale();
 
-  const navigation = [
-    { name: t('nav.home'), href: `/${locale}` },
-    { name: t('nav.services'), href: `/${locale}/services` },
-    { name: t('nav.tourist'), href: `/${locale}/tourist` },
-    { name: t('nav.about'), href: `/${locale}/about` },
-    { name: t('nav.testimonials'), href: `/${locale}/testimonials` },
-    { name: t('nav.news'), href: `/${locale}/news` },
-    { name: t('nav.contact'), href: `/${locale}/contact` },
-  ];
-
   return (
     <header className="sticky top-0 z-50 bg-taxi-black text-white shadow-lg">
       <Container>
@@ -34,21 +24,8 @@ export function Header() {
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-8">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="text-sm font-medium hover:text-taxi-yellow transition-colors"
-              >
-                {item.name}
-              </Link>
-            ))}
-          </div>
-
           {/* Right Side - Phone, Language, CTA */}
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-4">
             {/* Phone */}
             <a
               href="tel:+4756511340"
@@ -107,7 +84,7 @@ export function Header() {
           {/* Mobile Menu Button */}
           <button
             type="button"
-            className="lg:hidden p-2 rounded-md text-white hover:text-taxi-yellow"
+            className="md:hidden p-2 rounded-md text-white hover:text-taxi-yellow"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             <span className="sr-only">Open menu</span>
@@ -145,19 +122,8 @@ export function Header() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-taxi-yellow/20 py-4">
+          <div className="md:hidden border-t border-taxi-yellow/20 py-4">
             <div className="flex flex-col space-y-4">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="text-base font-medium hover:text-taxi-yellow transition-colors"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}
-
               {/* Mobile Phone */}
               <a
                 href="tel:+4756511340"
