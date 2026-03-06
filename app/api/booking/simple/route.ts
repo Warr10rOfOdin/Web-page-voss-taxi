@@ -38,7 +38,10 @@ export async function POST(request: NextRequest) {
       messageToCar: body.messageToDriver || body.messageToCar || '',
       messageToBooking: body.messageToBooking || '',
       taxiAccountNo: body.accountNumber || '',
-      attributes: body.attributes || [],
+      // attributes expects a comma-separated string, not an array
+      attributes: Array.isArray(body.attributes)
+        ? body.attributes.join(',')
+        : (body.attributes || ''),
     };
 
     // Call Taxi4U API with authentication
