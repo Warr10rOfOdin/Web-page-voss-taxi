@@ -22,6 +22,7 @@ interface Passenger {
   toPostalCode: string;
   pickupTime: string;
   clientNote: string;
+  childAge?: string; // Optional child age for automatic seat selection
 }
 
 export function BookingForm({ locale }: BookingFormProps) {
@@ -42,6 +43,7 @@ export function BookingForm({ locale }: BookingFormProps) {
       toPostalCode: '',
       pickupTime: '',
       clientNote: '',
+      childAge: '',
     },
   ]);
 
@@ -54,7 +56,7 @@ export function BookingForm({ locale }: BookingFormProps) {
   const [bookRef, setBookRef] = useState<string | null>(null);
 
   // Get current GPS location and reverse geocode to address
-  const useMyLocation = async (passengerId: string) => {
+  const getMyLocation = async (passengerId: string) => {
     setLoadingLocation(true);
     setError(null);
 
@@ -127,6 +129,7 @@ export function BookingForm({ locale }: BookingFormProps) {
       toPostalCode: passengers[0].toPostalCode,
       pickupTime: passengers[0].pickupTime,
       clientNote: '',
+      childAge: '',
     };
     setPassengers([...passengers, newPassenger]);
   };
@@ -145,6 +148,47 @@ export function BookingForm({ locale }: BookingFormProps) {
     );
   };
 
+  // Calculate attributes automatically based on form inputs
+  const calculateAttributes = (): string[] => {
+    const attributes: string[] = [];
+    const passengerCount = passengers.length;
+
+    // Auto-select seating capacity based on passenger count
+    if (passengerCount === 2) {
+      attributes.push('2 PERSONER');
+    } else if (passengerCount === 3) {
+      attributes.push('3 PERSONER');
+    } else if (passengerCount === 4) {
+      attributes.push('4 PERSONER');
+    } else if (passengerCount >= 5 && passengerCount <= 6) {
+      attributes.push('6 SETER');
+    } else if (passengerCount === 7) {
+      attributes.push('7 SETER');
+    } else if (passengerCount >= 8 && passengerCount < 16) {
+      attributes.push('8 SETER');
+    } else if (passengerCount >= 16) {
+      attributes.push('16 SETER');
+    }
+
+    // Auto-select child seats based on child ages
+    passengers.forEach(passenger => {
+      if (passenger.childAge) {
+        const age = parseInt(passenger.childAge);
+        if (!isNaN(age)) {
+          if (age <= 1) {
+            attributes.push('BARNESTOL 0-1ÅR/0-13KG');
+          } else if (age >= 2 && age <= 4) {
+            attributes.push('BARNESTOL 1-4ÅR/9-18KG');
+          } else if (age >= 5 && age <= 10) {
+            attributes.push('BARNESTOL 4-10ÅR/15-25KG');
+          }
+        }
+      }
+    });
+
+    return attributes;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -159,6 +203,9 @@ export function BookingForm({ locale }: BookingFormProps) {
     }
 
     try {
+      // Calculate attributes automatically based on form data
+      const attributes = calculateAttributes();
+
       // Prepare booking data for API
       const bookingData = {
         orderedBy: 'Website',
@@ -168,6 +215,7 @@ export function BookingForm({ locale }: BookingFormProps) {
           : new Date(Date.now() + 15 * 60000).toISOString(),
         carGroupId: carGroupId, // Vehicle type
         numberOfCars: 1, // Single car per booking
+        attributes: attributes.length > 0 ? attributes : undefined, // Auto-selected attributes
         passengers: passengers.map(p => ({
           seqNo: p.seqNo,
           clientName: p.clientName,
@@ -247,6 +295,7 @@ export function BookingForm({ locale }: BookingFormProps) {
         toPostalCode: '',
         pickupTime: '',
         clientNote: '',
+        childAge: '',
       },
     ]);
     setMessageToCar('');
@@ -354,7 +403,7 @@ export function BookingForm({ locale }: BookingFormProps) {
                   </h4>
                   <button
                     type="button"
-                    onClick={() => useMyLocation(passenger.id)}
+                    onClick={() => getMyLocation(passenger.id)}
                     disabled={loadingLocation}
                     className="text-xs font-medium text-taxi-yellow hover:text-taxi-black transition-colors flex items-center gap-1 disabled:opacity-50"
                   >
@@ -476,6 +525,27 @@ export function BookingForm({ locale }: BookingFormProps) {
                   <p className="text-xs text-taxi-grey mt-1">{t('pickupTimeNote')}</p>
                 </div>
               )}
+
+              {/* Child Seat (Optional) */}
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  {locale === 'no' ? 'Alder på barn (valfritt)' : 'Child age (optional)'}
+                </label>
+                <input
+                  type="number"
+                  value={passenger.childAge || ''}
+                  onChange={(e) => updatePassenger(passenger.id, 'childAge', e.target.value)}
+                  min="0"
+                  max="12"
+                  className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+                  placeholder={locale === 'no' ? 'Alder (0-12 år)' : 'Age (0-12 years)'}
+                />
+                <p className="text-xs text-taxi-grey mt-1">
+                  {locale === 'no'
+                    ? 'Fyll ut om du reiser med barn som treng barnesete (0-10 år)'
+                    : 'Fill in if traveling with a child who needs a car seat (0-10 years)'}
+                </p>
+              </div>
 
               {/* Passenger Note */}
               <div>
