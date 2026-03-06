@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { taxi4uFetch } from '@/lib/taxi4u-auth';
 
 // Get trip receipt
 export async function GET(request: NextRequest) {
@@ -13,15 +14,10 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const centralCode = process.env.TAXI4U_CENTRAL_CODE || 'VOSS';
+    const centralCode = process.env.TAXI4U_CENTRAL_CODE || 'VS';
 
-    const response = await fetch(
-      `https://api.taxi4u.cab/api/receipt?centralCode=${centralCode}&bookRef=${bookRef}`,
-      {
-        headers: {
-          'Authorization': `Bearer ${process.env.TAXI4U_API_KEY}`,
-        },
-      }
+    const response = await taxi4uFetch(
+      `https://api.taxi4u.cab/api/receipt?centralCode=${centralCode}&bookRef=${bookRef}`
     );
 
     if (response.status === 204) {
