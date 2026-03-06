@@ -10,23 +10,9 @@ export async function POST(request: NextRequest) {
     // Get central code from environment or use default
     const centralCode = process.env.TAXI4U_CENTRAL_CODE || 'VS';
 
-    // Add zone numbers to passengers (using PascalCase as expected by Taxi4U API)
-    const processedPassengers = body.passengers?.map((passenger: any) => {
-      const fromZone = getZoneNumber(passenger.fromPostalCode, passenger.fromCity);
-      const toZone = passenger.toPostalCode || passenger.toCity
-        ? getZoneNumber(passenger.toPostalCode, passenger.toCity)
-        : 0;
-
-      return {
-        ...passenger,
-        // Remove camelCase versions if they exist
-        fromZoneNo: undefined,
-        toZoneNo: undefined,
-        // Add PascalCase versions as expected by API
-        FromZoneNo: fromZone,
-        ToZoneNo: toZone,
-      };
-    });
+    // Pass passengers as-is - let Taxi4U API determine zones from full addresses
+    // The API will calculate zones based on fromStreet, fromCity, fromPostalCode
+    const processedPassengers = body.passengers;
 
     // Build enhanced booking payload
     const bookingData = {
