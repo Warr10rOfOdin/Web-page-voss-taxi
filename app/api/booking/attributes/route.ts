@@ -4,12 +4,17 @@ export async function GET() {
   try {
     const centralCode = process.env.TAXI4U_CENTRAL_CODE || 'VOSS';
 
+    // Using Basic Auth with username (centralCode) and password (API key)
+    const username = centralCode;
+    const password = process.env.TAXI4U_API_KEY || '';
+    const authString = Buffer.from(`${username}:${password}`).toString('base64');
+
     const response = await fetch(
       `https://api.taxi4u.cab/api/attribute?centralCode=${centralCode}`,
       {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${process.env.TAXI4U_API_KEY}`,
+          'Authorization': `Basic ${authString}`,
           'Accept': 'application/json',
         },
       }
