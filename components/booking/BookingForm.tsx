@@ -26,7 +26,6 @@ export function BookingForm({ locale }: BookingFormProps) {
   const [passengerCount, setPassengerCount] = useState(1);
   const [clientNote, setClientNote] = useState('');
   const [messageToCar, setMessageToCar] = useState('');
-  const [carGroupId, setCarGroupId] = useState<number>(0);
 
   // Price quote state
   const [priceQuote, setPriceQuote] = useState<{ tariff: string; price: number } | null>(null);
@@ -127,10 +126,12 @@ export function BookingForm({ locale }: BookingFormProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           fromStreet,
+          fromCity,
           fromPostalCode,
           fromLat: 0,
           fromLon: 0,
           toStreet,
+          toCity,
           toPostalCode,
           toLat: 0,
           toLon: 0,
@@ -159,12 +160,11 @@ export function BookingForm({ locale }: BookingFormProps) {
     setError(null);
     setSuccess(false);
 
-    // Validate vehicle type is selected
-    if (carGroupId === 0) {
-      setError(locale === 'no' ? 'Velg en kjøretøytype' : 'Please select a vehicle type');
-      setLoading(false);
-      return;
-    }
+    // Auto-determine vehicle type based on passenger count
+    // 1-4 passengers = Standard Taxi (carGroupId 1)
+    // 5-6 passengers = Large Taxi (carGroupId 2)
+    // 7+ passengers = Minibus (carGroupId 3)
+    const carGroupId = passengerCount <= 4 ? 1 : passengerCount <= 6 ? 2 : 3;
 
     try {
       // Calculate attributes based on passenger count
@@ -267,7 +267,6 @@ export function BookingForm({ locale }: BookingFormProps) {
     setPassengerCount(1);
     setClientNote('');
     setMessageToCar('');
-    setCarGroupId(0);
     setPriceQuote(null);
     setPriceError(null);
     setSuccess(false);
@@ -548,37 +547,6 @@ export function BookingForm({ locale }: BookingFormProps) {
               className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
             />
             <p className="text-xs text-taxi-grey mt-1">{t('pickupTimeNote')}</p>
-          </div>
-
-          {/* Vehicle Type Selection */}
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              {locale === 'no' ? 'Kjøretøytype *' : 'Vehicle Type *'}
-            </label>
-            <select
-              value={carGroupId}
-              onChange={(e) => setCarGroupId(Number(e.target.value))}
-              required
-              className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
-            >
-              <option value={0} disabled>
-                {locale === 'no' ? '-- Velg kjøretøytype --' : '-- Select vehicle type --'}
-              </option>
-              <option value={1}>
-                {locale === 'no' ? 'Standard Taxi (1-4 personer)' : 'Standard Taxi (1-4 people)'}
-              </option>
-              <option value={2}>
-                {locale === 'no' ? 'Stor Taxi (5-6 personer)' : 'Large Taxi (5-6 people)'}
-              </option>
-              <option value={3}>
-                {locale === 'no' ? 'Minibuss (7-8 personer)' : 'Minibus (7-8 people)'}
-              </option>
-            </select>
-            <p className="text-xs text-taxi-grey mt-1">
-              {locale === 'no'
-                ? 'Velg kjøretøytype basert på antall passasjerer og bagasje'
-                : 'Select vehicle type based on number of passengers and luggage'}
-            </p>
           </div>
 
           {/* Notes */}

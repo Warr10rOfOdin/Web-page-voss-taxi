@@ -10,6 +10,10 @@ export async function POST(request: NextRequest) {
     // Get central code from environment or use default
     const centralCode = process.env.TAXI4U_CENTRAL_CODE || 'VS';
 
+    // Calculate zones
+    const fromZone = getZoneNumber(body.fromPostalCode, body.fromCity);
+    const toZone = getZoneNumber(body.toPostalCode, body.toCity);
+
     // Build booking payload with flat structure (Taxi4U API format)
     const bookingData: any = {
       centralCode,
@@ -17,12 +21,14 @@ export async function POST(request: NextRequest) {
       fromStreet: body.fromStreet,
       fromCity: body.fromCity,
       fromPostalCode: body.fromPostalCode,
-      fromZoneNo: getZoneNumber(body.fromPostalCode, body.fromCity),
+      fromZone,
+      fromZoneNo: fromZone,
       // To location (with defaults for optional destination)
       toStreet: body.toStreet || 'Ikke oppgitt', // "Not specified" in Norwegian
       toCity: body.toCity || '',
       toPostalCode: body.toPostalCode || '',
-      toZoneNo: getZoneNumber(body.toPostalCode, body.toCity),
+      toZone,
+      toZoneNo: toZone,
       // Customer information
       customerName: body.customerName,
       tel: body.tel,
