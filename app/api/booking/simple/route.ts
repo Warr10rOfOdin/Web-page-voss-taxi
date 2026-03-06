@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     // Get central code from environment or use default
-    const centralCode = process.env.TAXI4U_CENTRAL_CODE || 'VOSS';
+    const centralCode = process.env.TAXI4U_CENTRAL_CODE || 'VS';
 
     // Calculate zone numbers from postal codes/cities
     const fromZoneNo = getZoneNumber(body.fromPostalCode, body.fromCity);
