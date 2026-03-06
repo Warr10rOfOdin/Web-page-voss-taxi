@@ -34,21 +34,15 @@ export async function POST(request: NextRequest) {
       tel: body.tel,
       pickupTime: body.pickupTime,
       orderedBy: body.orderedBy || 'Website',
+      // Required fields (even if empty)
+      messageToCar: body.messageToDriver || body.messageToCar || '',
+      messageToBooking: body.messageToBooking || '',
     };
 
     // Add optional fields per API documentation (only if they have values)
     // API spec: https://api.taxi4u.cab/swagger (POST /api/book)
     if (body.accountNumber) {
       bookingData.taxiAccountNo = body.accountNumber; // API uses English field names
-    }
-
-    const messageToDriver = body.messageToDriver || body.messageToCar;
-    if (messageToDriver) {
-      bookingData.messageToCar = messageToDriver; // API uses English field names
-    }
-
-    if (body.messageToBooking) {
-      bookingData.messageToBooking = body.messageToBooking; // API uses English field names
     }
 
     if (body.attributes) {
