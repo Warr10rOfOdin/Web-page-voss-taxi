@@ -37,13 +37,8 @@ export async function POST(request: NextRequest) {
       // Required fields (even if empty)
       messageToCar: body.messageToDriver || body.messageToCar || '',
       messageToBooking: body.messageToBooking || '',
+      taxiAccountNo: body.accountNumber || '',
     };
-
-    // Add optional fields per API documentation (only if they have values)
-    // API spec: https://api.taxi4u.cab/swagger (POST /api/book)
-    if (body.accountNumber) {
-      bookingData.taxiAccountNo = body.accountNumber; // API uses English field names
-    }
 
     if (body.attributes) {
       bookingData.attributes = body.attributes;
