@@ -13,6 +13,52 @@ interface AuthTokens {
 let cachedTokens: AuthTokens | null = null;
 
 /**
+ * Sleep helper for retry backoff
+ */
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * Retry fetch with exponential backoff for transient errors
+ */
+async function fetchWithRetry(
+  url: string,
+  options: RequestInit = {},
+  maxRetries = 3
+): Promise<Response> {
+  let lastError: Error | null = null;
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const response = await fetch(url, options);
+
+      // Retry on server timeout/overload errors
+      if (response.status === 522 || response.status === 503 || response.status === 504) {
+        if (attempt < maxRetries - 1) {
+          const backoffMs = Math.pow(2, attempt) * 2000; // 2s, 4s, 8s
+          console.log(`Request failed with ${response.status}, retrying in ${backoffMs}ms (attempt ${attempt + 1}/${maxRetries})...`);
+          await sleep(backoffMs);
+          continue;
+        }
+      }
+
+      return response;
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(String(error));
+      if (attempt < maxRetries - 1) {
+        const backoffMs = Math.pow(2, attempt) * 2000;
+        console.log(`Request error: ${lastError.message}, retrying in ${backoffMs}ms (attempt ${attempt + 1}/${maxRetries})...`);
+        await sleep(backoffMs);
+        continue;
+      }
+    }
+  }
+
+  throw lastError || new Error('Request failed after retries');
+}
+
+/**
  * Login to Taxi4U API and get access token
  */
 async function login(): Promise<AuthTokens> {
@@ -26,7 +72,7 @@ async function login(): Promise<AuthTokens> {
 
   console.log('Attempting login to Taxi4U API...', { userId });
 
-  const response = await fetch('https://api.taxi4u.cab/api/auth/login', {
+  const response = await fetchWithRetry('https://api.taxi4u.cab/api/auth/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -62,7 +108,7 @@ async function refreshAccessToken(): Promise<AuthTokens> {
     return login();
   }
 
-  const response = await fetch('https://api.taxi4u.cab/api/auth/refresh-token', {
+  const response = await fetchWithRetry('https://api.taxi4u.cab/api/auth/refresh-token', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -114,7 +160,7 @@ export async function getAccessToken(): Promise<string> {
 export async function taxi4uFetch(url: string, options: RequestInit = {}): Promise<Response> {
   const token = await getAccessToken();
 
-  const response = await fetch(url, {
+  const response = await fetchWithRetry(url, {
     ...options,
     headers: {
       ...options.headers,
@@ -127,7 +173,7 @@ export async function taxi4uFetch(url: string, options: RequestInit = {}): Promi
     await refreshAccessToken();
     const newToken = cachedTokens!.accessToken;
 
-    return fetch(url, {
+    return fetchWithRetry(url, {
       ...options,
       headers: {
         ...options.headers,
