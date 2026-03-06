@@ -32,9 +32,9 @@ export async function POST(request: NextRequest) {
       tel: body.tel,
       pickupTime: body.pickupTime,
       orderedBy: body.orderedBy || 'Website',
-      // Optional fields
-      messageToCar: body.messageToCar,
-      attributes: body.attributes,
+      // Required fields that can be empty
+      messageToCar: body.messageToCar || '', // Empty string if not provided
+      attributes: body.attributes || '', // Empty string if not provided
     };
 
     // Call Taxi4U API with authentication
