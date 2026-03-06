@@ -32,6 +32,7 @@ export async function POST(request: NextRequest) {
       tel: body.tel,
       pickupTime: body.pickupTime,
       orderedBy: body.orderedBy || 'Website',
+      accountNumber: body.accountNumber || '', // Account/customer number
       // Required fields that can be empty
       messageToCar: body.messageToCar || '', // Empty string if not provided
       messageToBooking: body.messageToBooking || '', // Message to booking/dispatcher
