@@ -10,9 +10,12 @@ export async function POST(request: NextRequest) {
     // Get central code from environment or use default
     const centralCode = process.env.TAXI4U_CENTRAL_CODE || 'VS';
 
-    // Pass passengers as-is - let Taxi4U API determine zones from full addresses
-    // The API will calculate zones based on fromStreet, fromCity, fromPostalCode
-    const processedPassengers = body.passengers;
+    // Process passengers to add zone numbers (required by API)
+    const processedPassengers = body.passengers.map((passenger: any) => ({
+      ...passenger,
+      fromZoneNo: getZoneNumber(passenger.fromPostalCode, passenger.fromCity),
+      toZoneNo: getZoneNumber(passenger.toPostalCode, passenger.toCity),
+    }));
 
     // Build enhanced booking payload
     const bookingData = {
