@@ -186,9 +186,9 @@
     "errorTitle": "Booking Error",
     "optionalDestination": "Optional - can be specified to driver",
     "successTitle": "Booking Confirmed!",
-    "successMessage": "Your taxi has been booked successfully.",
+    "successMessage": "Your taxi has been booked successfully. You will receive an SMS confirmation with all the details.",
     "bookingReference": "Booking Reference",
-    "confirmationNote": "Please save your booking reference. The driver will contact you shortly.",
+    "confirmationNote": "Please save your booking reference. Check your SMS for confirmation. The driver will contact you shortly.",
     "bookAnother": "Book Another Taxi"
   }
 }
