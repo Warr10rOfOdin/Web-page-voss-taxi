@@ -46,6 +46,7 @@ export function BookingForm({ locale }: BookingFormProps) {
   ]);
 
   const [messageToCar, setMessageToCar] = useState('');
+  const [carGroupId, setCarGroupId] = useState(1); // Default to standard taxi
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -97,6 +98,8 @@ export function BookingForm({ locale }: BookingFormProps) {
         pickupTime: passengers[0].pickupTime
           ? new Date(passengers[0].pickupTime).toISOString()
           : new Date(Date.now() + 15 * 60000).toISOString(),
+        carGroupId: carGroupId, // Vehicle type
+        numberOfCars: 1, // Single car per booking
         passengers: passengers.map(p => ({
           seqNo: p.seqNo,
           clientName: p.clientName,
@@ -158,6 +161,7 @@ export function BookingForm({ locale }: BookingFormProps) {
       },
     ]);
     setMessageToCar('');
+    setCarGroupId(1);
     setSuccess(false);
     setBookRef(null);
   };
@@ -391,6 +395,33 @@ export function BookingForm({ locale }: BookingFormProps) {
           >
             + {locale === 'no' ? 'Legg til passasjer' : 'Add passenger'}
           </button>
+
+          {/* Vehicle Type Selection */}
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              {locale === 'no' ? 'Kjøretøytype' : 'Vehicle Type'}
+            </label>
+            <select
+              value={carGroupId}
+              onChange={(e) => setCarGroupId(Number(e.target.value))}
+              className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+            >
+              <option value={1}>
+                {locale === 'no' ? 'Standard Taxi (1-4 personer)' : 'Standard Taxi (1-4 people)'}
+              </option>
+              <option value={2}>
+                {locale === 'no' ? 'Stor Taxi (5-6 personer)' : 'Large Taxi (5-6 people)'}
+              </option>
+              <option value={3}>
+                {locale === 'no' ? 'Minibuss (7-8 personer)' : 'Minibus (7-8 people)'}
+              </option>
+            </select>
+            <p className="text-xs text-taxi-grey mt-1">
+              {locale === 'no'
+                ? 'Velg kjøretøytype basert på antall passasjerer og bagasje'
+                : 'Select vehicle type based on number of passengers and luggage'}
+            </p>
+          </div>
 
           {/* General Message to Driver */}
           <div>
