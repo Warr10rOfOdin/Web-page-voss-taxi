@@ -33,6 +33,14 @@ export async function POST(request: NextRequest) {
 
     const data = await response.json();
 
+    // Check for error in response
+    if (data.errorMessage) {
+      return NextResponse.json(
+        { error: 'Booking failed', details: data.errorMessage },
+        { status: 400 }
+      );
+    }
+
     return NextResponse.json({
       success: true,
       bookRef: data.bookRef,

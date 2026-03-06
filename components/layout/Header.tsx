@@ -2,14 +2,12 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
-import { Button } from '@/components/ui/Button';
+import { useLocale } from 'next-intl';
 import { Container } from '@/components/ui/Container';
 import { cn } from '@/lib/utils';
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const t = useTranslations();
   const locale = useLocale();
 
   const navigation = [
@@ -35,7 +33,7 @@ export function Header() {
             </div>
           </Link>
 
-          {/* Right Side - Phone, Language, CTA */}
+          {/* Right Side - Phone and Language */}
           <div className="hidden md:flex items-center space-x-4">
             {/* Phone */}
             <a
@@ -83,13 +81,6 @@ export function Header() {
                 EN
               </Link>
             </div>
-
-            {/* CTA Button */}
-            <Link href={`/${locale}/book`}>
-              <Button size="sm">
-                {t('hero.ctaPrimary')}
-              </Button>
-            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -181,13 +172,6 @@ export function Header() {
                   EN
                 </Link>
               </div>
-
-              {/* Mobile CTA */}
-              <Link href={`/${locale}/book`}>
-                <Button size="md" className="w-full">
-                  {t('hero.ctaPrimary')}
-                </Button>
-              </Link>
             </div>
           </div>
         )}
