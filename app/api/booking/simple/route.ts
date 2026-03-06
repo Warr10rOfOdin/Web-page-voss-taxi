@@ -38,11 +38,8 @@ export async function POST(request: NextRequest) {
       messageToCar: body.messageToDriver || body.messageToCar || '',
       messageToBooking: body.messageToBooking || '',
       taxiAccountNo: body.accountNumber || '',
+      attributes: body.attributes || [],
     };
-
-    if (body.attributes) {
-      bookingData.attributes = body.attributes;
-    }
 
     // Call Taxi4U API with authentication
     console.log('Sending booking request:', JSON.stringify(bookingData, null, 2));
