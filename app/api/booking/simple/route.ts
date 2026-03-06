@@ -34,6 +34,7 @@ export async function POST(request: NextRequest) {
       orderedBy: body.orderedBy || 'Website',
       // Required fields that can be empty
       messageToCar: body.messageToCar || '', // Empty string if not provided
+      messageToBooking: body.messageToBooking || '', // Message to booking/dispatcher
       attributes: body.attributes || '', // Empty string if not provided
     };
 
