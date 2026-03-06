@@ -164,11 +164,10 @@ export function BookingForm({ locale }: BookingFormProps) {
       attributes.push('6 SETER');
     } else if (passengerCount === 7) {
       attributes.push('7 SETER');
-    } else if (passengerCount >= 8 && passengerCount < 16) {
+    } else if (passengerCount === 8) {
       attributes.push('8 SETER');
-    } else if (passengerCount >= 16) {
-      attributes.push('16 SETER');
     }
+    // Note: 9+ passengers must call - not available for online booking
 
     // Auto-select child seats based on child ages
     passengers.forEach(passenger => {
@@ -564,13 +563,24 @@ export function BookingForm({ locale }: BookingFormProps) {
           ))}
 
           {/* Add Passenger Button */}
-          <button
-            type="button"
-            onClick={addPassenger}
-            className="w-full py-3 border-2 border-dashed border-taxi-yellow rounded-lg text-taxi-yellow hover:bg-taxi-yellow/10 transition-colors font-medium"
-          >
-            + {locale === 'no' ? 'Legg til passasjer' : 'Add passenger'}
-          </button>
+          {passengers.length < 8 ? (
+            <button
+              type="button"
+              onClick={addPassenger}
+              className="w-full py-3 border-2 border-dashed border-taxi-yellow rounded-lg text-taxi-yellow hover:bg-taxi-yellow/10 transition-colors font-medium"
+            >
+              + {locale === 'no' ? 'Legg til passasjer' : 'Add passenger'}
+            </button>
+          ) : (
+            <div className="w-full py-3 border-2 border-dashed border-taxi-grey/30 rounded-lg text-taxi-grey text-center">
+              <p className="font-medium">
+                {locale === 'no' ? 'Maksimalt 8 passasjerer for nettbestilling' : 'Maximum 8 passengers for online booking'}
+              </p>
+              <p className="text-sm mt-1">
+                {locale === 'no' ? 'For større grupper, ring oss på 56 51 07 00' : 'For larger groups, call us at 56 51 07 00'}
+              </p>
+            </div>
+          )}
 
           {/* Vehicle Type Selection */}
           <div>
