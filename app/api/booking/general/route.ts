@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { taxi4uFetch } from '@/lib/taxi4u-auth';
 
 // General booking endpoint (multi-passenger, detailed)
 export async function POST(request: NextRequest) {
@@ -6,16 +7,17 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     // Get central code from environment or use default
-    const centralCode = process.env.TAXI4U_CENTRAL_CODE || 'VOSS';
+    const centralCode = process.env.TAXI4U_CENTRAL_CODE || 'VS';
 
-    // Call Taxi4U API
-    const response = await fetch(
+    console.log('Sending general booking request:', JSON.stringify(body, null, 2));
+
+    // Call Taxi4U API with authentication (handles token refresh)
+    const response = await taxi4uFetch(
       `https://api.taxi4u.cab/api/book/general?centralCode=${centralCode}`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.TAXI4U_API_KEY}`,
         },
         body: JSON.stringify(body),
       }
@@ -23,6 +25,7 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       const error = await response.text();
+      console.error('General booking failed:', { status: response.status, error, sentData: body });
       return NextResponse.json(
         { error: 'Booking failed', details: error },
         { status: response.status }
@@ -30,6 +33,14 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await response.json();
+
+    // Check for error in response
+    if (data.errorMessage) {
+      return NextResponse.json(
+        { error: 'Booking failed', details: data.errorMessage },
+        { status: 400 }
+      );
+    }
 
     return NextResponse.json({
       success: true,
