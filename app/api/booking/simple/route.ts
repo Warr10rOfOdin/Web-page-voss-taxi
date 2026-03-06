@@ -36,8 +36,7 @@ export async function POST(request: NextRequest) {
       orderedBy: body.orderedBy || 'Website',
       accountNumber: body.accountNumber || '', // Account/customer number
       // Optional fields
-      messageToDriver: body.messageToDriver || '', // Empty string if not provided
-      messageToBooking: body.messageToBooking || '', // Message to booking/dispatcher
+      messageToCar: body.messageToDriver || body.messageToCar || '', // Message to driver/car
       attributes: body.attributes || '', // Empty string if not provided
     };
 
