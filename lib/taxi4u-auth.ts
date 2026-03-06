@@ -20,8 +20,11 @@ async function login(): Promise<AuthTokens> {
   const password = process.env.TAXI4U_PASSWORD;
 
   if (!userId || !password) {
+    console.error('Missing credentials:', { userId: !!userId, password: !!password });
     throw new Error('TAXI4U_USER_ID and TAXI4U_PASSWORD must be set in environment variables');
   }
+
+  console.log('Attempting login to Taxi4U API...', { userId });
 
   const response = await fetch('https://api.taxi4u.cab/api/auth/login', {
     method: 'POST',
@@ -33,10 +36,12 @@ async function login(): Promise<AuthTokens> {
 
   if (!response.ok) {
     const error = await response.text();
-    throw new Error(`Login failed: ${error}`);
+    console.error('Login failed:', { status: response.status, error });
+    throw new Error(`Login failed (${response.status}): ${error}`);
   }
 
   const data = await response.json();
+  console.log('Login successful!', { userId: data.userId });
 
   // Cache tokens with 55-minute expiry (tokens typically last 1 hour)
   cachedTokens = {
