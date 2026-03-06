@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
-import { AddressAutocomplete } from '@/components/ui/AddressAutocomplete';
 
 interface BookingFormProps {
   locale: string;
@@ -132,15 +131,20 @@ export function BookingForm({ locale }: BookingFormProps) {
       clientNote: '',
       childAge: '',
     };
+    setPassengers([...passengers, newPassenger]);
+  };
 
-    fetchAttributes();
-  }, []);
+  const removePassenger = (id: string) => {
+    if (passengers.length > 1) {
+      setPassengers(passengers.filter(p => p.id !== id).map((p, idx) => ({ ...p, seqNo: idx + 1 })));
+    }
+  };
 
-  const toggleAttribute = (code: number) => {
-    setSelectedAttributes(prev =>
-      prev.includes(code)
-        ? prev.filter(c => c !== code)
-        : [...prev, code]
+  const updatePassenger = (id: string, field: keyof Passenger, value: string) => {
+    setPassengers(
+      passengers.map(p =>
+        p.id === id ? { ...p, [field]: value } : p
+      )
     );
   };
 
@@ -203,17 +207,10 @@ export function BookingForm({ locale }: BookingFormProps) {
 
       // Prepare booking data for API
       const bookingData = {
-        fromStreet,
-        fromCity,
-        fromPostalCode,
-        toStreet: toStreet || undefined,
-        toCity: toCity || undefined,
-        toPostalCode: toPostalCode || undefined,
-        customerName: clientName,
-        tel,
+        orderedBy: 'Website',
         messageToCar: messageToCar || undefined,
-        pickupTime: pickupTime
-          ? new Date(pickupTime).toISOString()
+        pickupTime: passengers[0].pickupTime
+          ? new Date(passengers[0].pickupTime).toISOString()
           : new Date(Date.now() + 15 * 60000).toISOString(),
         carGroupId: carGroupId, // Vehicle type
         numberOfCars: 1, // Single car per booking
@@ -238,7 +235,7 @@ export function BookingForm({ locale }: BookingFormProps) {
         })),
       };
 
-      const response = await fetch('/api/booking/simple', {
+      const response = await fetch('/api/booking/general', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -342,90 +339,57 @@ export function BookingForm({ locale }: BookingFormProps) {
         <CardTitle className="text-2xl">{t('title')}</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Contact Info */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-bold">
-              {locale === 'no' ? 'Kontaktinformasjon' : 'Contact Information'}
-            </h3>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  {t('name')} *
-                </label>
-                <input
-                  type="text"
-                  value={clientName}
-                  onChange={(e) => setClientName(e.target.value)}
-                  required
-                  className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
-                />
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Passengers */}
+          {passengers.map((passenger, index) => (
+            <div
+              key={passenger.id}
+              className="border border-taxi-grey/30 rounded-lg p-6 space-y-4 relative"
+            >
+              {/* Passenger header */}
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-bold">
+                  {locale === 'no' ? 'Passasjer' : 'Passenger'} {index + 1}
+                </h3>
+                {passengers.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removePassenger(passenger.id)}
+                    className="text-red-500 hover:text-red-700 text-sm font-medium"
+                  >
+                    {locale === 'no' ? 'Fjern' : 'Remove'}
+                  </button>
+                )}
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  {t('phone')} *
-                </label>
-                <input
-                  type="tel"
-                  value={tel}
-                  onChange={(e) => setTel(e.target.value)}
-                  required
-                  className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
-                  placeholder="+47 123 45 678"
-                />
-              </div>
-            </div>
-          </div>
 
-          {/* Pickup Location */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-bold flex items-center">
-              <svg className="w-5 h-5 text-taxi-yellow mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <circle cx="10" cy="10" r="8" />
-              </svg>
-              {t('pickupLocation')}
-            </h3>
-
-            <AddressAutocomplete
-              value={fromStreet}
-              onChange={setFromStreet}
-              onSelect={(address) => {
-                setFromStreet(address.street);
-                setFromCity(address.city);
-                setFromPostalCode(address.postalCode);
-              }}
-              label={t('street')}
-              placeholder="Uttrågata 19"
-              required
-            />
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  {t('city')} *
-                </label>
-                <input
-                  type="text"
-                  value={fromCity}
-                  onChange={(e) => setFromCity(e.target.value)}
-                  required
-                  className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
-                />
+              {/* Contact Info */}
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    {t('name')} *
+                  </label>
+                  <input
+                    type="text"
+                    value={passenger.clientName}
+                    onChange={(e) => updatePassenger(passenger.id, 'clientName', e.target.value)}
+                    required
+                    className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    {t('phone')} *
+                  </label>
+                  <input
+                    type="tel"
+                    value={passenger.tel}
+                    onChange={(e) => updatePassenger(passenger.id, 'tel', e.target.value)}
+                    required
+                    className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+                    placeholder="+47 123 45 678"
+                  />
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  {t('postalCode')} *
-                </label>
-                <input
-                  type="text"
-                  value={fromPostalCode}
-                  onChange={(e) => setFromPostalCode(e.target.value)}
-                  required
-                  className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
-                />
-              </div>
-            </div>
-          </div>
 
               {/* Pickup Location */}
               <div className="space-y-4">
@@ -467,107 +431,99 @@ export function BookingForm({ locale }: BookingFormProps) {
                   />
                 </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  {t('city')}
-                </label>
-                <input
-                  type="text"
-                  value={toCity}
-                  onChange={(e) => setToCity(e.target.value)}
-                  className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  {t('postalCode')}
-                </label>
-                <input
-                  type="text"
-                  value={toPostalCode}
-                  onChange={(e) => setToPostalCode(e.target.value)}
-                  className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Pickup Time */}
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              {t('pickupTime')}
-            </label>
-            <input
-              type="datetime-local"
-              value={pickupTime}
-              onChange={(e) => setPickupTime(e.target.value)}
-              min={getMinDateTime()}
-              className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
-            />
-            <p className="text-xs text-taxi-grey mt-1">{t('pickupTimeNote')}</p>
-          </div>
-
-          {/* Passenger and Equipment Details */}
-          <div className="space-y-4 border-t pt-4">
-            <h3 className="text-lg font-bold">
-              {locale === 'no' ? 'Passasjerar og utstyr' : 'Passengers and Equipment'}
-            </h3>
-
-            {/* Number of Passengers */}
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  {locale === 'no' ? 'Antal passasjerar' : 'Number of passengers'}
-                </label>
-                <select
-                  value={passengerCount}
-                  onChange={(e) => {
-                    setPassengerCount(parseInt(e.target.value));
-                    if (parseInt(e.target.value) === 1) setHasChildren(false);
-                  }}
-                  className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
-                >
-                  {[1, 2, 3, 4, 5, 6, 7, 8].map(num => (
-                    <option key={num} value={num}>{num}</option>
-                  ))}
-                </select>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      {t('city')} *
+                    </label>
+                    <input
+                      type="text"
+                      value={passenger.fromCity}
+                      onChange={(e) => updatePassenger(passenger.id, 'fromCity', e.target.value)}
+                      required
+                      className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      {t('postalCode')} *
+                    </label>
+                    <input
+                      type="text"
+                      value={passenger.fromPostalCode}
+                      onChange={(e) => updatePassenger(passenger.id, 'fromPostalCode', e.target.value)}
+                      required
+                      className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+                    />
+                  </div>
+                </div>
               </div>
 
-              {/* Children checkbox */}
-              <div className="flex items-center">
-                <label className="flex items-center cursor-pointer">
+              {/* Destination */}
+              <div className="space-y-4">
+                <h4 className="text-sm font-bold text-taxi-grey flex items-center">
+                  <svg className="w-4 h-4 text-taxi-yellow mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  {t('destination')}
+                </h4>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    {t('street')}
+                  </label>
                   <input
-                    type="checkbox"
-                    checked={hasChildren}
-                    onChange={(e) => {
-                      setHasChildren(e.target.checked);
-                      if (!e.target.checked) setChildAge('');
-                    }}
-                    className="w-5 h-5 text-taxi-yellow border-taxi-grey rounded focus:ring-taxi-yellow"
+                    type="text"
+                    value={passenger.toStreet}
+                    onChange={(e) => updatePassenger(passenger.id, 'toStreet', e.target.value)}
+                    className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+                    placeholder={t('optionalDestination')}
                   />
-                  <span className="ml-2 text-sm font-medium">
-                    {locale === 'no' ? 'Med barn' : 'With children'}
-                  </span>
-                </label>
-              </div>
-            </div>
+                </div>
 
-            {/* Child Age (conditional) */}
-            {hasChildren && (
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  {locale === 'no' ? 'Alder på barn' : 'Age of child'}
-                </label>
-                <input
-                  type="text"
-                  value={childAge}
-                  onChange={(e) => setChildAge(e.target.value)}
-                  className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
-                  placeholder={locale === 'no' ? 'T.d. 5 år' : 'E.g. 5 years'}
-                />
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      {t('city')}
+                    </label>
+                    <input
+                      type="text"
+                      value={passenger.toCity}
+                      onChange={(e) => updatePassenger(passenger.id, 'toCity', e.target.value)}
+                      className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      {t('postalCode')}
+                    </label>
+                    <input
+                      type="text"
+                      value={passenger.toPostalCode}
+                      onChange={(e) => updatePassenger(passenger.id, 'toPostalCode', e.target.value)}
+                      className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+                    />
+                  </div>
+                </div>
               </div>
-            )}
+
+              {/* Pickup Time (only for first passenger) */}
+              {index === 0 && (
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    {t('pickupTime')}
+                  </label>
+                  <input
+                    type="datetime-local"
+                    value={passenger.pickupTime}
+                    onChange={(e) => updatePassenger(passenger.id, 'pickupTime', e.target.value)}
+                    min={getMinDateTime()}
+                    className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+                  />
+                  <p className="text-xs text-taxi-grey mt-1">{t('pickupTimeNote')}</p>
+                </div>
+              )}
 
               {/* Child Seat (Optional) */}
               <div>
@@ -593,32 +549,18 @@ export function BookingForm({ locale }: BookingFormProps) {
               {/* Passenger Note */}
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  {locale === 'no' ? 'Antal par ski' : 'Number of ski pairs'}
+                  {locale === 'no' ? 'Notat (valfritt)' : 'Note (optional)'}
                 </label>
-                <input
-                  type="number"
-                  min="0"
-                  max="20"
-                  value={skisCount}
-                  onChange={(e) => setSkisCount(parseInt(e.target.value) || 0)}
+                <textarea
+                  value={passenger.clientNote}
+                  onChange={(e) => updatePassenger(passenger.id, 'clientNote', e.target.value)}
+                  rows={2}
                   className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  {locale === 'no' ? 'Antal bagasje' : 'Amount of baggage'}
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  max="20"
-                  value={baggageCount}
-                  onChange={(e) => setBaggageCount(parseInt(e.target.value) || 0)}
-                  className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+                  placeholder={locale === 'no' ? 'T.d. bagasje, spesielle ønskje...' : 'E.g. luggage, special requests...'}
                 />
               </div>
             </div>
-          </div>
+          ))}
 
           {/* Add Passenger Button */}
           {passengers.length < 8 ? (
@@ -671,17 +613,17 @@ export function BookingForm({ locale }: BookingFormProps) {
             </p>
           </div>
 
-          {/* Additional Note */}
+          {/* General Message to Driver */}
           <div>
             <label className="block text-sm font-medium mb-1">
-              {locale === 'no' ? 'Tilleggsnotat (valfritt)' : 'Additional note (optional)'}
+              {t('messageOptional')}
             </label>
             <textarea
-              value={additionalNote}
-              onChange={(e) => setAdditionalNote(e.target.value)}
+              value={messageToCar}
+              onChange={(e) => setMessageToCar(e.target.value)}
               rows={3}
               className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
-              placeholder={locale === 'no' ? 'Andre ønskje eller informasjon...' : 'Other requests or information...'}
+              placeholder={t('messagePlaceholder')}
             />
           </div>
 
