@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { taxi4uFetch } from '@/lib/taxi4u-auth';
-import { getZoneNumber } from '@/lib/zones';
 
 const TAXI4U_API_BASE = process.env.TAXI4U_API_BASE || 'https://api.taxi4u.cab';
 const TAXI4U_CENTRAL_CODE = process.env.TAXI4U_CENTRAL_CODE || 'vs';
@@ -8,7 +7,7 @@ const TAXI4U_CENTRAL_CODE = process.env.TAXI4U_CENTRAL_CODE || 'vs';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { fromStreet, fromCity, fromPostalCode, fromLat, fromLon, toStreet, toCity, toPostalCode, toLat, toLon, attributes, pickupTime } = body;
+    const { fromStreet, fromCity, fromPostalCode, toStreet, toCity, toPostalCode, attributes, pickupTime } = body;
 
     // Validate required fields
     if (!fromStreet || !toStreet) {
@@ -18,28 +17,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Calculate zone numbers for better geocoding
-    const fromZone = getZoneNumber(fromPostalCode, fromCity);
-    const toZone = getZoneNumber(toPostalCode, toCity);
-
     // Call Taxi4U price quote API using the same authentication as booking
     const apiUrl = `${TAXI4U_API_BASE}/api/pricequote?centralCode=${TAXI4U_CENTRAL_CODE}`;
 
     const priceQuoteData = {
       fromStreet,
-      fromCity: fromCity || '',
+      fromCity: fromCity || 'Voss',
       fromPostalCode: fromPostalCode || '',
-      fromZone,
-      fromZoneNo: fromZone,
-      fromLat: fromLat || 0,
-      fromLon: fromLon || 0,
       toStreet,
-      toCity: toCity || '',
+      toCity: toCity || 'Voss',
       toPostalCode: toPostalCode || '',
-      toZone,
-      toZoneNo: toZone,
-      toLat: toLat || 0,
-      toLon: toLon || 0,
       attributes: attributes || [],
       pickupTime: pickupTime || new Date().toISOString(),
     };

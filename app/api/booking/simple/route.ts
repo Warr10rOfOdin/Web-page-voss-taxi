@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { taxi4uFetch } from '@/lib/taxi4u-auth';
-import { getZoneNumber } from '@/lib/zones';
 
 // Simple booking endpoint (single passenger)
 export async function POST(request: NextRequest) {
@@ -10,25 +9,17 @@ export async function POST(request: NextRequest) {
     // Get central code from environment or use default
     const centralCode = process.env.TAXI4U_CENTRAL_CODE || 'VS';
 
-    // Calculate zones
-    const fromZone = getZoneNumber(body.fromPostalCode, body.fromCity);
-    const toZone = getZoneNumber(body.toPostalCode, body.toCity);
-
     // Build booking payload with flat structure (Taxi4U API format)
     const bookingData: any = {
       centralCode,
-      // From location
+      // From location - complete address
       fromStreet: body.fromStreet,
-      fromCity: body.fromCity,
-      fromPostalCode: body.fromPostalCode,
-      fromZone,
-      fromZoneNo: fromZone,
-      // To location (with defaults for optional destination)
-      toStreet: body.toStreet || 'Ikke oppgitt', // "Not specified" in Norwegian
+      fromCity: body.fromCity || 'Voss',
+      fromPostalCode: body.fromPostalCode || '',
+      // To location - optional, with defaults
+      toStreet: body.toStreet || '',
       toCity: body.toCity || '',
       toPostalCode: body.toPostalCode || '',
-      toZone,
-      toZoneNo: toZone,
       // Customer information
       customerName: body.customerName,
       tel: body.tel,

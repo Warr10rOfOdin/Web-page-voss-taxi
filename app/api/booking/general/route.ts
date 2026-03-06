@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { taxi4uFetch } from '@/lib/taxi4u-auth';
-import { getZoneNumber } from '@/lib/zones';
 
 // General booking endpoint (multi-passenger, detailed)
 export async function POST(request: NextRequest) {
@@ -10,25 +9,9 @@ export async function POST(request: NextRequest) {
     // Get central code from environment or use default
     const centralCode = process.env.TAXI4U_CENTRAL_CODE || 'VS';
 
-    // Process passengers to add zone numbers (required by API)
-    // Try both fromZone and fromZoneNo field names for compatibility
-    const processedPassengers = body.passengers.map((passenger: any) => {
-      const fromZone = getZoneNumber(passenger.fromPostalCode, passenger.fromCity);
-      const toZone = getZoneNumber(passenger.toPostalCode, passenger.toCity);
-
-      return {
-        ...passenger,
-        fromZone,
-        toZone,
-        fromZoneNo: fromZone,
-        toZoneNo: toZone,
-      };
-    });
-
-    // Build enhanced booking payload
+    // Build enhanced booking payload - send addresses as-is
     const bookingData = {
       ...body,
-      passengers: processedPassengers,
       // Add required dispatch fields
       carGroupId: body.carGroupId || 1, // Default to standard taxi (group 1)
       numberOfCars: body.numberOfCars || 1, // Default to 1 car
