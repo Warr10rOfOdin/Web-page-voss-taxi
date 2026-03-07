@@ -193,12 +193,22 @@ export function BookingForm({ locale }: BookingFormProps) {
       }
 
       // Prepare booking data for API
+      // Calculate pickup time - round to nearest 5 minutes
+      const calculatePickupTime = (): string => {
+        if (pickupTime) {
+          return new Date(pickupTime).toISOString();
+        }
+        // Book now: add 15 minutes and round to nearest 5
+        const now = new Date(Date.now() + 15 * 60000);
+        return roundToNearest5Minutes(now).toISOString();
+      };
+
+      const finalPickupTime = calculatePickupTime();
+
       const bookingData = {
         orderedBy: 'Website',
         messageToCar: messageToCar || undefined,
-        pickupTime: pickupTime
-          ? new Date(pickupTime).toISOString()
-          : new Date(Date.now() + 15 * 60000).toISOString(),
+        pickupTime: finalPickupTime,
         carGroupId: carGroupId,
         numberOfCars: 1,
         attributes: attributes.length > 0 ? attributes : undefined,
@@ -216,9 +226,7 @@ export function BookingForm({ locale }: BookingFormProps) {
           toPostalCode: toPostalCode || undefined,
           toLat,
           toLon,
-          pickupTime: pickupTime
-            ? new Date(pickupTime).toISOString()
-            : new Date(Date.now() + 15 * 60000).toISOString(),
+          pickupTime: finalPickupTime,
           clientNote: clientNote || undefined,
           clientNoteToCar: true,
         }],
@@ -286,11 +294,26 @@ export function BookingForm({ locale }: BookingFormProps) {
     setBookRef(null);
   };
 
-  // Get minimum datetime (now + 5 minutes)
+  // Round time to nearest 5-minute increment
+  const roundToNearest5Minutes = (date: Date): Date => {
+    const minutes = date.getMinutes();
+    const remainder = minutes % 5;
+    const roundedMinutes = remainder >= 2.5 ? minutes + (5 - remainder) : minutes - remainder;
+
+    const newDate = new Date(date);
+    newDate.setMinutes(roundedMinutes);
+    newDate.setSeconds(0);
+    newDate.setMilliseconds(0);
+
+    return newDate;
+  };
+
+  // Get minimum datetime (now + 15 minutes, rounded to nearest 5)
   const getMinDateTime = () => {
     const now = new Date();
-    now.setMinutes(now.getMinutes() + 5);
-    return now.toISOString().slice(0, 16);
+    now.setMinutes(now.getMinutes() + 15); // Add 15 minutes buffer
+    const rounded = roundToNearest5Minutes(now);
+    return rounded.toISOString().slice(0, 16);
   };
 
   if (success && bookRef) {
@@ -308,9 +331,18 @@ export function BookingForm({ locale }: BookingFormProps) {
             <p className="text-2xl font-bold text-taxi-yellow">{bookRef}</p>
           </div>
           <p className="text-taxi-grey">{t('confirmationNote')}</p>
-          <Button onClick={resetForm} variant="secondary">
-            {t('bookAnother')}
-          </Button>
+
+          <div className="flex flex-col gap-3">
+            <a
+              href={`/${locale}/manage-booking`}
+              className="inline-block px-6 py-2 bg-taxi-yellow text-taxi-black font-semibold rounded-lg hover:bg-taxi-yellow/90 transition-colors"
+            >
+              {locale === 'no' ? 'Sjekk/endre booking' : 'View/Manage Booking'}
+            </a>
+            <Button onClick={resetForm} variant="secondary">
+              {t('bookAnother')}
+            </Button>
+          </div>
         </CardContent>
       </Card>
     );
@@ -567,8 +599,18 @@ export function BookingForm({ locale }: BookingFormProps) {
             <input
               type="datetime-local"
               value={pickupTime}
-              onChange={(e) => setPickupTime(e.target.value)}
+              onChange={(e) => {
+                // Round selected time to nearest 5 minutes
+                if (e.target.value) {
+                  const selectedDate = new Date(e.target.value);
+                  const rounded = roundToNearest5Minutes(selectedDate);
+                  setPickupTime(rounded.toISOString().slice(0, 16));
+                } else {
+                  setPickupTime(e.target.value);
+                }
+              }}
               min={getMinDateTime()}
+              step="300"
               className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
             />
             <p className="text-xs text-taxi-grey mt-1">{t('pickupTimeNote')}</p>
