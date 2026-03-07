@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useLocale } from 'next-intl';
 import { Container } from '@/components/ui/Container';
@@ -8,26 +8,51 @@ import { cn } from '@/lib/utils';
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const locale = useLocale();
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 bg-taxi-black text-white shadow-lg">
+    <header
+      className={cn(
+        'sticky top-0 z-50 text-white transition-all duration-300',
+        scrolled
+          ? 'glass-dark backdrop-blur-xl border-b border-white/10 depth-3'
+          : 'bg-gradient-to-b from-taxi-black/90 to-transparent'
+      )}
+    >
       <Container>
         <nav className="flex items-center justify-between py-4">
-          {/* Logo */}
-          <Link href={`/${locale}`} className="flex items-center space-x-2">
-            <div className="text-2xl md:text-3xl font-display font-bold">
-              <span className="text-taxi-yellow">VOSS</span>
-              <span className="text-white"> TAXI</span>
+          {/* Logo with Glow Effect */}
+          <Link
+            href={`/${locale}`}
+            className="flex items-center space-x-2 group"
+          >
+            <div className="text-2xl md:text-3xl font-display font-bold smooth-transition">
+              <span className="text-taxi-yellow group-hover:drop-shadow-[0_0_15px_rgba(255,197,0,0.7)] transition-all duration-300">
+                VOSS
+              </span>
+              <span className="text-white group-hover:text-taxi-yellow transition-colors duration-300">
+                {' '}
+                TAXI
+              </span>
             </div>
           </Link>
 
           {/* Right Side - Phone and Language */}
-          <div className="hidden md:flex items-center space-x-4">
-            {/* Phone */}
+          <div className="hidden md:flex items-center space-x-6">
+            {/* Phone with Glass Effect */}
             <a
               href="tel:+4756511340"
-              className="text-sm font-medium hover:text-taxi-yellow transition-colors flex items-center space-x-2"
+              className="glass-yellow px-4 py-2 rounded-full text-sm font-semibold hover:scale-105 smooth-transition flex items-center space-x-2 depth-2 hover-glow"
             >
               <svg
                 className="w-4 h-4"
@@ -45,15 +70,15 @@ export function Header() {
               <span>+47 56 51 13 40</span>
             </a>
 
-            {/* Language Toggle */}
-            <div className="flex items-center space-x-1 border border-taxi-yellow rounded-lg overflow-hidden">
+            {/* Language Toggle with Glass Effect */}
+            <div className="glass-strong flex items-center space-x-1 rounded-full overflow-hidden p-1 depth-1 backdrop-blur-xl">
               <Link
                 href={`/no`}
                 className={cn(
-                  'px-3 py-1 text-sm font-medium transition-colors',
+                  'px-4 py-1.5 text-sm font-bold rounded-full smooth-transition',
                   locale === 'no'
-                    ? 'bg-taxi-yellow text-taxi-black'
-                    : 'text-taxi-yellow hover:bg-taxi-yellow/10'
+                    ? 'bg-taxi-yellow text-taxi-black depth-glow'
+                    : 'text-white hover:bg-white/10'
                 )}
               >
                 NO
@@ -61,10 +86,10 @@ export function Header() {
               <Link
                 href={`/en`}
                 className={cn(
-                  'px-3 py-1 text-sm font-medium transition-colors',
+                  'px-4 py-1.5 text-sm font-bold rounded-full smooth-transition',
                   locale === 'en'
-                    ? 'bg-taxi-yellow text-taxi-black'
-                    : 'text-taxi-yellow hover:bg-taxi-yellow/10'
+                    ? 'bg-taxi-yellow text-taxi-black depth-glow'
+                    : 'text-white hover:bg-white/10'
                 )}
               >
                 EN
@@ -72,19 +97,21 @@ export function Header() {
             </div>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button with Glass Effect */}
           <button
             type="button"
-            className="md:hidden p-2 rounded-md text-white hover:text-taxi-yellow"
+            className="md:hidden p-3 rounded-full glass-strong hover:glass-yellow smooth-transition depth-2"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            <span className="sr-only">Open menu</span>
+            <span className="sr-only">
+              {mobileMenuOpen ? 'Close menu' : 'Open menu'}
+            </span>
             {mobileMenuOpen ? (
               <svg
-                className="h-6 w-6"
+                className="h-6 w-6 text-white"
                 fill="none"
                 viewBox="0 0 24 24"
-                strokeWidth="1.5"
+                strokeWidth="2"
                 stroke="currentColor"
               >
                 <path
@@ -95,10 +122,10 @@ export function Header() {
               </svg>
             ) : (
               <svg
-                className="h-6 w-6"
+                className="h-6 w-6 text-white"
                 fill="none"
                 viewBox="0 0 24 24"
-                strokeWidth="1.5"
+                strokeWidth="2"
                 stroke="currentColor"
               >
                 <path
@@ -111,17 +138,17 @@ export function Header() {
           </button>
         </nav>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu with Glass Effect */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-taxi-yellow/20 py-4">
+          <div className="md:hidden border-t border-white/10 py-6 glass-dark backdrop-blur-xl rounded-b-2xl mt-2 depth-3">
             <div className="flex flex-col space-y-4">
               {/* Mobile Phone */}
               <a
                 href="tel:+4756511340"
-                className="text-base font-medium text-taxi-yellow flex items-center space-x-2"
+                className="glass-yellow px-6 py-4 rounded-2xl text-base font-bold flex items-center space-x-3 hover-scale smooth-transition depth-2"
               >
                 <svg
-                  className="w-5 h-5"
+                  className="w-6 h-6"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -137,34 +164,40 @@ export function Header() {
               </a>
 
               {/* Mobile Language Toggle */}
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center gap-3">
                 <Link
                   href={`/no`}
                   className={cn(
-                    'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
+                    'flex-1 px-6 py-4 rounded-2xl text-base font-bold smooth-transition text-center',
                     locale === 'no'
-                      ? 'bg-taxi-yellow text-taxi-black'
-                      : 'border border-taxi-yellow text-taxi-yellow'
+                      ? 'bg-taxi-yellow text-taxi-black depth-glow'
+                      : 'glass-strong text-white border border-white/20'
                   )}
                 >
-                  NO
+                  Norsk
                 </Link>
                 <Link
                   href={`/en`}
                   className={cn(
-                    'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
+                    'flex-1 px-6 py-4 rounded-2xl text-base font-bold smooth-transition text-center',
                     locale === 'en'
-                      ? 'bg-taxi-yellow text-taxi-black'
-                      : 'border border-taxi-yellow text-taxi-yellow'
+                      ? 'bg-taxi-yellow text-taxi-black depth-glow'
+                      : 'glass-strong text-white border border-white/20'
                   )}
                 >
-                  EN
+                  English
                 </Link>
               </div>
             </div>
           </div>
         )}
       </Container>
+
+      {/* Animated Bottom Border */}
+      <div className={cn(
+        'h-0.5 bg-gradient-to-r from-transparent via-taxi-yellow to-transparent transition-opacity duration-300',
+        scrolled ? 'opacity-100' : 'opacity-0'
+      )} />
     </header>
   );
 }
