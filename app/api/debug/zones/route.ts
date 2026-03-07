@@ -4,14 +4,14 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getAuthToken } from '@/lib/taxi4u-auth';
+import { getAccessToken } from '@/lib/taxi4u-auth';
 
 export async function GET(request: NextRequest) {
   try {
     const centralCode = process.env.TAXI4U_CENTRAL_CODE || 'VOSS';
 
     // Get auth token
-    const token = await getAuthToken();
+    const token = await getAccessToken();
 
     // Fetch zones
     const response = await fetch(
