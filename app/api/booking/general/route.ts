@@ -4,6 +4,7 @@ import { validateGeneralBookingRequest } from '@/lib/validation';
 import { retryWithBackoff } from '@/lib/retry';
 import { strictRateLimiter } from '@/lib/rate-limit';
 import { logRequest, logResponse, trackRequestMetrics } from '@/lib/request-logger';
+import { getZoneNumber } from '@/lib/zones';
 import type { GeneralBookingRequest, BookingResponse } from '@/lib/types/booking';
 
 // General booking endpoint (multi-passenger, detailed)
@@ -45,12 +46,21 @@ export async function POST(request: NextRequest) {
     // Get central code from environment or use default
     const centralCode = process.env.TAXI4U_CENTRAL_CODE || 'VS';
 
-    // Build enhanced booking payload - send addresses as-is
+    // Build enhanced booking payload with zone numbers
     const bookingData = {
       ...body,
       // Add required dispatch fields
       carGroupId: body.carGroupId || 1, // Default to standard taxi (group 1)
       numberOfCars: body.numberOfCars || 1, // Default to 1 car
+      // Add zone numbers to each passenger
+      passengers: body.passengers.map((passenger: any) => ({
+        ...passenger,
+        fromZoneNo: getZoneNumber(passenger.fromPostalCode, passenger.fromCity),
+        // Add toZoneNo if destination is provided
+        ...(passenger.toPostalCode || passenger.toCity ? {
+          toZoneNo: getZoneNumber(passenger.toPostalCode, passenger.toCity)
+        } : {}),
+      })),
     };
 
     console.log('Sending general booking request:', JSON.stringify(bookingData, null, 2));

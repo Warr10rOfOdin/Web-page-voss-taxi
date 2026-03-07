@@ -4,6 +4,7 @@ import { validateSimpleBookingRequest } from '@/lib/validation';
 import { retryWithBackoff } from '@/lib/retry';
 import { strictRateLimiter } from '@/lib/rate-limit';
 import { logRequest, logResponse, trackRequestMetrics } from '@/lib/request-logger';
+import { getZoneNumber } from '@/lib/zones';
 import type { SimpleBookingRequest, BookingResponse } from '@/lib/types/booking';
 
 // Simple booking endpoint (single passenger)
@@ -51,10 +52,12 @@ export async function POST(request: NextRequest) {
       fromStreet: body.fromStreet,
       fromCity: body.fromCity || 'Voss',
       fromPostalCode: body.fromPostalCode || '',
+      fromZoneNo: getZoneNumber(body.fromPostalCode, body.fromCity),
       // To location - optional, with defaults
       toStreet: body.toStreet || '',
       toCity: body.toCity || '',
       toPostalCode: body.toPostalCode || '',
+      toZoneNo: getZoneNumber(body.toPostalCode, body.toCity),
       // Customer information
       customerName: body.customerName,
       tel: body.tel,

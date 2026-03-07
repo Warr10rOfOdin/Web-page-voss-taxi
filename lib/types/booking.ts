@@ -13,9 +13,11 @@ export interface Passenger {
   fromStreet: string;
   fromCity: string;
   fromPostalCode: string;
+  fromZoneNo?: number; // Auto-calculated from postal code/city
   toStreet?: string;
   toCity?: string;
   toPostalCode?: string;
+  toZoneNo?: number; // Auto-calculated from postal code/city
   pickupTime: string; // ISO 8601 format
   clientNoteToCar?: boolean;
   messageToCar?: string;
