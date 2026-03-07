@@ -8,6 +8,8 @@ interface AddressSuggestion {
   street: string;
   city: string;
   postalCode: string;
+  lat?: number;
+  lon?: number;
 }
 
 interface AddressAutocompleteProps {
@@ -59,12 +61,25 @@ export function AddressAutocomplete({
 
         const data = await response.json();
 
-        const formatted: AddressSuggestion[] = (data.adresser || []).map((addr: any) => ({
-          display: `${addr.adressetekst}, ${addr.postnummer} ${addr.poststed}`,
-          street: addr.adressetekst || '',
-          city: addr.poststed || '',
-          postalCode: addr.postnummer || '',
-        }));
+        const formatted: AddressSuggestion[] = (data.adresser || []).map((addr: any) => {
+          // Extract GPS coordinates from representasjonspunkt
+          let lat: number | undefined;
+          let lon: number | undefined;
+
+          if (addr.representasjonspunkt?.lat && addr.representasjonspunkt?.lon) {
+            lat = parseFloat(addr.representasjonspunkt.lat);
+            lon = parseFloat(addr.representasjonspunkt.lon);
+          }
+
+          return {
+            display: `${addr.adressetekst}, ${addr.postnummer} ${addr.poststed}`,
+            street: addr.adressetekst || '',
+            city: addr.poststed || '',
+            postalCode: addr.postnummer || '',
+            lat,
+            lon,
+          };
+        });
 
         setSuggestions(formatted);
         setShowSuggestions(true);

@@ -407,6 +407,11 @@ export function BookingForm({ locale }: BookingFormProps) {
                 setFromStreet(address.street);
                 setFromCity(address.city);
                 setFromPostalCode(address.postalCode);
+                // Store GPS coordinates if available
+                if (address.lat && address.lon) {
+                  setFromLat(address.lat);
+                  setFromLon(address.lon);
+                }
               }}
               label={t('street')}
               placeholder="Uttrågata 19"
@@ -461,6 +466,11 @@ export function BookingForm({ locale }: BookingFormProps) {
                 setToStreet(address.street);
                 setToCity(address.city);
                 setToPostalCode(address.postalCode);
+                // Store GPS coordinates if available
+                if (address.lat && address.lon) {
+                  setToLat(address.lat);
+                  setToLon(address.lon);
+                }
               }}
               label={t('street')}
               placeholder={t('optionalDestination')}
