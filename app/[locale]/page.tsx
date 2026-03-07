@@ -1,6 +1,15 @@
 import { setRequestLocale } from 'next-intl/server';
-import { Container } from '@/components/ui/Container';
-import { BookingForm } from '@/components/booking/BookingForm';
+import { getTranslations } from 'next-intl/server';
+import { Hero } from '@/components/sections/Hero';
+import { DiscoverVoss } from '@/components/sections/DiscoverVoss';
+import { Services } from '@/components/sections/Services';
+import { PopularDestinations } from '@/components/sections/PopularDestinations';
+import { WinterActivities } from '@/components/sections/WinterActivities';
+import { SummerActivities } from '@/components/sections/SummerActivities';
+import { WhyChooseUs } from '@/components/sections/WhyChooseUs';
+import { Testimonials } from '@/components/sections/Testimonials';
+import { FAQ } from '@/components/sections/FAQ';
+import { CallToAction } from '@/components/sections/CallToAction';
 
 export default async function HomePage({
   params,
@@ -10,44 +19,45 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
 
+  const t = await getTranslations({ locale, namespace: 'hero' });
+
+  const heroContent = {
+    title: t('title'),
+    subtitle: t('subtitle'),
+    ctaPrimary: t('ctaPrimary'),
+    ctaSecondary: t('ctaSecondary'),
+    backgroundImage: '/images/voss-landscape.jpg',
+  };
+
   return (
-    <div className="py-16 md:py-24 min-h-screen bg-gradient-to-b from-white to-taxi-light-grey">
-      <Container>
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">
-              {locale === 'no' ? 'Bestill Taxi No' : 'Book Your Taxi Now'}
-            </h1>
-            <p className="text-lg text-taxi-grey">
-              {locale === 'no'
-                ? 'Fyll ut skjemaet nedanfor, så kontaktar me deg snart'
-                : 'Fill out the form below and we\'ll get in touch with you shortly'}
-            </p>
-          </div>
+    <>
+      {/* Hero Section */}
+      <Hero content={heroContent} locale={locale} />
 
-          <BookingForm locale={locale} />
+      {/* Discover Voss */}
+      <DiscoverVoss locale={locale} />
 
-          {/* Emergency Contact */}
-          <div className="mt-8 text-center p-6 bg-taxi-yellow/10 rounded-lg border-2 border-taxi-yellow">
-            <p className="font-bold mb-2">
-              {locale === 'no'
-                ? 'Treng du taxi no med ein gong?'
-                : 'Need a taxi right now?'}
-            </p>
-            <a
-              href="tel:+4756511340"
-              className="text-2xl font-bold text-taxi-yellow hover:text-taxi-black transition-colors"
-            >
-              +47 56 51 13 40
-            </a>
-            <p className="text-sm text-taxi-grey mt-2">
-              {locale === 'no'
-                ? 'Tilgjengeleg 24/7 - Ring oss direkte'
-                : 'Available 24/7 - Call us directly'}
-            </p>
-          </div>
-        </div>
-      </Container>
-    </div>
+      {/* Services */}
+      <Services locale={locale} />
+
+      {/* Popular Destinations */}
+      <PopularDestinations locale={locale} />
+
+      {/* Seasonal Activities */}
+      <WinterActivities locale={locale} />
+      <SummerActivities locale={locale} />
+
+      {/* Why Choose Us */}
+      <WhyChooseUs locale={locale} />
+
+      {/* Testimonials */}
+      <Testimonials locale={locale} />
+
+      {/* FAQ */}
+      <FAQ locale={locale} />
+
+      {/* Call to Action */}
+      <CallToAction locale={locale} />
+    </>
   );
 }
