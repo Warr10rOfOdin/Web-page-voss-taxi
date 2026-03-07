@@ -17,22 +17,18 @@ export function DiscoverVoss({ locale }: DiscoverVossProps) {
       description: 'Voss ligg midt i hjartet av Vestlandet, omgjeven av majestiske fjell, klårt vatn og spektakulær natur. Her kan du oppleve ekstrem sport, roleg natur og autentisk norsk kultur - alt på éin plass.',
       features: [
         {
-          icon: '🏔️',
           title: 'Eventyr i Fjellet',
           description: 'Frå verdskjent fallskjermhopping til roleg fjellvandring - Voss er eit paradis for eventyrlyste og naturelskarar.'
         },
         {
-          icon: '💧',
           title: 'Fossar og Fjordar',
           description: 'Besøk Tvindefossen og Bordalsgjelet, eller ta ein tur til dei nærliggjande fjordane. Naturopplevingar du aldri gløymer.'
         },
         {
-          icon: '⛷️',
           title: 'Verdsklasse Vintersport',
           description: 'Voss Resort er eit av Noregs beste alpinsenter, med utfordrande løyper og moderne fasiliteter for heile familien.'
         },
         {
-          icon: '🎭',
           title: 'Kultur og Historie',
           description: 'Utforsk Finneloftet, Voss Folkemuseum og den rike kulturarven som strekk seg tusen år tilbake i tid.'
         }
@@ -46,22 +42,18 @@ export function DiscoverVoss({ locale }: DiscoverVossProps) {
       description: 'Nestled in the heart of Western Norway, Voss is surrounded by majestic mountains, crystal-clear waters, and spectacular nature. Experience extreme sports, peaceful nature, and authentic Norwegian culture - all in one place.',
       features: [
         {
-          icon: '🏔️',
           title: 'Mountain Adventures',
           description: 'From world-famous skydiving to peaceful mountain hiking - Voss is paradise for adventure seekers and nature lovers.'
         },
         {
-          icon: '💧',
           title: 'Waterfalls & Fjords',
           description: 'Visit Tvindefossen and Bordalsgjelet, or take a trip to the nearby fjords. Nature experiences you\'ll never forget.'
         },
         {
-          icon: '⛷️',
           title: 'World-Class Winter Sports',
           description: 'Voss Resort is one of Norway\'s best alpine centers, with challenging slopes and modern facilities for the whole family.'
         },
         {
-          icon: '🎭',
           title: 'Culture & History',
           description: 'Explore Finneloftet, Voss Folk Museum and the rich cultural heritage that stretches back a thousand years.'
         }
@@ -94,19 +86,16 @@ export function DiscoverVoss({ locale }: DiscoverVossProps) {
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
           {t.features.map((feature, index) => (
             <div
               key={index}
-              className="glass-strong backdrop-blur-xl rounded-3xl p-8 hover-lift smooth-transition depth-3 group"
+              className="bg-white border border-taxi-light-grey/30 rounded-xl p-6 hover:border-taxi-yellow/40 transition-all"
             >
-              <div className="text-6xl mb-6 group-hover:scale-110 smooth-transition">
-                {feature.icon}
-              </div>
-              <h3 className="text-xl font-bold mb-4 text-taxi-black">
+              <h3 className="text-lg font-bold mb-3 text-taxi-black">
                 {feature.title}
               </h3>
-              <p className="text-taxi-grey leading-relaxed">
+              <p className="text-sm text-taxi-grey leading-relaxed">
                 {feature.description}
               </p>
             </div>
@@ -114,29 +103,29 @@ export function DiscoverVoss({ locale }: DiscoverVossProps) {
         </div>
 
         {/* Highlight Stats */}
-        <div className="glass-yellow backdrop-blur-xl rounded-3xl p-12 depth-4 mb-16">
+        <div className="bg-gradient-to-br from-taxi-yellow to-yellow-500 rounded-xl p-10 mb-16">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
-              <div className="text-4xl md:text-5xl font-bold text-taxi-black mb-2">600m</div>
-              <div className="text-sm md:text-base text-taxi-grey font-semibold">
-                {locale === 'no' ? 'Høgde over havet' : 'Elevation'}
+              <div className="text-4xl md:text-5xl font-bold text-taxi-black mb-2">75+</div>
+              <div className="text-sm text-taxi-black/70 font-medium">
+                {locale === 'no' ? 'År erfaring' : 'Years Experience'}
               </div>
             </div>
             <div>
               <div className="text-4xl md:text-5xl font-bold text-taxi-black mb-2">1000+</div>
-              <div className="text-sm md:text-base text-taxi-grey font-semibold">
+              <div className="text-sm text-taxi-black/70 font-medium">
                 {locale === 'no' ? 'År med historie' : 'Years of History'}
               </div>
             </div>
             <div>
               <div className="text-4xl md:text-5xl font-bold text-taxi-black mb-2">15min</div>
-              <div className="text-sm md:text-base text-taxi-grey font-semibold">
+              <div className="text-sm text-taxi-black/70 font-medium">
                 {locale === 'no' ? 'Til Bordalsgjelet' : 'To Bordalsgjelet'}
               </div>
             </div>
             <div>
               <div className="text-4xl md:text-5xl font-bold text-taxi-black mb-2">24/7</div>
-              <div className="text-sm md:text-base text-taxi-grey font-semibold">
+              <div className="text-sm text-taxi-black/70 font-medium">
                 {locale === 'no' ? 'Taxi Service' : 'Taxi Service'}
               </div>
             </div>
