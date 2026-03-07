@@ -28,6 +28,11 @@ export default async function BookPage({
 
         {/* Two Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Right: Check Your Booking - Shows first on mobile */}
+          <div className="lg:col-span-1 lg:order-last order-first">
+            <BookingCheckCard locale={locale} />
+          </div>
+
           {/* Left: Booking Form (2 columns on large screens) */}
           <div className="lg:col-span-2">
             <BookingForm locale={locale} />
@@ -51,11 +56,6 @@ export default async function BookPage({
                   : 'Available 24/7 - Call us directly'}
               </p>
             </div>
-          </div>
-
-          {/* Right: Check Your Booking (1 column on large screens) */}
-          <div className="lg:col-span-1">
-            <BookingCheckCard locale={locale} />
           </div>
         </div>
       </Container>
