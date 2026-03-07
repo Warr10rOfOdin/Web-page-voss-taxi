@@ -129,21 +129,21 @@ export function FAQ({ locale }: FAQProps) {
   const t = content[locale as 'no' | 'en'];
 
   return (
-    <section className="relative py-24 bg-gradient-to-b from-taxi-light-grey/30 via-white to-taxi-light-grey/30 overflow-hidden">
-      {/* Decorative Background Elements */}
-      <div className="absolute top-20 left-10 w-96 h-96 bg-taxi-yellow/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl" />
+    <section className="relative py-24 bg-white overflow-hidden">
+      {/* Subtle Background Element */}
+      <div className="absolute top-40 right-10 w-96 h-96 bg-taxi-yellow/5 rounded-full blur-3xl" />
 
       <Container className="relative z-10">
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="inline-block glass-dark backdrop-blur-xl px-8 py-3 rounded-full mb-6 depth-2">
-            <span className="text-taxi-yellow font-bold">❓ FAQ</span>
-          </div>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-4">
+          <p className="text-sm uppercase tracking-wider text-taxi-grey/60 mb-4 font-semibold">
+            {locale === 'no' ? 'Vanlige spørsmål' : 'Frequently Asked Questions'}
+          </p>
+          <h2 className="text-4xl md:text-5xl font-display font-bold mb-4 text-taxi-black">
             {t.title}
           </h2>
-          <p className="text-xl text-taxi-grey max-w-2xl mx-auto">
+          <div className="w-24 h-1 bg-taxi-yellow mx-auto mb-6" />
+          <p className="text-lg text-taxi-grey max-w-2xl mx-auto">
             {t.subtitle}
           </p>
         </div>
@@ -154,19 +154,19 @@ export function FAQ({ locale }: FAQProps) {
             {t.faqs.map((faq, index) => (
               <div
                 key={index}
-                className="glass-strong backdrop-blur-xl rounded-2xl overflow-hidden depth-2 hover-lift smooth-transition"
+                className="bg-white border border-taxi-light-grey/30 rounded-xl overflow-hidden hover:border-taxi-yellow/40 smooth-transition"
               >
                 <button
                   onClick={() => setOpenIndex(openIndex === index ? null : index)}
                   className="w-full text-left p-6 flex items-center justify-between group"
                   aria-expanded={openIndex === index}
                 >
-                  <h3 className="text-lg md:text-xl font-bold text-taxi-black group-hover:text-taxi-yellow smooth-transition pr-8">
+                  <h3 className="text-base md:text-lg font-semibold text-taxi-black pr-8">
                     {faq.question}
                   </h3>
                   <div
-                    className={`flex-shrink-0 w-8 h-8 rounded-full glass-dark flex items-center justify-center text-taxi-yellow smooth-transition ${
-                      openIndex === index ? 'rotate-180' : ''
+                    className={`flex-shrink-0 w-10 h-10 rounded-full bg-taxi-light-grey/20 flex items-center justify-center text-taxi-black smooth-transition ${
+                      openIndex === index ? 'rotate-180 bg-taxi-yellow/20' : ''
                     }`}
                   >
                     <svg
@@ -189,8 +189,8 @@ export function FAQ({ locale }: FAQProps) {
                     openIndex === index ? 'max-h-96' : 'max-h-0'
                   }`}
                 >
-                  <div className="px-6 pb-6 text-taxi-grey leading-relaxed">
-                    {faq.answer}
+                  <div className="px-6 pb-6 pt-0 text-taxi-grey leading-relaxed border-t border-taxi-light-grey/20">
+                    <p className="pt-4">{faq.answer}</p>
                   </div>
                 </div>
               </div>
@@ -200,11 +200,11 @@ export function FAQ({ locale }: FAQProps) {
 
         {/* Bottom CTA */}
         <div className="mt-16 text-center">
-          <div className="glass-dark backdrop-blur-xl rounded-3xl p-8 md:p-12 depth-3 max-w-3xl mx-auto">
-            <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
+          <div className="bg-gradient-to-br from-taxi-black to-gray-900 rounded-2xl p-8 md:p-12 max-w-4xl mx-auto text-white">
+            <h3 className="text-2xl md:text-3xl font-display font-bold mb-4">
               {locale === 'no' ? 'Har du fleire spørsmål?' : 'Have more questions?'}
             </h3>
-            <p className="text-taxi-light-grey/90 mb-6">
+            <p className="text-taxi-light-grey/80 mb-8 max-w-2xl mx-auto">
               {locale === 'no'
                 ? 'Me er alltid klare til å hjelpe deg. Ring oss eller send ein e-post.'
                 : 'We\'re always ready to help you. Give us a call or send an email.'}
@@ -212,16 +212,14 @@ export function FAQ({ locale }: FAQProps) {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="tel:+4756511340"
-                className="glass-yellow rounded-full px-8 py-4 font-bold text-taxi-black hover-scale smooth-transition depth-2 inline-flex items-center justify-center"
+                className="bg-taxi-yellow text-taxi-black rounded-lg px-8 py-4 font-semibold hover:bg-taxi-yellow/90 transition-colors inline-flex items-center justify-center"
               >
-                <span className="mr-2">📞</span>
                 +47 56 51 13 40
               </a>
               <a
                 href="mailto:post@vosstaxi.no"
-                className="glass-strong backdrop-blur-xl rounded-full px-8 py-4 font-bold text-white hover:text-taxi-yellow hover-lift smooth-transition depth-2 inline-flex items-center justify-center"
+                className="bg-white/10 text-white border border-white/20 rounded-lg px-8 py-4 font-semibold hover:bg-white/20 transition-colors inline-flex items-center justify-center"
               >
-                <span className="mr-2">✉️</span>
                 post@vosstaxi.no
               </a>
             </div>
