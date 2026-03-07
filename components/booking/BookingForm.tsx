@@ -318,47 +318,70 @@ export function BookingForm({ locale }: BookingFormProps) {
 
   if (success && bookRef) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-center text-2xl">
-            ✅ {t('successTitle')}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="text-center space-y-4">
-          <p className="text-lg text-taxi-grey">{t('successMessage')}</p>
-          <div className="bg-taxi-light-grey p-4 rounded-lg">
-            <p className="text-sm text-taxi-grey mb-1">{t('bookingReference')}</p>
-            <p className="text-2xl font-bold text-taxi-yellow">{bookRef}</p>
+      <div className="glass-dark backdrop-blur-xl rounded-3xl overflow-hidden depth-4">
+        <div className="p-8 md:p-12 text-center space-y-6">
+          {/* Success Icon with Glow */}
+          <div className="inline-flex items-center justify-center w-24 h-24 rounded-full glass-yellow depth-glow-strong mb-4">
+            <svg className="w-12 h-12 text-taxi-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+            </svg>
           </div>
-          <p className="text-taxi-grey">{t('confirmationNote')}</p>
 
-          <div className="flex flex-col gap-3">
+          <h2 className="text-3xl md:text-4xl font-display font-bold text-white">
+            {t('successTitle')}
+          </h2>
+
+          <p className="text-lg text-taxi-light-grey/90">{t('successMessage')}</p>
+
+          {/* Booking Reference Card */}
+          <div className="glass-strong backdrop-blur-xl rounded-2xl p-6 depth-2 border-2 border-taxi-yellow/30">
+            <p className="text-sm text-taxi-light-grey/70 mb-2">{t('bookingReference')}</p>
+            <p className="text-3xl md:text-4xl font-bold text-taxi-yellow tracking-wider font-mono">
+              {bookRef}
+            </p>
+            <p className="text-xs text-taxi-light-grey/60 mt-3">
+              {locale === 'no' ? 'Ta vare på denne referansen' : 'Save this reference number'}
+            </p>
+          </div>
+
+          <p className="text-taxi-light-grey/90">{t('confirmationNote')}</p>
+
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 pt-4">
             <a
               href={`/${locale}/manage-booking`}
-              className="inline-block px-6 py-2 bg-taxi-yellow text-taxi-black font-semibold rounded-lg hover:bg-taxi-yellow/90 transition-colors"
+              className="flex-1 glass-yellow rounded-full px-8 py-4 font-bold text-taxi-black hover-scale smooth-transition depth-2 inline-flex items-center justify-center"
             >
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
               {locale === 'no' ? 'Sjekk/endre booking' : 'View/Manage Booking'}
             </a>
-            <Button onClick={resetForm} variant="secondary">
+            <button
+              onClick={resetForm}
+              className="flex-1 glass-strong backdrop-blur-xl rounded-full px-8 py-4 font-bold text-white hover:text-taxi-yellow hover-lift smooth-transition depth-2"
+            >
               {t('bookAnother')}
-            </Button>
+            </button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-2xl">{t('title')}</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <div className="glass-dark backdrop-blur-xl rounded-3xl overflow-hidden depth-4">
+      <div className="p-8 md:p-12">
+        <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-2">
+          {t('title')}
+        </h2>
+        <div className="h-1 w-24 bg-gradient-to-r from-taxi-yellow to-transparent mb-8 rounded-full" />
+
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Contact Info */}
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">
+              <label className="block text-sm font-semibold mb-2 text-white">
                 {t('name')} *
               </label>
               <input
@@ -366,11 +389,11 @@ export function BookingForm({ locale }: BookingFormProps) {
                 value={clientName}
                 onChange={(e) => setClientName(e.target.value)}
                 required
-                className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+                className="w-full px-4 py-3 glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">
+              <label className="block text-sm font-semibold mb-2 text-white">
                 {t('phone')} *
               </label>
               <input
@@ -378,7 +401,7 @@ export function BookingForm({ locale }: BookingFormProps) {
                 value={tel}
                 onChange={(e) => setTel(e.target.value)}
                 required
-                className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+                className="w-full px-4 py-3 glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
                 placeholder="+47 123 45 678"
               />
             </div>
@@ -407,10 +430,10 @@ export function BookingForm({ locale }: BookingFormProps) {
           </div>
 
           {/* Pickup Location */}
-          <div className="space-y-4">
+          <div className="glass-strong backdrop-blur-md rounded-2xl p-6 border border-white/10 space-y-4">
             <div className="flex items-center justify-between">
-              <h4 className="text-sm font-bold text-taxi-grey flex items-center">
-                <svg className="w-4 h-4 text-taxi-yellow mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <h4 className="text-lg font-bold text-taxi-yellow flex items-center">
+                <svg className="w-5 h-5 text-taxi-yellow mr-2" fill="currentColor" viewBox="0 0 20 20">
                   <circle cx="10" cy="10" r="8" />
                 </svg>
                 {t('pickupLocation')}
@@ -419,7 +442,7 @@ export function BookingForm({ locale }: BookingFormProps) {
                 type="button"
                 onClick={getMyLocation}
                 disabled={loadingLocation}
-                className="text-xs font-medium text-taxi-yellow hover:text-taxi-black transition-colors flex items-center gap-1 disabled:opacity-50"
+                className="text-xs font-semibold text-taxi-yellow hover:text-white transition-colors flex items-center gap-1 disabled:opacity-50 glass-yellow px-3 py-2 rounded-full hover-scale smooth-transition"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -452,7 +475,7 @@ export function BookingForm({ locale }: BookingFormProps) {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-1">
+                <label className="block text-sm font-semibold mb-2 text-white">
                   {t('city')} *
                 </label>
                 <input
@@ -460,11 +483,11 @@ export function BookingForm({ locale }: BookingFormProps) {
                   value={fromCity}
                   onChange={(e) => setFromCity(e.target.value)}
                   required
-                  className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+                  className="w-full px-4 py-3 glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">
+                <label className="block text-sm font-semibold mb-2 text-white">
                   {t('postalCode')} *
                 </label>
                 <input
@@ -472,21 +495,21 @@ export function BookingForm({ locale }: BookingFormProps) {
                   value={fromPostalCode}
                   onChange={(e) => setFromPostalCode(e.target.value)}
                   required
-                  className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+                  className="w-full px-4 py-3 glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
                 />
               </div>
             </div>
           </div>
 
           {/* Destination */}
-          <div className="space-y-4">
-            <h4 className="text-sm font-bold text-taxi-grey flex items-center">
-              <svg className="w-4 h-4 text-taxi-yellow mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="glass-strong backdrop-blur-md rounded-2xl p-6 border border-white/10 space-y-4">
+            <h4 className="text-lg font-bold text-taxi-yellow flex items-center">
+              <svg className="w-5 h-5 text-taxi-yellow mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
               {t('destination')}
-              <span className="ml-2 text-xs text-taxi-grey font-normal">
+              <span className="ml-2 text-sm text-taxi-light-grey/70 font-normal">
                 ({locale === 'no' ? 'valfritt' : 'optional'})
               </span>
             </h4>
@@ -511,25 +534,25 @@ export function BookingForm({ locale }: BookingFormProps) {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-1">
+                <label className="block text-sm font-semibold mb-2 text-white">
                   {t('city')}
                 </label>
                 <input
                   type="text"
                   value={toCity}
                   onChange={(e) => setToCity(e.target.value)}
-                  className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+                  className="w-full px-4 py-3 glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">
+                <label className="block text-sm font-semibold mb-2 text-white">
                   {t('postalCode')}
                 </label>
                 <input
                   type="text"
                   value={toPostalCode}
                   onChange={(e) => setToPostalCode(e.target.value)}
-                  className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+                  className="w-full px-4 py-3 glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
                 />
               </div>
             </div>
@@ -554,26 +577,29 @@ export function BookingForm({ locale }: BookingFormProps) {
 
               {/* Price Quote Display */}
               {priceQuote && (
-                <div className="mt-3 bg-taxi-yellow/10 border-2 border-taxi-yellow rounded-lg p-4">
+                <div className="mt-4 glass-yellow backdrop-blur-xl rounded-2xl p-6 depth-2 border-2 border-taxi-yellow/50">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-taxi-grey">
+                      <p className="text-sm text-taxi-black/70 font-semibold">
                         {locale === 'no' ? 'Estimert pris' : 'Estimated price'}
                       </p>
-                      <p className="text-2xl font-bold text-taxi-black">
+                      <p className="text-3xl md:text-4xl font-bold text-taxi-black mt-1">
                         {priceQuote.price} kr
                       </p>
                       {priceQuote.tariff && (
-                        <p className="text-xs text-taxi-grey mt-1">
+                        <p className="text-xs text-taxi-black/60 mt-2">
                           {locale === 'no' ? 'Takst' : 'Tariff'}: {priceQuote.tariff}
                         </p>
                       )}
                     </div>
-                    <svg className="w-12 h-12 text-taxi-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <div className="glass-strong rounded-full p-4 depth-2">
+                      <svg className="w-10 h-10 text-taxi-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
                   </div>
-                  <p className="text-xs text-taxi-grey mt-2">
+                  <div className="h-px bg-taxi-black/20 my-3" />
+                  <p className="text-xs text-taxi-black/70">
                     {locale === 'no'
                       ? 'Dette er eit estimat. Faktisk pris kan variere avhengig av trafikk og rute.'
                       : 'This is an estimate. Actual price may vary depending on traffic and route.'
@@ -584,8 +610,8 @@ export function BookingForm({ locale }: BookingFormProps) {
 
               {/* Price Error */}
               {priceError && (
-                <div className="mt-3 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-                  <p className="text-sm">{priceError}</p>
+                <div className="mt-4 glass-dark backdrop-blur-xl px-4 py-3 rounded-xl border border-red-500/50">
+                  <p className="text-sm text-red-300">{priceError}</p>
                 </div>
               )}
             </div>
@@ -646,8 +672,8 @@ export function BookingForm({ locale }: BookingFormProps) {
 
           {/* Error Display */}
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-              <p className="font-medium">{t('errorTitle')}</p>
+            <div className="glass-dark backdrop-blur-xl border border-red-500/50 text-red-300 px-6 py-4 rounded-2xl depth-2">
+              <p className="font-bold text-white mb-1">{t('errorTitle')}</p>
               <p className="text-sm">{error}</p>
             </div>
           )}
@@ -656,17 +682,27 @@ export function BookingForm({ locale }: BookingFormProps) {
           <Button
             type="submit"
             size="lg"
-            className="w-full"
+            className="w-full depth-glow hover-scale smooth-transition text-lg font-bold py-6"
             disabled={loading}
           >
-            {loading ? t('processing') : tCta('bookNow')}
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                {t('processing')}
+              </span>
+            ) : (
+              tCta('bookNow')
+            )}
           </Button>
 
-          <p className="text-xs text-center text-taxi-grey">
+          <p className="text-xs text-center text-taxi-light-grey/70">
             {t('privacyNote')}
           </p>
         </form>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

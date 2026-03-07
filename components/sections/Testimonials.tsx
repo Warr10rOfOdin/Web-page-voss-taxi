@@ -197,7 +197,7 @@ export function Testimonials({ locale }: TestimonialsProps) {
 
               {/* Quote */}
               <p className="text-taxi-light-grey/90 mb-6 leading-relaxed italic">
-                "{testimonial.text}"
+                &ldquo;{testimonial.text}&rdquo;
               </p>
 
               {/* Service Badge */}
