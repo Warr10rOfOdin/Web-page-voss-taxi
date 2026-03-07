@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 
@@ -28,9 +27,7 @@ interface BookingDetails {
   }>;
 }
 
-export default function ManageBookingPage({ params }: { params: { locale: string } }) {
-  const { locale } = params;
-  const t = useTranslations('manageBooking');
+function ManageBookingContent({ locale }: { locale: string }) {
   const searchParams = useSearchParams();
 
   const [bookRef, setBookRef] = useState('');
@@ -253,5 +250,30 @@ export default function ManageBookingPage({ params }: { params: { locale: string
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function ManageBookingPage({ params }: { params: { locale: string } }) {
+  const { locale } = params;
+
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto px-4 py-12 max-w-3xl">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-2xl">
+              {locale === 'no' ? 'Sjekk din booking' : 'Check Your Booking'}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-center text-taxi-grey">
+              {locale === 'no' ? 'Lastar...' : 'Loading...'}
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    }>
+      <ManageBookingContent locale={locale} />
+    </Suspense>
   );
 }

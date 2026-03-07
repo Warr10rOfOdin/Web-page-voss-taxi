@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { taxi4uFetch } from '@/lib/taxi4u-auth';
 
+export const dynamic = 'force-dynamic';
+
 // Get trip receipt
 export async function GET(request: NextRequest) {
   try {
