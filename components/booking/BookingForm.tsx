@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { AddressAutocomplete } from '@/components/ui/AddressAutocomplete';
 
 interface BookingFormProps {
   locale: string;
@@ -387,19 +388,18 @@ export function BookingForm({ locale }: BookingFormProps) {
               </button>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                {t('street')} *
-              </label>
-              <input
-                type="text"
-                value={fromStreet}
-                onChange={(e) => setFromStreet(e.target.value)}
-                required
-                className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
-                placeholder="Uttrågata 19"
-              />
-            </div>
+            <AddressAutocomplete
+              value={fromStreet}
+              onChange={setFromStreet}
+              onSelect={(address) => {
+                setFromStreet(address.street);
+                setFromCity(address.city);
+                setFromPostalCode(address.postalCode);
+              }}
+              label={t('street')}
+              placeholder="Uttrågata 19"
+              required
+            />
 
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -437,21 +437,23 @@ export function BookingForm({ locale }: BookingFormProps) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
               {t('destination')}
+              <span className="ml-2 text-xs text-taxi-grey font-normal">
+                ({locale === 'no' ? 'valfritt' : 'optional'})
+              </span>
             </h4>
 
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                {t('street')} *
-              </label>
-              <input
-                type="text"
-                value={toStreet}
-                onChange={(e) => setToStreet(e.target.value)}
-                required
-                className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
-                placeholder={t('optionalDestination')}
-              />
-            </div>
+            <AddressAutocomplete
+              value={toStreet}
+              onChange={setToStreet}
+              onSelect={(address) => {
+                setToStreet(address.street);
+                setToCity(address.city);
+                setToPostalCode(address.postalCode);
+              }}
+              label={t('street')}
+              placeholder={t('optionalDestination')}
+              required={false}
+            />
 
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -488,6 +490,7 @@ export function BookingForm({ locale }: BookingFormProps) {
                 disabled={loadingPrice || !fromStreet || !toStreet}
                 variant="secondary"
                 className="w-full"
+                title={!toStreet ? (locale === 'no' ? 'Treng destinasjon for prisestimat' : 'Destination required for price quote') : ''}
               >
                 {loadingPrice
                   ? (locale === 'no' ? 'Hentar prisestimat...' : 'Getting price quote...')
