@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
@@ -30,13 +31,27 @@ interface BookingDetails {
 export default function ManageBookingPage({ params }: { params: { locale: string } }) {
   const { locale } = params;
   const t = useTranslations('manageBooking');
-  
+  const searchParams = useSearchParams();
+
   const [bookRef, setBookRef] = useState('');
   const [booking, setBooking] = useState<BookingDetails | null>(null);
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
+  // Auto-search if ref is in URL
+  useEffect(() => {
+    const ref = searchParams.get('ref');
+    if (ref) {
+      setBookRef(ref.toUpperCase());
+      // Trigger search after setting ref
+      setTimeout(() => {
+        const searchButton = document.querySelector('[data-search-button]') as HTMLButtonElement;
+        searchButton?.click();
+      }, 100);
+    }
+  }, [searchParams]);
 
   const handleSearch = async () => {
     if (!bookRef) {
@@ -133,9 +148,10 @@ export default function ManageBookingPage({ params }: { params: { locale: string
               onClick={handleSearch}
               disabled={loading}
               className="w-full"
+              data-search-button
             >
-              {loading 
-                ? (locale === 'no' ? 'Søkjer...' : 'Searching...') 
+              {loading
+                ? (locale === 'no' ? 'Søkjer...' : 'Searching...')
                 : (locale === 'no' ? 'Søk' : 'Search')}
             </Button>
           </div>
