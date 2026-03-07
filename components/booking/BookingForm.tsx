@@ -20,9 +20,13 @@ export function BookingForm({ locale }: BookingFormProps) {
   const [fromStreet, setFromStreet] = useState('');
   const [fromCity, setFromCity] = useState('Voss');
   const [fromPostalCode, setFromPostalCode] = useState('5700');
+  const [fromLat, setFromLat] = useState<number | null>(null);
+  const [fromLon, setFromLon] = useState<number | null>(null);
   const [toStreet, setToStreet] = useState('');
   const [toCity, setToCity] = useState('');
   const [toPostalCode, setToPostalCode] = useState('');
+  const [toLat, setToLat] = useState<number | null>(null);
+  const [toLon, setToLon] = useState<number | null>(null);
   const [pickupTime, setPickupTime] = useState('');
   const [passengerCount, setPassengerCount] = useState(1);
   const [clientNote, setClientNote] = useState('');
@@ -60,6 +64,10 @@ export function BookingForm({ locale }: BookingFormProps) {
       });
 
       const { latitude, longitude } = position.coords;
+
+      // Store GPS coordinates
+      setFromLat(latitude);
+      setFromLon(longitude);
 
       // Reverse geocode using Nominatim (OpenStreetMap)
       const response = await fetch(
@@ -201,9 +209,13 @@ export function BookingForm({ locale }: BookingFormProps) {
           fromStreet,
           fromCity,
           fromPostalCode,
+          fromLat,
+          fromLon,
           toStreet: toStreet || undefined,
           toCity: toCity || undefined,
           toPostalCode: toPostalCode || undefined,
+          toLat,
+          toLon,
           pickupTime: pickupTime
             ? new Date(pickupTime).toISOString()
             : new Date(Date.now() + 15 * 60000).toISOString(),
