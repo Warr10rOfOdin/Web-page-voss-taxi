@@ -219,11 +219,10 @@ export default function ManageBookingPage({ params }: { params: { locale: string
                 <Button
                   onClick={handleDelete}
                   disabled={deleting}
-                  variant="destructive"
-                  className="w-full bg-red-600 hover:bg-red-700"
+                  className="w-full bg-red-600 hover:bg-red-700 text-white"
                 >
-                  {deleting 
-                    ? (locale === 'no' ? 'Slettar...' : 'Deleting...') 
+                  {deleting
+                    ? (locale === 'no' ? 'Slettar...' : 'Deleting...')
                     : (locale === 'no' ? 'Slett booking' : 'Delete Booking')}
                 </Button>
               ) : (
