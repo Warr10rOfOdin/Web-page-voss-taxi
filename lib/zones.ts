@@ -58,20 +58,12 @@ export function getZoneFromCity(city: string): number {
 }
 
 /**
- * Get zone number (tries postal code first, then city)
- * Returns official Taxi4U zone codes (100-903 range)
+ * Get zone number - returns a default zone since postal codes don't correlate to zones
+ * The API requires a zone number but doesn't use it for address-based routing
+ * Returns 0 as the default/universal zone number
  */
 export function getZoneNumber(postalCode?: string, city?: string): number {
-  if (postalCode) {
-    const zoneFromPostal = getZoneFromPostalCode(postalCode);
-    if (zoneFromPostal !== 100 || !city) return zoneFromPostal;
-  }
-
-  if (city) {
-    const zoneFromCity = getZoneFromCity(city);
-    if (zoneFromCity) return zoneFromCity;
-  }
-
-  // Default to zone 100 (central Voss)
-  return 100;
+  // API requires zone number but postal codes don't correlate to zones
+  // Use 0 as default/universal zone - API should route based on address
+  return 0;
 }
