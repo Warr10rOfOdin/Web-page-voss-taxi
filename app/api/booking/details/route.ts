@@ -1,39 +1,57 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { taxi4uFetch } from '@/lib/taxi4u-auth';
 
-// Get booking details
 export async function GET(request: NextRequest) {
   try {
-    const searchParams = request.nextUrl.searchParams;
+    const { searchParams } = new URL(request.url);
     const bookRef = searchParams.get('bookRef');
 
     if (!bookRef) {
       return NextResponse.json(
-        { error: 'bookRef parameter is required' },
+        { success: false, error: 'Booking reference is required' },
         { status: 400 }
       );
     }
 
-    const centralCode = process.env.TAXI4U_CENTRAL_CODE || 'VS';
-
+    // Fetch booking details from Taxi4U API
     const response = await taxi4uFetch(
-      `https://api.taxi4u.cab/api/bookingdetails?centralCode=${centralCode}&bookRef=${bookRef}`
+      `/api/bookingdetails?centralCode=vs&bookRef=${encodeURIComponent(bookRef)}`,
+      {
+        method: 'GET',
+      }
     );
 
     if (!response.ok) {
-      const error = await response.text();
+      const errorText = await response.text();
+      console.error('Taxi4U booking details failed:', response.status, errorText);
+
+      if (response.status === 404) {
+        return NextResponse.json(
+          { success: false, error: 'Booking not found' },
+          { status: 404 }
+        );
+      }
+
       return NextResponse.json(
-        { error: 'Failed to fetch booking details', details: error },
+        { success: false, error: 'Failed to fetch booking details' },
         { status: response.status }
       );
     }
 
-    const data = await response.json();
-    return NextResponse.json(data);
+    const bookingData = await response.json();
+
+    return NextResponse.json({
+      success: true,
+      booking: bookingData,
+    });
+
   } catch (error) {
     console.error('Booking details error:', error);
     return NextResponse.json(
-      { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
+      {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch booking details'
+      },
       { status: 500 }
     );
   }
