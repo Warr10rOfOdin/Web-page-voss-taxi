@@ -25,6 +25,11 @@ export async function POST(request: NextRequest) {
     // Log request
     requestId = logRequest(request, { body });
 
+    // Convert passengers object to array if needed (form data comes as object)
+    if (body.passengers && !Array.isArray(body.passengers)) {
+      body.passengers = Object.values(body.passengers);
+    }
+
     // Validate request using validation utilities
     const validation = validateGeneralBookingRequest(body);
     if (!validation.isValid) {

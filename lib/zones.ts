@@ -58,13 +58,12 @@ export function getZoneFromCity(city: string): number {
 }
 
 /**
- * Get zone number - returns a default zone since postal codes don't correlate to zones
- * The API requires a zone number but doesn't use it for address-based routing
- * Returns 1 as the default/universal zone number (zone 0 is invalid)
+ * Get zone number - returns zone 100 (central Voss)
+ * Since postal codes don't correlate to zones, use the standard Voss zone
+ * Zone 100 is the default zone for the Voss central area
  */
 export function getZoneNumber(postalCode?: string, city?: string): number {
-  // API requires zone number but postal codes don't correlate to zones
-  // Use zone 1 as default (zone 0 is treated as "missing" by API)
-  // API should route based on complete address instead
-  return 1;
+  // Zones 0 and 1 are invalid/missing
+  // Use zone 100 (central Voss zone from zone mapping)
+  return 100;
 }
