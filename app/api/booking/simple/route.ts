@@ -186,9 +186,9 @@ export async function POST(request: NextRequest) {
     logResponse(requestId, { status: 200, data: responseData }, startTime);
     trackRequestMetrics(request.nextUrl.pathname, 200, Date.now() - startTime);
 
-    const response = NextResponse.json(responseData);
-    response.headers.set('X-Request-Id', requestId);
-    return response;
+    const finalResponse = NextResponse.json(responseData);
+    finalResponse.headers.set('X-Request-Id', requestId);
+    return finalResponse;
   } catch (error) {
     // Enhanced error logging
     console.error('Simple booking unexpected error:', {
