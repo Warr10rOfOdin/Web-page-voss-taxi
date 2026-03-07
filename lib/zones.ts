@@ -58,26 +58,11 @@ export function getZoneFromCity(city: string): number {
 }
 
 /**
- * Get zone number - looks up zone from postal code or city
- * Falls back to zone 100 (central Voss) if no match found
+ * Get zone number - returns a test zone number
+ * TODO: Get actual valid zones from Taxi4U API
+ * Postal codes have NO correlation to zones
  */
 export function getZoneNumber(postalCode?: string, city?: string): number {
-  // Try postal code lookup first
-  if (postalCode) {
-    const zone = getZoneFromPostalCode(postalCode);
-    if (zone !== 100 || postalCode === '5700' || postalCode === '5704') {
-      return zone;
-    }
-  }
-
-  // Try city lookup
-  if (city) {
-    const zone = getZoneFromCity(city);
-    if (zone !== 100 || city.toUpperCase().includes('VOSS')) {
-      return zone;
-    }
-  }
-
-  // Default to zone 100 (central Voss)
-  return 100;
+  // Try zone 1 - most APIs start zones at 1
+  return 1;
 }
