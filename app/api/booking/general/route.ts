@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { taxi4uFetch } from '@/lib/taxi4u-auth';
-import { getZoneNumber } from '@/lib/zones';
+import { getZoneFromCoordinates } from '@/lib/zone-lookup';
 
 // General booking endpoint (multi-passenger, detailed)
 export async function POST(request: NextRequest) {
@@ -10,9 +10,22 @@ export async function POST(request: NextRequest) {
     // Get central code from environment or use default
     const centralCode = process.env.TAXI4U_CENTRAL_CODE || 'VS';
 
-    // Pass passengers as-is - let Taxi4U API determine zones from full addresses
-    // The API will calculate zones based on fromStreet, fromCity, fromPostalCode
-    const processedPassengers = body.passengers;
+    // Process passengers and add zone numbers from GPS coordinates
+    const processedPassengers = body.passengers.map((passenger: any) => {
+      const passengerData = { ...passenger };
+
+      // Determine fromZoneNo from GPS coordinates if available
+      if (passenger.fromLat && passenger.fromLon) {
+        passengerData.fromZoneNo = getZoneFromCoordinates(passenger.fromLon, passenger.fromLat);
+      }
+
+      // Determine toZoneNo from GPS coordinates if available
+      if (passenger.toLat && passenger.toLon) {
+        passengerData.toZoneNo = getZoneFromCoordinates(passenger.toLon, passenger.toLat);
+      }
+
+      return passengerData;
+    });
 
     // Build enhanced booking payload
     const bookingData = {
