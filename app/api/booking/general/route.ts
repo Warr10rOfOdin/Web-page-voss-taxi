@@ -87,13 +87,38 @@ export async function POST(request: NextRequest) {
       // Try to parse error as JSON for better error messages
       try {
         const errorJson = JSON.parse(errorText);
-        errorDetails = errorJson.message || errorJson.error || errorText;
 
-        // Log detailed error information
+        // Extract detailed error information
+        let specificErrors: string[] = [];
+        if (errorJson.errors) {
+          // Handle Taxi4U API error format
+          if (errorJson.errors.generalErrors && Array.isArray(errorJson.errors.generalErrors)) {
+            specificErrors = errorJson.errors.generalErrors;
+          }
+          // Handle other error formats
+          if (typeof errorJson.errors === 'object') {
+            Object.keys(errorJson.errors).forEach(key => {
+              const value = errorJson.errors[key];
+              if (Array.isArray(value)) {
+                specificErrors.push(...value);
+              } else {
+                specificErrors.push(String(value));
+              }
+            });
+          }
+        }
+
+        errorDetails = specificErrors.length > 0
+          ? specificErrors.join('; ')
+          : (errorJson.message || errorJson.error || errorText);
+
+        // Log detailed error information with all details
         console.error('General booking API error:', {
           status: response.status,
           statusText: response.statusText,
           error: errorJson,
+          specificErrors,
+          requestData: bookingData,
           timestamp: new Date().toISOString(),
         });
       } catch {
@@ -101,6 +126,7 @@ export async function POST(request: NextRequest) {
           status: response.status,
           statusText: response.statusText,
           error: errorText,
+          requestData: bookingData,
           timestamp: new Date().toISOString(),
         });
       }
@@ -109,7 +135,8 @@ export async function POST(request: NextRequest) {
         {
           error: 'Booking failed',
           details: errorDetails,
-          statusCode: response.status
+          statusCode: response.status,
+          type: 'api_error'
         },
         { status: response.status }
       );
