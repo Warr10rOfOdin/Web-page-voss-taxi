@@ -1,45 +1,45 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { taxi4uFetch } from '@/lib/taxi4u-auth';
+import { validateGeneralBookingRequest } from '@/lib/validation';
+import { retryWithBackoff } from '@/lib/retry';
+import { strictRateLimiter } from '@/lib/rate-limit';
+import { logRequest, logResponse, trackRequestMetrics } from '@/lib/request-logger';
+import type { GeneralBookingRequest, BookingResponse } from '@/lib/types/booking';
 
 // General booking endpoint (multi-passenger, detailed)
 export async function POST(request: NextRequest) {
-  try {
-    // Parse and validate request body
-    const body = await request.json();
+  const startTime = Date.now();
+  let requestId: string = '';
 
-    // Validate required fields
-    if (!body.passengers || !Array.isArray(body.passengers) || body.passengers.length === 0) {
-      console.error('Validation error: Missing or invalid passengers array');
-      return NextResponse.json(
-        { error: 'Invalid request', details: 'At least one passenger is required' },
-        { status: 400 }
-      );
+  try {
+    // Apply rate limiting
+    const rateLimitResult = await strictRateLimiter(request);
+    if (rateLimitResult) {
+      return rateLimitResult;
     }
 
-    // Validate each passenger
-    for (let i = 0; i < body.passengers.length; i++) {
-      const passenger = body.passengers[i];
-      if (!passenger.clientName || typeof passenger.clientName !== 'string' || passenger.clientName.trim() === '') {
-        console.error(`Validation error: Missing or invalid clientName for passenger ${i + 1}`);
-        return NextResponse.json(
-          { error: 'Invalid request', details: `Passenger ${i + 1}: Name is required` },
-          { status: 400 }
-        );
-      }
-      if (!passenger.tel || typeof passenger.tel !== 'string' || passenger.tel.trim() === '') {
-        console.error(`Validation error: Missing or invalid tel for passenger ${i + 1}`);
-        return NextResponse.json(
-          { error: 'Invalid request', details: `Passenger ${i + 1}: Phone number is required` },
-          { status: 400 }
-        );
-      }
-      if (!passenger.fromStreet || typeof passenger.fromStreet !== 'string' || passenger.fromStreet.trim() === '') {
-        console.error(`Validation error: Missing or invalid fromStreet for passenger ${i + 1}`);
-        return NextResponse.json(
-          { error: 'Invalid request', details: `Passenger ${i + 1}: Pickup address is required` },
-          { status: 400 }
-        );
-      }
+    // Parse request body
+    const body = await request.json();
+
+    // Log request
+    requestId = logRequest(request, { body });
+
+    // Validate request using validation utilities
+    const validation = validateGeneralBookingRequest(body);
+    if (!validation.isValid) {
+      console.error('Validation error:', {
+        errors: validation.errors,
+        timestamp: new Date().toISOString(),
+      });
+      return NextResponse.json(
+        {
+          error: 'Validation failed',
+          details: validation.errors.join('; '),
+          errors: validation.errors,
+          type: 'validation_error'
+        },
+        { status: 400 }
+      );
     }
 
     // Get central code from environment or use default
@@ -55,15 +55,28 @@ export async function POST(request: NextRequest) {
 
     console.log('Sending general booking request:', JSON.stringify(bookingData, null, 2));
 
-    // Call Taxi4U API with authentication (handles token refresh)
-    const response = await taxi4uFetch(
-      `https://api.taxi4u.cab/api/book/general?centralCode=${centralCode}`,
+    // Call Taxi4U API with authentication and retry logic
+    const response = await retryWithBackoff(
+      () => taxi4uFetch(
+        `https://api.taxi4u.cab/api/book/general?centralCode=${centralCode}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(bookingData),
+        }
+      ),
       {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(bookingData),
+        maxAttempts: 3,
+        initialDelayMs: 1000,
+        shouldRetry: (error: any) => {
+          // Retry on network errors and 5xx server errors
+          if (error?.name === 'TypeError' || error?.name === 'NetworkError') return true;
+          if (error?.status >= 500 && error?.status < 600) return true;
+          if (error?.status === 408 || error?.status === 504) return true;
+          return false;
+        }
       }
     );
 
@@ -74,13 +87,38 @@ export async function POST(request: NextRequest) {
       // Try to parse error as JSON for better error messages
       try {
         const errorJson = JSON.parse(errorText);
-        errorDetails = errorJson.message || errorJson.error || errorText;
 
-        // Log detailed error information
+        // Extract detailed error information
+        let specificErrors: string[] = [];
+        if (errorJson.errors) {
+          // Handle Taxi4U API error format
+          if (errorJson.errors.generalErrors && Array.isArray(errorJson.errors.generalErrors)) {
+            specificErrors = errorJson.errors.generalErrors;
+          }
+          // Handle other error formats
+          if (typeof errorJson.errors === 'object') {
+            Object.keys(errorJson.errors).forEach(key => {
+              const value = errorJson.errors[key];
+              if (Array.isArray(value)) {
+                specificErrors.push(...value);
+              } else {
+                specificErrors.push(String(value));
+              }
+            });
+          }
+        }
+
+        errorDetails = specificErrors.length > 0
+          ? specificErrors.join('; ')
+          : (errorJson.message || errorJson.error || errorText);
+
+        // Log detailed error information with all details
         console.error('General booking API error:', {
           status: response.status,
           statusText: response.statusText,
           error: errorJson,
+          specificErrors,
+          requestData: bookingData,
           timestamp: new Date().toISOString(),
         });
       } catch {
@@ -88,6 +126,7 @@ export async function POST(request: NextRequest) {
           status: response.status,
           statusText: response.statusText,
           error: errorText,
+          requestData: bookingData,
           timestamp: new Date().toISOString(),
         });
       }
@@ -96,7 +135,8 @@ export async function POST(request: NextRequest) {
         {
           error: 'Booking failed',
           details: errorDetails,
-          statusCode: response.status
+          statusCode: response.status,
+          type: 'api_error'
         },
         { status: response.status }
       );
@@ -123,12 +163,20 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
     });
 
-    return NextResponse.json({
+    const responseData = {
       success: true,
       internalNo: data.internalNo,
       bookRef: data.bookRef,
       data,
-    });
+    };
+
+    // Log response
+    logResponse(requestId, { status: 200, data: responseData }, startTime);
+    trackRequestMetrics(request.nextUrl.pathname, 200, Date.now() - startTime);
+
+    const finalResponse = NextResponse.json(responseData);
+    finalResponse.headers.set('X-Request-Id', requestId);
+    return finalResponse;
   } catch (error) {
     // Enhanced error logging
     console.error('General booking unexpected error:', {
