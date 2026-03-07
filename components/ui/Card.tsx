@@ -2,7 +2,7 @@ import { HTMLAttributes, forwardRef } from 'react';
 import { cn } from '@/lib/utils';
 
 export interface CardProps extends HTMLAttributes<HTMLDivElement> {
-  variant?: 'default' | 'hover';
+  variant?: 'default' | 'hover' | 'glass' | 'glass-dark' | 'depth';
 }
 
 const Card = forwardRef<HTMLDivElement, CardProps>(
@@ -11,10 +11,22 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
       <div
         ref={ref}
         className={cn(
-          'rounded-xl bg-white border border-gray-200 shadow-sm',
+          'rounded-2xl overflow-hidden',
           {
-            'transition-all duration-300 hover:shadow-lg hover:-translate-y-1':
+            // Default solid card
+            'bg-white border border-gray-200 shadow-lg depth-2':
+              variant === 'default',
+            // Hover effect card
+            'bg-white border border-gray-200 shadow-lg depth-2 hover-lift smooth-transition':
               variant === 'hover',
+            // Glass morphism variants
+            'glass backdrop-blur-xl border-white/30 depth-3':
+              variant === 'glass',
+            'glass-dark backdrop-blur-xl border-white/20 depth-3':
+              variant === 'glass-dark',
+            // Enhanced depth card
+            'bg-white border border-gray-100 depth-4 hover-lift smooth-transition':
+              variant === 'depth',
           },
           className
         )}
