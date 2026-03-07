@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 
@@ -27,16 +27,28 @@ interface BookingDetails {
   }>;
 }
 
-export default function ManageBookingPage({ params }: { params: { locale: string } }) {
-  const { locale } = params;
-  const t = useTranslations('manageBooking');
-  
+function ManageBookingContent({ locale }: { locale: string }) {
+  const searchParams = useSearchParams();
+
   const [bookRef, setBookRef] = useState('');
   const [booking, setBooking] = useState<BookingDetails | null>(null);
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
+  // Auto-search if ref is in URL
+  useEffect(() => {
+    const ref = searchParams.get('ref');
+    if (ref) {
+      setBookRef(ref.toUpperCase());
+      // Trigger search after setting ref
+      setTimeout(() => {
+        const searchButton = document.querySelector('[data-search-button]') as HTMLButtonElement;
+        searchButton?.click();
+      }, 100);
+    }
+  }, [searchParams]);
 
   const handleSearch = async () => {
     if (!bookRef) {
@@ -133,9 +145,10 @@ export default function ManageBookingPage({ params }: { params: { locale: string
               onClick={handleSearch}
               disabled={loading}
               className="w-full"
+              data-search-button
             >
-              {loading 
-                ? (locale === 'no' ? 'Søkjer...' : 'Searching...') 
+              {loading
+                ? (locale === 'no' ? 'Søkjer...' : 'Searching...')
                 : (locale === 'no' ? 'Søk' : 'Search')}
             </Button>
           </div>
@@ -237,5 +250,30 @@ export default function ManageBookingPage({ params }: { params: { locale: string
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function ManageBookingPage({ params }: { params: { locale: string } }) {
+  const { locale } = params;
+
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto px-4 py-12 max-w-3xl">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-2xl">
+              {locale === 'no' ? 'Sjekk din booking' : 'Check Your Booking'}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-center text-taxi-grey">
+              {locale === 'no' ? 'Lastar...' : 'Loading...'}
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    }>
+      <ManageBookingContent locale={locale} />
+    </Suspense>
   );
 }
