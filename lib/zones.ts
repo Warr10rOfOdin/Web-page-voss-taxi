@@ -58,12 +58,26 @@ export function getZoneFromCity(city: string): number {
 }
 
 /**
- * Get zone number - returns zone 100 (central Voss)
- * Since postal codes don't correlate to zones, use the standard Voss zone
- * Zone 100 is the default zone for the Voss central area
+ * Get zone number - looks up zone from postal code or city
+ * Falls back to zone 100 (central Voss) if no match found
  */
 export function getZoneNumber(postalCode?: string, city?: string): number {
-  // Zones 0 and 1 are invalid/missing
-  // Use zone 100 (central Voss zone from zone mapping)
+  // Try postal code lookup first
+  if (postalCode) {
+    const zone = getZoneFromPostalCode(postalCode);
+    if (zone !== 100 || postalCode === '5700' || postalCode === '5704') {
+      return zone;
+    }
+  }
+
+  // Try city lookup
+  if (city) {
+    const zone = getZoneFromCity(city);
+    if (zone !== 100 || city.toUpperCase().includes('VOSS')) {
+      return zone;
+    }
+  }
+
+  // Default to zone 100 (central Voss)
   return 100;
 }
