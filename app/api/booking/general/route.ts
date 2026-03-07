@@ -57,13 +57,13 @@ export async function POST(request: NextRequest) {
       // Add required dispatch fields
       carGroupId: body.carGroupId || 1, // Default to standard taxi (group 1)
       numberOfCars: body.numberOfCars || 1, // Default to 1 car
-      // Add zone numbers to each passenger (as strings - API might require string type)
+      // Add zone numbers to each passenger (API may use PascalCase field names)
       passengers: body.passengers.map((passenger: any) => ({
         ...passenger,
-        fromZoneNo: String(getZoneNumber(passenger.fromPostalCode, passenger.fromCity)),
+        FromZoneNo: String(getZoneNumber(passenger.fromPostalCode, passenger.fromCity)),
         // Add toZoneNo if destination is provided
         ...(passenger.toPostalCode || passenger.toCity ? {
-          toZoneNo: String(getZoneNumber(passenger.toPostalCode, passenger.toCity))
+          ToZoneNo: String(getZoneNumber(passenger.toPostalCode, passenger.toCity))
         } : {}),
       })),
     };
