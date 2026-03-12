@@ -208,7 +208,8 @@ export function BookingForm({ locale }: BookingFormProps) {
 
     try {
       // Calculate attributes based on passenger count
-      // Attributes must be numeric IDs that match the Taxi4U system
+      // NOTE: Attributes are only used for 2-4 passengers (standard taxi)
+      // For 5+ passengers, the carGroupId alone determines the vehicle type
       const attributes: number[] = [];
       if (passengerCount === 2) {
         attributes.push(2); // 2 PERSONER attribute ID
@@ -216,15 +217,9 @@ export function BookingForm({ locale }: BookingFormProps) {
         attributes.push(3); // 3 PERSONER attribute ID
       } else if (passengerCount === 4) {
         attributes.push(4); // 4 PERSONER attribute ID
-      } else if (passengerCount === 5) {
-        attributes.push(5); // 5 PERSONER attribute ID
-      } else if (passengerCount === 6) {
-        attributes.push(6); // 6 SETER attribute ID
-      } else if (passengerCount === 7) {
-        attributes.push(7); // 7 SETER attribute ID
-      } else if (passengerCount === 8) {
-        attributes.push(8); // 8 SETER attribute ID
       }
+      // For 5+ passengers: carGroupId 2 (large taxi) or 3 (minibus) is sufficient
+      // No passenger count attributes needed for larger vehicles
 
       // Prepare booking data for API
       // Calculate pickup time - round to nearest 5 minutes
