@@ -1,6 +1,7 @@
 import { setRequestLocale } from 'next-intl/server';
 import { Container } from '@/components/ui/Container';
 import { BookingForm } from '@/components/booking/BookingForm';
+import { BookingChecker } from '@/components/booking/BookingChecker';
 
 export default async function HomePage({
   params,
@@ -33,6 +34,11 @@ export default async function HomePage({
 
           {/* Booking Form */}
           <BookingForm locale={locale} />
+
+          {/* Booking Checker */}
+          <div className="mt-12">
+            <BookingChecker locale={locale} />
+          </div>
 
           {/* Emergency Contact */}
           <div className="mt-8 text-center">

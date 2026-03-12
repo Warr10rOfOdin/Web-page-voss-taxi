@@ -25,7 +25,7 @@ export async function Footer() {
         {/* Top Border Gradient */}
         <div className="h-1 bg-gradient-to-r from-transparent via-taxi-yellow to-transparent mb-12" />
 
-        <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div className="py-12 grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Company Info with Glass Effect */}
           <div className="glass-dark p-6 rounded-2xl depth-2 hover-lift smooth-transition backdrop-blur-xl">
             <div className="text-3xl font-display font-bold mb-4">
@@ -39,25 +39,6 @@ export async function Footer() {
             </p>
             <div className="mt-6 glass-yellow rounded-full px-4 py-2 inline-block text-sm font-bold">
               ⭐ Since 1950
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h3 className="font-bold text-xl mb-6 text-taxi-yellow">
-              {footerContent.quickLinks.title}
-            </h3>
-            <div className="space-y-3 text-sm">
-              {footerContent.quickLinks.links.map((link: any, index: number) => (
-                <Link
-                  key={index}
-                  href={link.url}
-                  className="block text-taxi-light-grey/90 hover:text-taxi-yellow hover:translate-x-2 smooth-transition flex items-center group"
-                >
-                  <span className="text-taxi-yellow mr-2 group-hover:animate-pulse">→</span>
-                  {link.text}
-                </Link>
-              ))}
             </div>
           </div>
 
