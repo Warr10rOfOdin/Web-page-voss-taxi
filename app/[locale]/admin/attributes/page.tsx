@@ -21,7 +21,7 @@ export default function AttributesDebugPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === 'vosstaxi2024') {
+    if (password === 'Hestavangen11') {
       sessionStorage.setItem('admin-auth', 'true');
       setAuthenticated(true);
       fetchAttributes();
