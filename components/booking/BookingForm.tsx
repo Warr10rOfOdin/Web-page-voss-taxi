@@ -208,19 +208,22 @@ export function BookingForm({ locale }: BookingFormProps) {
 
     try {
       // Calculate attributes based on passenger count
-      const attributes: string[] = [];
+      // Attributes must be numeric IDs that match the Taxi4U system
+      const attributes: number[] = [];
       if (passengerCount === 2) {
-        attributes.push('2 PERSONER');
+        attributes.push(2); // 2 PERSONER attribute ID
       } else if (passengerCount === 3) {
-        attributes.push('3 PERSONER');
+        attributes.push(3); // 3 PERSONER attribute ID
       } else if (passengerCount === 4) {
-        attributes.push('4 PERSONER');
-      } else if (passengerCount === 5 || passengerCount === 6) {
-        attributes.push('6 SETER');
+        attributes.push(4); // 4 PERSONER attribute ID
+      } else if (passengerCount === 5) {
+        attributes.push(5); // 5 PERSONER attribute ID
+      } else if (passengerCount === 6) {
+        attributes.push(6); // 6 SETER attribute ID
       } else if (passengerCount === 7) {
-        attributes.push('7 SETER');
+        attributes.push(7); // 7 SETER attribute ID
       } else if (passengerCount === 8) {
-        attributes.push('8 SETER');
+        attributes.push(8); // 8 SETER attribute ID
       }
 
       // Prepare booking data for API
