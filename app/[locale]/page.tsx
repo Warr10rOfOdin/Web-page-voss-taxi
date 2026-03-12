@@ -18,7 +18,7 @@ export default async function HomePage({
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-taxi-yellow/5 rounded-full blur-3xl" />
 
       <Container className="relative z-10 py-16">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           {/* Page Header */}
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-4">
@@ -32,12 +32,17 @@ export default async function HomePage({
             </p>
           </div>
 
-          {/* Booking Form */}
-          <BookingForm locale={locale} />
+          {/* Main Content Grid */}
+          <div className="grid lg:grid-cols-[1fr_380px] gap-8">
+            {/* Booking Form */}
+            <div>
+              <BookingForm locale={locale} />
+            </div>
 
-          {/* Booking Checker */}
-          <div className="mt-12">
-            <BookingChecker locale={locale} />
+            {/* Booking Checker Sidebar */}
+            <div className="lg:sticky lg:top-24 self-start">
+              <BookingChecker locale={locale} />
+            </div>
           </div>
 
           {/* Emergency Contact */}
