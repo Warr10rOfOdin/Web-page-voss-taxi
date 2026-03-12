@@ -38,7 +38,7 @@ export default function AdminPage() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     // Simple password check - in production, use proper authentication
-    if (password === 'vosstaxi2024') {
+    if (password === 'Hestavangen11') {
       sessionStorage.setItem('admin-auth', 'true');
       setAuthenticated(true);
       fetchRules();
