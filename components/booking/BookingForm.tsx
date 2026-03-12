@@ -234,9 +234,23 @@ export function BookingForm({ locale }: BookingFormProps) {
 
       const finalPickupTime = calculatePickupTime();
 
+      // Build message to car - include passenger count for dispatcher visibility
+      let finalMessageToCar = messageToCar || '';
+
+      // For larger groups (5+ passengers), explicitly state passenger count
+      // since attributes don't apply to these vehicle types
+      if (passengerCount >= 5) {
+        const passengerInfo = locale === 'no'
+          ? `${passengerCount} passasjerar`
+          : `${passengerCount} passengers`;
+        finalMessageToCar = finalMessageToCar
+          ? `${passengerInfo}. ${finalMessageToCar}`
+          : passengerInfo;
+      }
+
       const bookingData = {
         orderedBy: 'Website',
-        messageToCar: messageToCar || undefined,
+        messageToCar: finalMessageToCar || undefined,
         pickupTime: finalPickupTime,
         carGroupId: carGroupId,
         numberOfCars: 1,
