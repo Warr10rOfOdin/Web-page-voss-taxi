@@ -185,7 +185,7 @@ export default function AttributesDebugPage() {
             <div className="mt-8 bg-blue-900/20 border border-blue-500/50 text-blue-300 px-6 py-4 rounded-xl">
               <p className="font-bold text-white mb-2">💡 Usage Instructions:</p>
               <ol className="list-decimal list-inside space-y-1 text-sm">
-                <li>Look for passenger count attributes above (e.g., "2 PERSONER", "6 SETER")</li>
+                <li>Look for passenger count attributes above (e.g., &quot;2 PERSONER&quot;, &quot;6 SETER&quot;)</li>
                 <li>Note the ID numbers for each passenger count</li>
                 <li>Update the booking form to use these IDs in the attributes array</li>
                 <li>Test bookings to ensure dispatchers can see vehicle requirements</li>
@@ -200,10 +200,10 @@ export default function AttributesDebugPage() {
               <p>• 2 passengers → carGroupId: 1 (Standard), attributes: [2]</p>
               <p>• 3 passengers → carGroupId: 1 (Standard), attributes: [3]</p>
               <p>• 4 passengers → carGroupId: 1 (Standard), attributes: [4]</p>
-              <p>• 5 passengers → carGroupId: 2 (Large), no attributes, message: "5 passasjerar"</p>
-              <p>• 6 passengers → carGroupId: 2 (Large), no attributes, message: "6 passasjerar"</p>
-              <p>• 7 passengers → carGroupId: 3 (Minibus), no attributes, message: "7 passasjerar"</p>
-              <p>• 8 passengers → carGroupId: 3 (Minibus), no attributes, message: "8 passasjerar"</p>
+              <p>• 5 passengers → carGroupId: 2 (Large), no attributes, message: &quot;5 passasjerar&quot;</p>
+              <p>• 6 passengers → carGroupId: 2 (Large), no attributes, message: &quot;6 passasjerar&quot;</p>
+              <p>• 7 passengers → carGroupId: 3 (Minibus), no attributes, message: &quot;7 passasjerar&quot;</p>
+              <p>• 8 passengers → carGroupId: 3 (Minibus), no attributes, message: &quot;8 passasjerar&quot;</p>
             </div>
           </div>
         </div>
