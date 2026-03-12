@@ -44,6 +44,12 @@ export function BookingForm({ locale }: BookingFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [bookRef, setBookRef] = useState<string | null>(null);
 
+  // Rules checking state
+  const [ruleWarnings, setRuleWarnings] = useState<any[]>([]);
+  const [ruleRestrictions, setRuleRestrictions] = useState<any[]>([]);
+  const [ruleDisclaimers, setRuleDisclaimers] = useState<any[]>([]);
+  const [hasRestrictions, setHasRestrictions] = useState(false);
+
   // Get current GPS location and reverse geocode to address
   const getMyLocation = async () => {
     setLoadingLocation(true);
@@ -105,6 +111,31 @@ export function BookingForm({ locale }: BookingFormProps) {
       }
     } finally {
       setLoadingLocation(false);
+    }
+  };
+
+  // Check booking rules
+  const checkRules = async (pickupTimeStr: string) => {
+    if (!pickupTimeStr) {
+      setRuleWarnings([]);
+      setRuleRestrictions([]);
+      setRuleDisclaimers([]);
+      setHasRestrictions(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/booking/check-rules?pickupTime=${encodeURIComponent(pickupTimeStr)}`);
+      const data = await response.json();
+
+      if (data.success) {
+        setRuleWarnings(data.data.warnings || []);
+        setRuleRestrictions(data.data.restrictions || []);
+        setRuleDisclaimers(data.data.disclaimers || []);
+        setHasRestrictions(data.data.hasRestrictions);
+      }
+    } catch (error) {
+      console.error('Error checking rules:', error);
     }
   };
 
@@ -630,9 +661,14 @@ export function BookingForm({ locale }: BookingFormProps) {
                 if (e.target.value) {
                   const selectedDate = new Date(e.target.value);
                   const rounded = roundToNearest5Minutes(selectedDate);
-                  setPickupTime(rounded.toISOString().slice(0, 16));
+                  const timeStr = rounded.toISOString().slice(0, 16);
+                  setPickupTime(timeStr);
+                  // Check rules for this time
+                  checkRules(rounded.toISOString());
                 } else {
                   setPickupTime(e.target.value);
+                  // Clear rules if no time selected
+                  checkRules('');
                 }
               }}
               min={getMinDateTime()}
@@ -640,6 +676,48 @@ export function BookingForm({ locale }: BookingFormProps) {
               className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
             />
             <p className="text-xs text-taxi-grey mt-1">{t('pickupTimeNote')}</p>
+
+            {/* Rule Restrictions */}
+            {hasRestrictions && ruleRestrictions.length > 0 && (
+              <div className="mt-4 bg-red-900/20 border border-red-500/50 text-red-300 px-6 py-4 rounded-xl">
+                <p className="font-bold text-white mb-2">
+                  {locale === 'no' ? '⚠️ Bestilling ikke mulig' : '⚠️ Booking not possible'}
+                </p>
+                {ruleRestrictions.map((rule, index) => (
+                  <p key={index} className="text-sm mb-1">
+                    {locale === 'no' ? rule.messageNo : rule.messageEn}
+                  </p>
+                ))}
+              </div>
+            )}
+
+            {/* Rule Warnings */}
+            {ruleWarnings.length > 0 && (
+              <div className="mt-4 bg-yellow-900/20 border border-yellow-500/50 text-yellow-300 px-6 py-4 rounded-xl">
+                <p className="font-bold text-white mb-2">
+                  {locale === 'no' ? '⚠️ Viktig informasjon' : '⚠️ Important information'}
+                </p>
+                {ruleWarnings.map((rule, index) => (
+                  <p key={index} className="text-sm mb-1">
+                    {locale === 'no' ? rule.messageNo : rule.messageEn}
+                  </p>
+                ))}
+              </div>
+            )}
+
+            {/* Rule Disclaimers */}
+            {ruleDisclaimers.length > 0 && (
+              <div className="mt-4 bg-blue-900/20 border border-blue-500/50 text-blue-300 px-6 py-4 rounded-xl">
+                <p className="font-bold text-white mb-2">
+                  {locale === 'no' ? 'ℹ️ Merk' : 'ℹ️ Note'}
+                </p>
+                {ruleDisclaimers.map((rule, index) => (
+                  <p key={index} className="text-sm mb-1">
+                    {locale === 'no' ? rule.messageNo : rule.messageEn}
+                  </p>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Notes */}
@@ -683,7 +761,7 @@ export function BookingForm({ locale }: BookingFormProps) {
             type="submit"
             size="lg"
             className="w-full depth-glow hover-scale smooth-transition text-lg font-bold py-6"
-            disabled={loading}
+            disabled={loading || hasRestrictions}
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
