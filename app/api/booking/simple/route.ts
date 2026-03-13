@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { taxi4uFetch } from '@/lib/taxi4u-auth';
 import { getZoneNumber } from '@/lib/zones';
+import { logBooking } from '@/lib/booking-stats';
 
 // Simple booking endpoint (single passenger)
 export async function POST(request: NextRequest) {
@@ -61,11 +62,33 @@ export async function POST(request: NextRequest) {
 
     // Check for error in response
     if (data.errorMessage) {
+      // Log failed booking
+      logBooking({
+        bookRef: undefined,
+        customerName: body.customerName,
+        fromCity: body.fromCity,
+        toCity: body.toCity,
+        pickupTime: body.pickupTime,
+        bookingType: 'simple',
+        success: false,
+      });
+
       return NextResponse.json(
         { error: 'Booking failed', details: data.errorMessage },
         { status: 400 }
       );
     }
+
+    // Log successful booking
+    logBooking({
+      bookRef: data.bookRef,
+      customerName: body.customerName,
+      fromCity: body.fromCity,
+      toCity: body.toCity,
+      pickupTime: body.pickupTime,
+      bookingType: 'simple',
+      success: true,
+    });
 
     return NextResponse.json({
       success: true,

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { taxi4uFetch } from '@/lib/taxi4u-auth';
 import { getZoneFromCoordinates } from '@/lib/zone-lookup';
+import { logBooking } from '@/lib/booking-stats';
 
 // General booking endpoint (multi-passenger, detailed)
 export async function POST(request: NextRequest) {
@@ -68,11 +69,37 @@ export async function POST(request: NextRequest) {
 
     // Check for error in response
     if (data.errorMessage) {
+      // Log failed booking
+      const firstPassenger = body.passengers?.[0] || {};
+      logBooking({
+        bookRef: undefined,
+        internalNo: undefined,
+        customerName: body.orderedBy || firstPassenger.customerName || 'Unknown',
+        fromCity: firstPassenger.fromCity || 'Unknown',
+        toCity: firstPassenger.toCity || '',
+        pickupTime: firstPassenger.pickupTime || body.pickupTime || '',
+        bookingType: 'general',
+        success: false,
+      });
+
       return NextResponse.json(
         { error: 'Booking failed', details: data.errorMessage },
         { status: 400 }
       );
     }
+
+    // Log successful booking
+    const firstPassenger = body.passengers?.[0] || {};
+    logBooking({
+      bookRef: data.bookRef,
+      internalNo: data.internalNo,
+      customerName: body.orderedBy || firstPassenger.customerName || 'Unknown',
+      fromCity: firstPassenger.fromCity || 'Unknown',
+      toCity: firstPassenger.toCity || '',
+      pickupTime: firstPassenger.pickupTime || body.pickupTime || '',
+      bookingType: 'general',
+      success: true,
+    });
 
     return NextResponse.json({
       success: true,
