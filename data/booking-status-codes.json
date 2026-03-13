@@ -1,0 +1,285 @@
+{
+  "statusCodes": {
+    "cancelled": [
+      {
+        "code": "A0",
+        "lastChar": "0",
+        "category": "Cancelled",
+        "label": {
+          "no": "Avbestilt/Sletta",
+          "en": "Cancelled/Deleted"
+        },
+        "description": {
+          "no": "Denne turen er avbestilt eller sletta",
+          "en": "This trip has been cancelled or deleted"
+        },
+        "icon": "❌",
+        "canDelete": false,
+        "canGetReceipt": false
+      },
+      {
+        "code": "CA",
+        "lastChar": "A",
+        "category": "Cancelled",
+        "label": {
+          "no": "Avbestilt",
+          "en": "Cancelled"
+        },
+        "description": {
+          "no": "Denne turen er avbestilt",
+          "en": "This trip has been cancelled"
+        },
+        "icon": "❌",
+        "canDelete": false,
+        "canGetReceipt": false
+      }
+    ],
+    "pending": [
+      {
+        "code": "AU",
+        "lastChar": "U",
+        "category": "Pending",
+        "label": {
+          "no": "Ventar på taxi",
+          "en": "Awaiting Taxi"
+        },
+        "description": {
+          "no": "Venter på at ein taxi skal akseptere turen",
+          "en": "Waiting for a taxi to accept the trip"
+        },
+        "icon": "⏳",
+        "canDelete": true,
+        "canGetReceipt": false
+      },
+      {
+        "code": "OP",
+        "lastChar": "P",
+        "category": "Pending",
+        "label": {
+          "no": "Åpen",
+          "en": "Open"
+        },
+        "description": {
+          "no": "Bestillinga er registrert og venter",
+          "en": "Booking is registered and waiting"
+        },
+        "icon": "⏳",
+        "canDelete": true,
+        "canGetReceipt": false
+      },
+      {
+        "code": "BUGIMN",
+        "lastChar": "N",
+        "category": "Pending",
+        "label": {
+          "no": "Under behandling",
+          "en": "Under Review"
+        },
+        "description": {
+          "no": "Bestillinga er under behandling av systemet",
+          "en": "Booking is being processed by the system"
+        },
+        "icon": "🔄",
+        "canDelete": true,
+        "canGetReceipt": false
+      },
+      {
+        "code": "AUGIMN",
+        "lastChar": "N",
+        "category": "Pending",
+        "label": {
+          "no": "Ventar på behandling",
+          "en": "Awaiting Processing"
+        },
+        "description": {
+          "no": "Bestillinga ventar på å bli behandla av systemet",
+          "en": "Booking is awaiting system processing"
+        },
+        "icon": "⏳",
+        "canDelete": true,
+        "canGetReceipt": false
+      }
+    ],
+    "active": [
+      {
+        "code": "AS",
+        "lastChar": "S",
+        "category": "Active",
+        "label": {
+          "no": "Taxi tildelt",
+          "en": "Taxi Assigned"
+        },
+        "description": {
+          "no": "Ein taxi er tildelt turen din",
+          "en": "A taxi has been assigned to your trip"
+        },
+        "icon": "🚕",
+        "canDelete": false,
+        "canGetReceipt": false
+      },
+      {
+        "code": "AC",
+        "lastChar": "C",
+        "category": "Active",
+        "label": {
+          "no": "Akseptert",
+          "en": "Accepted"
+        },
+        "description": {
+          "no": "Taxi har akseptert turen",
+          "en": "Taxi has accepted the trip"
+        },
+        "icon": "✅",
+        "canDelete": false,
+        "canGetReceipt": false
+      },
+      {
+        "code": "EN",
+        "lastChar": "N",
+        "category": "Active",
+        "label": {
+          "no": "På veg",
+          "en": "En Route"
+        },
+        "description": {
+          "no": "Taxi er på veg til henting",
+          "en": "Taxi is on the way to pickup"
+        },
+        "icon": "🚖",
+        "canDelete": false,
+        "canGetReceipt": false
+      },
+      {
+        "code": "AR",
+        "lastChar": "R",
+        "category": "Active",
+        "label": {
+          "no": "Framme",
+          "en": "Arrived"
+        },
+        "description": {
+          "no": "Taxi har kome fram til hentestaden",
+          "en": "Taxi has arrived at pickup location"
+        },
+        "icon": "📍",
+        "canDelete": false,
+        "canGetReceipt": false
+      },
+      {
+        "code": "PU",
+        "lastChar": "U",
+        "category": "Active",
+        "label": {
+          "no": "Passasjer om bord",
+          "en": "Passenger On Board"
+        },
+        "description": {
+          "no": "Passasjer er om bord, turen pågår",
+          "en": "Passenger is on board, trip in progress"
+        },
+        "icon": "🚗",
+        "canDelete": false,
+        "canGetReceipt": false
+      }
+    ],
+    "completed": [
+      {
+        "code": "CO",
+        "lastChar": "O",
+        "category": "Completed",
+        "label": {
+          "no": "Fullført",
+          "en": "Completed"
+        },
+        "description": {
+          "no": "Turen er fullført",
+          "en": "Trip has been completed"
+        },
+        "icon": "✅",
+        "canDelete": false,
+        "canGetReceipt": true
+      },
+      {
+        "code": "FI",
+        "lastChar": "I",
+        "category": "Completed",
+        "label": {
+          "no": "Ferdig",
+          "en": "Finished"
+        },
+        "description": {
+          "no": "Turen er ferdig",
+          "en": "Trip is finished"
+        },
+        "icon": "🏁",
+        "canDelete": false,
+        "canGetReceipt": true
+      }
+    ]
+  },
+  "lastCharMapping": {
+    "0": {
+      "type": "cancelled",
+      "label": { "no": "Avbestilt/Sletta", "en": "Cancelled/Deleted" },
+      "icon": "❌"
+    },
+    "A": {
+      "type": "cancelled",
+      "label": { "no": "Avbestilt", "en": "Cancelled" },
+      "icon": "❌"
+    },
+    "U": {
+      "type": "pending",
+      "label": { "no": "Ventar", "en": "Awaiting" },
+      "icon": "⏳",
+      "note": "Can be AU (Awaiting Taxi) or PU (Passenger On Board) - context dependent"
+    },
+    "P": {
+      "type": "pending",
+      "label": { "no": "Åpen", "en": "Open" },
+      "icon": "⏳"
+    },
+    "N": {
+      "type": "mixed",
+      "label": { "no": "Under behandling", "en": "Processing" },
+      "icon": "🔄",
+      "note": "Can be BUGIMN (Under Review), AUGIMN (Awaiting Processing), or EN (En Route) - context dependent"
+    },
+    "S": {
+      "type": "active",
+      "label": { "no": "Taxi tildelt", "en": "Taxi Assigned" },
+      "icon": "🚕"
+    },
+    "C": {
+      "type": "active",
+      "label": { "no": "Akseptert", "en": "Accepted" },
+      "icon": "✅"
+    },
+    "R": {
+      "type": "active",
+      "label": { "no": "Framme", "en": "Arrived" },
+      "icon": "📍"
+    },
+    "O": {
+      "type": "completed",
+      "label": { "no": "Fullført", "en": "Completed" },
+      "icon": "✅"
+    },
+    "I": {
+      "type": "completed",
+      "label": { "no": "Ferdig", "en": "Finished" },
+      "icon": "🏁"
+    }
+  },
+  "metadata": {
+    "description": "Comprehensive mapping of all Taxi4U booking status codes for Voss Taxi",
+    "version": "1.0",
+    "lastUpdated": "2026-03-13",
+    "notes": [
+      "Some last characters (U, N) map to multiple codes with different meanings",
+      "Full status code should always be used for precise status determination",
+      "Last character can be used for quick category identification",
+      "Receipt can only be obtained for completed trips (CO, FI)"
+    ]
+  }
+}

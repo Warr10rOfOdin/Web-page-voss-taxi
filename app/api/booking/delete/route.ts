@@ -5,10 +5,19 @@ export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const bookRef = searchParams.get('bookRef');
+    const phoneNumber = searchParams.get('phoneNumber');
 
+    // GDPR Compliance: Require both booking reference and phone number
     if (!bookRef) {
       return NextResponse.json(
         { success: false, error: 'Booking reference is required' },
+        { status: 400 }
+      );
+    }
+
+    if (!phoneNumber) {
+      return NextResponse.json(
+        { success: false, error: 'Phone number is required for verification' },
         { status: 400 }
       );
     }
@@ -29,6 +38,26 @@ export async function DELETE(request: NextRequest) {
     }
 
     const bookingData = await detailsResponse.json();
+
+    // GDPR Security: Verify phone number matches booking
+    const normalizePhone = (phone: string) => {
+      return phone.replace(/[\s\-\+]/g, '').replace(/^47/, '');
+    };
+
+    const inputPhone = normalizePhone(phoneNumber);
+    const bookingPhone = bookingData.passengers?.[0]?.tel
+      ? normalizePhone(bookingData.passengers[0].tel)
+      : '';
+
+    if (!bookingPhone || !inputPhone.endsWith(bookingPhone.slice(-8))) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Phone number does not match booking. Please verify your information.'
+        },
+        { status: 403 }
+      );
+    }
 
     // Check if booking can be deleted
     // tripStatus "AU" = Auto/Unassigned, can be deleted
