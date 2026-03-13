@@ -103,8 +103,8 @@ export async function GET(request: NextRequest) {
       ReceiptPDF({ data: receiptData, locale }) as any
     );
 
-    // Return PDF
-    return new NextResponse(pdfBuffer, {
+    // Return PDF - convert buffer to Uint8Array for NextResponse compatibility
+    return new NextResponse(new Uint8Array(pdfBuffer), {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="voss-taxi-receipt-${bookRef}.pdf"`,
