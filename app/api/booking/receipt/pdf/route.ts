@@ -120,11 +120,9 @@ export async function GET(request: NextRequest) {
 
     console.log('Transformed receipt data:', JSON.stringify(receiptData, null, 2));
 
-    // Generate PDF - call component as function to get Document element
-    // Type assertion needed for server-side PDF rendering
-    const pdfBuffer = await ReactPDF.renderToBuffer(
-      ReceiptPDF({ data: receiptData, locale }) as any
-    );
+    // Generate PDF - ReceiptPDF returns a Document element
+    const receiptElement = React.createElement(ReceiptPDF, { data: receiptData, locale });
+    const pdfBuffer = await ReactPDF.renderToBuffer(receiptElement as any);
 
     // Return PDF - convert buffer to Uint8Array for NextResponse compatibility
     return new NextResponse(new Uint8Array(pdfBuffer), {
