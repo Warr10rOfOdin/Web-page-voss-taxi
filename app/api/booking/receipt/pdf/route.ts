@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { taxi4uFetch } from '@/lib/taxi4u-auth';
-import { renderToBuffer } from '@react-pdf/renderer';
+import ReactPDF from '@react-pdf/renderer';
 import { ReceiptPDF, ReceiptData } from '@/components/receipts/ReceiptPDF';
 import React from 'react';
 
@@ -98,9 +98,8 @@ export async function GET(request: NextRequest) {
     };
 
     // Generate PDF
-    const pdfBuffer = await renderToBuffer(
-      React.createElement(ReceiptPDF, { data: receiptData, locale })
-    );
+    const pdfElement = React.createElement(ReceiptPDF, { data: receiptData, locale });
+    const pdfBuffer = await ReactPDF.renderToBuffer(pdfElement);
 
     // Return PDF
     return new NextResponse(pdfBuffer, {
