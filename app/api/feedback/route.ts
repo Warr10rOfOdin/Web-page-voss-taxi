@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { sendEmail } from '@/lib/smtp-mailer';
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,39 +28,22 @@ export async function POST(request: NextRequest) {
       message,
     ].filter(Boolean).join('\n');
 
-    // Send email via configured provider
-    // For now, use the FEEDBACK_EMAIL env var to determine where to send
+    // Send email via SMTP
     const feedbackEmail = process.env.FEEDBACK_EMAIL || 'post@vosstaxi.no';
 
-    // If a mail service is configured (e.g., Resend, SendGrid), use it
-    if (process.env.RESEND_API_KEY) {
-      const response = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          from: `Voss Taxi Feedback <${process.env.RESEND_FROM_EMAIL || 'noreply@vosstaxi.no'}>`,
-          to: [feedbackEmail],
-          reply_to: email,
-          subject: emailSubject,
-          text: emailBody,
-        }),
+    try {
+      await sendEmail({
+        to: feedbackEmail,
+        subject: emailSubject,
+        text: emailBody,
+        replyTo: email,
       });
-
-      if (!response.ok) {
-        console.error('Failed to send email via Resend:', await response.text());
-        return NextResponse.json({ error: 'Failed to send email' }, { status: 500 });
-      }
-    } else {
-      // Log the feedback for now (will be sent via email once configured)
-      console.log('=== FEEDBACK RECEIVED ===');
-      console.log(`To: ${feedbackEmail}`);
-      console.log(`Subject: ${emailSubject}`);
-      console.log(emailBody);
-      console.log('========================');
-      console.log('NOTE: Set RESEND_API_KEY env var to enable email delivery');
+    } catch (emailError) {
+      console.error('Failed to send feedback email:', emailError);
+      return NextResponse.json(
+        { error: 'Failed to send email', details: emailError instanceof Error ? emailError.message : 'Unknown error' },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({ success: true });
