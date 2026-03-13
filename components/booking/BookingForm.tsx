@@ -383,6 +383,55 @@ export function BookingForm({ locale }: BookingFormProps) {
             </p>
           </div>
 
+          {/* Booking Details Card */}
+          <div className="glass-strong backdrop-blur-xl rounded-2xl p-6 depth-2 border border-white/10 text-left">
+            <h3 className="text-lg font-bold text-white mb-4">
+              {locale === 'no' ? 'Bookingdetaljer' : 'Booking Details'}
+            </h3>
+            <div className="space-y-3 text-sm">
+              <div>
+                <p className="text-taxi-light-grey/60 mb-1">
+                  {locale === 'no' ? 'Henting' : 'Pickup'}
+                </p>
+                <p className="text-white font-semibold">
+                  {fromStreet}, {fromCity} {fromPostalCode}
+                </p>
+              </div>
+              {toStreet && (
+                <div>
+                  <p className="text-taxi-light-grey/60 mb-1">
+                    {locale === 'no' ? 'Destinasjon' : 'Destination'}
+                  </p>
+                  <p className="text-white font-semibold">
+                    {toStreet}, {toCity} {toPostalCode}
+                  </p>
+                </div>
+              )}
+              <div>
+                <p className="text-taxi-light-grey/60 mb-1">
+                  {locale === 'no' ? 'Hentetid' : 'Pickup Time'}
+                </p>
+                <p className="text-white font-semibold">
+                  {pickupTime
+                    ? new Date(pickupTime).toLocaleString(locale === 'no' ? 'no-NO' : 'en-US', {
+                        dateStyle: 'medium',
+                        timeStyle: 'short'
+                      })
+                    : (locale === 'no' ? 'Snarast mogleg' : 'As soon as possible')
+                  }
+                </p>
+              </div>
+              <div>
+                <p className="text-taxi-light-grey/60 mb-1">
+                  {locale === 'no' ? 'Passasjerer' : 'Passengers'}
+                </p>
+                <p className="text-white font-semibold">
+                  {passengerCount} {passengerCount === 1 ? (locale === 'no' ? 'passasjer' : 'passenger') : (locale === 'no' ? 'passasjerer' : 'passengers')}
+                </p>
+              </div>
+            </div>
+          </div>
+
           <p className="text-taxi-light-grey/90">{t('confirmationNote')}</p>
 
           {/* Action Buttons */}
