@@ -5,6 +5,29 @@ import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
 import { BookingRule, RuleType, DayOfWeek, TimeRange } from '@/types/booking-rules';
 
+interface BookingStats {
+  totalBookings: number;
+  successfulBookings: number;
+  failedBookings: number;
+  bookingsByType: {
+    simple: number;
+    general: number;
+  };
+  recentBookings: Array<{
+    id: string;
+    timestamp: string;
+    bookRef?: string;
+    customerName: string;
+    fromCity: string;
+    toCity?: string;
+    pickupTime: string;
+    bookingType: string;
+    success: boolean;
+  }>;
+  bookingsByDay: Record<string, number>;
+  bookingsByMonth: Record<string, number>;
+}
+
 export default function AdminPage() {
   const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
@@ -12,6 +35,8 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editingRule, setEditingRule] = useState<BookingRule | null>(null);
+  const [stats, setStats] = useState<BookingStats | null>(null);
+  const [showStats, setShowStats] = useState(true);
 
   // Form state
   const [formData, setFormData] = useState<Partial<BookingRule>>({
@@ -32,6 +57,7 @@ export default function AdminPage() {
     if (auth === 'true') {
       setAuthenticated(true);
       fetchRules();
+      fetchStats();
     }
   }, []);
 
@@ -42,8 +68,21 @@ export default function AdminPage() {
       sessionStorage.setItem('admin-auth', 'true');
       setAuthenticated(true);
       fetchRules();
+      fetchStats();
     } else {
       alert('Invalid password');
+    }
+  };
+
+  const fetchStats = async () => {
+    try {
+      const response = await fetch('/api/admin/stats?type=summary');
+      const data = await response.json();
+      if (data.success) {
+        setStats(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching stats:', error);
     }
   };
 
@@ -193,20 +232,146 @@ export default function AdminPage() {
       <Container>
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-between items-center mb-8">
-            <h1 className="text-4xl font-bold text-white">Booking Rules Admin</h1>
-            <Button
-              onClick={() => {
-                setShowForm(!showForm);
-                if (showForm) {
-                  setEditingRule(null);
-                  resetForm();
-                }
-              }}
-              variant="primary"
-            >
-              {showForm ? 'Cancel' : 'Add New Rule'}
-            </Button>
+            <h1 className="text-4xl font-bold text-white">Admin Dashboard</h1>
+            <div className="flex gap-3">
+              <Button
+                onClick={() => setShowStats(!showStats)}
+                variant="secondary"
+              >
+                {showStats ? 'Hide Stats' : 'Show Stats'}
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowForm(!showForm);
+                  if (showForm) {
+                    setEditingRule(null);
+                    resetForm();
+                  }
+                }}
+                variant="primary"
+              >
+                {showForm ? 'Cancel' : 'Add New Rule'}
+              </Button>
+            </div>
           </div>
+
+          {/* Booking Statistics Section */}
+          {showStats && stats && (
+            <div className="mb-8 space-y-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold text-white">Booking Statistics</h2>
+                <button
+                  onClick={fetchStats}
+                  className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-semibold transition-colors"
+                >
+                  Refresh
+                </button>
+              </div>
+
+              {/* Stats Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="bg-gradient-to-br from-taxi-yellow/20 to-taxi-yellow/10 backdrop-blur-md border border-taxi-yellow/30 rounded-xl p-6">
+                  <h3 className="text-taxi-yellow/80 text-sm font-semibold mb-2">Total Bookings</h3>
+                  <p className="text-4xl font-bold text-white">{stats.totalBookings}</p>
+                </div>
+
+                <div className="bg-gradient-to-br from-green-600/20 to-green-600/10 backdrop-blur-md border border-green-600/30 rounded-xl p-6">
+                  <h3 className="text-green-400 text-sm font-semibold mb-2">Successful</h3>
+                  <p className="text-4xl font-bold text-white">{stats.successfulBookings}</p>
+                  <p className="text-green-400 text-xs mt-1">
+                    {stats.totalBookings > 0 ? Math.round((stats.successfulBookings / stats.totalBookings) * 100) : 0}% success rate
+                  </p>
+                </div>
+
+                <div className="bg-gradient-to-br from-red-600/20 to-red-600/10 backdrop-blur-md border border-red-600/30 rounded-xl p-6">
+                  <h3 className="text-red-400 text-sm font-semibold mb-2">Failed</h3>
+                  <p className="text-4xl font-bold text-white">{stats.failedBookings}</p>
+                  <p className="text-red-400 text-xs mt-1">
+                    {stats.totalBookings > 0 ? Math.round((stats.failedBookings / stats.totalBookings) * 100) : 0}% failure rate
+                  </p>
+                </div>
+
+                <div className="bg-gradient-to-br from-blue-600/20 to-blue-600/10 backdrop-blur-md border border-blue-600/30 rounded-xl p-6">
+                  <h3 className="text-blue-400 text-sm font-semibold mb-2">By Type</h3>
+                  <p className="text-white text-sm">Simple: {stats.bookingsByType.simple}</p>
+                  <p className="text-white text-sm">General: {stats.bookingsByType.general}</p>
+                </div>
+              </div>
+
+              {/* Recent Bookings */}
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6">
+                <h3 className="text-xl font-bold text-white mb-4">Recent Bookings</h3>
+                {stats.recentBookings.length === 0 ? (
+                  <p className="text-white/70">No bookings yet</p>
+                ) : (
+                  <div className="space-y-3">
+                    {stats.recentBookings.map((booking) => (
+                      <div
+                        key={booking.id}
+                        className="bg-white/5 rounded-lg p-4 flex justify-between items-center"
+                      >
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-1">
+                            <span className="font-semibold text-white">{booking.customerName}</span>
+                            <span
+                              className={`px-2 py-0.5 rounded text-xs font-semibold ${
+                                booking.success
+                                  ? 'bg-green-600 text-white'
+                                  : 'bg-red-600 text-white'
+                              }`}
+                            >
+                              {booking.success ? 'Success' : 'Failed'}
+                            </span>
+                            <span className="px-2 py-0.5 rounded text-xs font-semibold bg-blue-600 text-white">
+                              {booking.bookingType}
+                            </span>
+                          </div>
+                          <p className="text-white/70 text-sm">
+                            {booking.fromCity} → {booking.toCity || 'Not specified'}
+                          </p>
+                          <p className="text-white/50 text-xs">
+                            Pickup: {new Date(booking.pickupTime).toLocaleString()}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          {booking.bookRef && (
+                            <p className="text-taxi-yellow text-sm font-mono">#{booking.bookRef}</p>
+                          )}
+                          <p className="text-white/50 text-xs">
+                            {new Date(booking.timestamp).toLocaleString()}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Monthly Statistics */}
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6">
+                <h3 className="text-xl font-bold text-white mb-4">Bookings by Month</h3>
+                {Object.keys(stats.bookingsByMonth).length === 0 ? (
+                  <p className="text-white/70">No data yet</p>
+                ) : (
+                  <div className="space-y-2">
+                    {Object.entries(stats.bookingsByMonth)
+                      .sort(([a], [b]) => b.localeCompare(a))
+                      .slice(0, 6)
+                      .map(([month, count]) => (
+                        <div key={month} className="flex justify-between items-center">
+                          <span className="text-white">{month}</span>
+                          <span className="font-semibold text-taxi-yellow">{count} bookings</span>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Booking Rules Section */}
+          <div className="border-t border-white/20 pt-8">
+            <h2 className="text-2xl font-bold text-white mb-6">Booking Rules Management</h2>
 
           {showForm && (
             <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-8 mb-8">
@@ -375,7 +540,6 @@ export default function AdminPage() {
           )}
 
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-white mb-4">Active Rules</h2>
             {loading && rules.length === 0 ? (
               <p className="text-white">Loading...</p>
             ) : rules.length === 0 ? (
@@ -458,6 +622,7 @@ export default function AdminPage() {
                 </div>
               ))
             )}
+          </div>
           </div>
         </div>
       </Container>

@@ -115,11 +115,9 @@ export async function POST(request: NextRequest) {
       referenceNumber: receiptApiData.referenceNumber || receiptApiData.reference || receiptApiData.ref,
     };
 
-    // Generate PDF - call component as function to get Document element
-    // Type assertion needed for server-side PDF rendering
-    const pdfBuffer = await ReactPDF.renderToBuffer(
-      ReceiptPDF({ data: receiptData, locale }) as any
-    );
+    // Generate PDF - ReceiptPDF returns a Document element
+    const receiptElement = React.createElement(ReceiptPDF, { data: receiptData, locale });
+    const pdfBuffer = await ReactPDF.renderToBuffer(receiptElement as any);
 
     // Configure SMTP transporter
     const transporter = nodemailer.createTransport({
