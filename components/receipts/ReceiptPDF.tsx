@@ -134,10 +134,25 @@ export interface ReceiptData {
   vehicleNumber?: string;
   licenseNumber?: string;
   driverName?: string;
+  driverId?: string;
+  tariff?: string;
   price: number;
   vat?: number;
   currency?: string;
   paymentMethod?: string;
+  receiptNumber?: string;
+  invoiceNumber?: string;
+  fromZone?: string;
+  toZone?: string;
+  tripSpecification?: Array<{
+    type: string;
+    km?: number;
+    time?: string;
+    price: number;
+  }>;
+  cardTerminal?: string;
+  authorization?: string;
+  referenceNumber?: string;
 }
 
 interface ReceiptPDFProps {
@@ -161,11 +176,11 @@ export const ReceiptPDF: React.FC<ReceiptPDFProps> = ({ data, locale }) => {
     dropoffTime: 'Avleveringstid',
     distance: 'Avstand',
     duration: 'Varighet',
-    vehicle: 'Køyretøy',
     license: 'Løyve',
     driver: 'Sjåfør',
+    tariff: 'Takst',
     subtotal: 'Delsum',
-    vat: 'MVA (25%)',
+    vat: 'MVA (12%)',
     total: 'Totalt å betale',
     paymentMethod: 'Betalingsmåte',
     thankYou: 'Takk for at du reiser med Voss Taxi!',
@@ -173,7 +188,7 @@ export const ReceiptPDF: React.FC<ReceiptPDFProps> = ({ data, locale }) => {
     companyAddress: 'Voss, Noreg',
     companyPhone: '+47 56 51 13 40',
     companyEmail: 'post@vosstaxi.no',
-    companyOrg: 'Org.nr: 123456789 MVA',
+    companyOrg: 'Org.nr: NO922900817MVA',
     footer: 'Dette er ein elektronisk generert kvittering. Spar denne for dine eigne register.',
   } : {
     receipt: 'Receipt',
@@ -190,11 +205,11 @@ export const ReceiptPDF: React.FC<ReceiptPDFProps> = ({ data, locale }) => {
     dropoffTime: 'Drop-off Time',
     distance: 'Distance',
     duration: 'Duration',
-    vehicle: 'Vehicle',
     license: 'License',
     driver: 'Driver',
+    tariff: 'Tariff',
     subtotal: 'Subtotal',
-    vat: 'VAT (25%)',
+    vat: 'VAT (12%)',
     total: 'Total Amount',
     paymentMethod: 'Payment Method',
     thankYou: 'Thank you for traveling with Voss Taxi!',
@@ -202,7 +217,7 @@ export const ReceiptPDF: React.FC<ReceiptPDFProps> = ({ data, locale }) => {
     companyAddress: 'Voss, Norway',
     companyPhone: '+47 56 51 13 40',
     companyEmail: 'post@vosstaxi.no',
-    companyOrg: 'Org.no: 123456789 VAT',
+    companyOrg: 'Org.no: NO922900817MVA',
     footer: 'This is an electronically generated receipt. Please save for your records.',
   };
 
@@ -227,8 +242,10 @@ export const ReceiptPDF: React.FC<ReceiptPDFProps> = ({ data, locale }) => {
 
   const calculateVAT = () => {
     if (data.vat !== undefined) return data.vat;
-    // Norwegian VAT is 25%
-    return data.price * 0.25;
+    // Norwegian VAT for passenger transport is 12% of base amount
+    // Total price includes VAT, so: total = base * 1.12
+    // Therefore: VAT = total - (total / 1.12) = total * (12/112)
+    return data.price * (12 / 112);
   };
 
   const calculateSubtotal = () => {
@@ -254,12 +271,27 @@ export const ReceiptPDF: React.FC<ReceiptPDFProps> = ({ data, locale }) => {
           <Text style={styles.receiptNumber}>
             {t.bookingReference}: {data.bookRef}
           </Text>
+          {data.receiptNumber && (
+            <Text style={styles.receiptNumber}>
+              {locale === 'no' ? 'Kvitt.nr' : 'Receipt No'}: {data.receiptNumber}
+            </Text>
+          )}
+          {data.invoiceNumber && (
+            <Text style={styles.receiptNumber}>
+              {locale === 'no' ? 'Rekv.nr' : 'Invoice No'}: {data.invoiceNumber}
+            </Text>
+          )}
           <Text style={styles.receiptNumber}>
             {t.date}: {new Date(data.date).toLocaleString(locale === 'no' ? 'no-NO' : 'en-US', {
               dateStyle: 'long',
               timeStyle: 'short',
             })}
           </Text>
+          {data.driverId && (
+            <Text style={styles.receiptNumber}>
+              {locale === 'no' ? 'Fører ID' : 'Driver ID'}: {data.driverId}
+            </Text>
+          )}
         </View>
 
         {/* Customer Information */}
@@ -284,10 +316,22 @@ export const ReceiptPDF: React.FC<ReceiptPDFProps> = ({ data, locale }) => {
             <Text style={styles.label}>{t.pickup}</Text>
             <Text style={styles.value}>{data.pickupAddress}</Text>
           </View>
+          {data.fromZone && (
+            <View style={styles.row}>
+              <Text style={styles.label}>{locale === 'no' ? 'Fra sone' : 'From zone'}</Text>
+              <Text style={styles.value}>{data.fromZone}</Text>
+            </View>
+          )}
           <View style={styles.row}>
             <Text style={styles.label}>{t.dropoff}</Text>
             <Text style={styles.value}>{data.dropoffAddress}</Text>
           </View>
+          {data.toZone && (
+            <View style={styles.row}>
+              <Text style={styles.label}>{locale === 'no' ? 'Til sone' : 'To zone'}</Text>
+              <Text style={styles.value}>{data.toZone}</Text>
+            </View>
+          )}
           <View style={styles.row}>
             <Text style={styles.label}>{t.pickupTime}</Text>
             <Text style={styles.value}>
@@ -320,12 +364,6 @@ export const ReceiptPDF: React.FC<ReceiptPDFProps> = ({ data, locale }) => {
               <Text style={styles.value}>{formatDuration(data.duration)}</Text>
             </View>
           )}
-          {data.vehicleNumber && (
-            <View style={styles.row}>
-              <Text style={styles.label}>{t.vehicle}</Text>
-              <Text style={styles.value}>{data.vehicleNumber}</Text>
-            </View>
-          )}
           {data.licenseNumber && (
             <View style={styles.row}>
               <Text style={styles.label}>{t.license}</Text>
@@ -338,11 +376,63 @@ export const ReceiptPDF: React.FC<ReceiptPDFProps> = ({ data, locale }) => {
               <Text style={styles.value}>{data.driverName}</Text>
             </View>
           )}
+          {data.tariff && (
+            <View style={styles.row}>
+              <Text style={styles.label}>{t.tariff}</Text>
+              <Text style={styles.value}>{data.tariff}</Text>
+            </View>
+          )}
         </View>
+
+        {/* Trip Specification */}
+        {data.tripSpecification && data.tripSpecification.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>
+              {locale === 'no' ? 'Spesifikasjon' : 'Specification'}
+            </Text>
+
+            {/* Table header */}
+            <View style={{ flexDirection: 'row', borderBottom: '1px solid #1a1a1a', paddingVertical: 5, backgroundColor: '#f5f5f5' }}>
+              <Text style={{ fontSize: 9, fontWeight: 'bold', width: '40%', paddingLeft: 5 }}>
+                {locale === 'no' ? 'Type' : 'Type'}
+              </Text>
+              <Text style={{ fontSize: 9, fontWeight: 'bold', width: '20%', textAlign: 'right' }}>KM</Text>
+              <Text style={{ fontSize: 9, fontWeight: 'bold', width: '20%', textAlign: 'right' }}>
+                {locale === 'no' ? 'Tid' : 'Time'}
+              </Text>
+              <Text style={{ fontSize: 9, fontWeight: 'bold', width: '20%', textAlign: 'right', paddingRight: 5 }}>
+                {locale === 'no' ? 'Kr' : 'Price'}
+              </Text>
+            </View>
+
+            {/* Table rows */}
+            {data.tripSpecification.map((spec, index) => (
+              <View key={index} style={{ flexDirection: 'row', paddingVertical: 4, borderBottom: '1px solid #eee' }}>
+                <Text style={{ fontSize: 9, width: '40%', paddingLeft: 5 }}>{spec.type}</Text>
+                <Text style={{ fontSize: 9, width: '20%', textAlign: 'right' }}>
+                  {spec.km !== undefined ? spec.km.toFixed(3) : '-'}
+                </Text>
+                <Text style={{ fontSize: 9, width: '20%', textAlign: 'right' }}>{spec.time || '-'}</Text>
+                <Text style={{ fontSize: 9, width: '20%', textAlign: 'right', paddingRight: 5 }}>
+                  {spec.price.toFixed(2)}
+                </Text>
+              </View>
+            ))}
+          </View>
+        )}
 
         {/* Economic Details */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t.economicDetails}</Text>
+
+          {data.tariff && (
+            <View style={styles.highlight}>
+              <View style={styles.row}>
+                <Text style={{ ...styles.label, fontWeight: 'bold', color: '#1a1a1a' }}>{t.tariff}</Text>
+                <Text style={{ ...styles.value, fontWeight: 'bold' }}>{data.tariff}</Text>
+              </View>
+            </View>
+          )}
 
           <View style={styles.vatSection}>
             <View style={styles.vatRow}>
@@ -367,6 +457,33 @@ export const ReceiptPDF: React.FC<ReceiptPDFProps> = ({ data, locale }) => {
               <View style={styles.row}>
                 <Text style={styles.label}>{t.paymentMethod}</Text>
                 <Text style={styles.value}>{data.paymentMethod}</Text>
+              </View>
+            </View>
+          )}
+
+          {data.cardTerminal && (
+            <View style={{ marginTop: 5 }}>
+              <View style={styles.row}>
+                <Text style={styles.label}>{locale === 'no' ? 'Kortterminal' : 'Card Terminal'}</Text>
+                <Text style={styles.value}>{data.cardTerminal}</Text>
+              </View>
+            </View>
+          )}
+
+          {data.authorization && (
+            <View style={{ marginTop: 5 }}>
+              <View style={styles.row}>
+                <Text style={styles.label}>{locale === 'no' ? 'Autorisasjon' : 'Authorization'}</Text>
+                <Text style={styles.value}>{data.authorization}</Text>
+              </View>
+            </View>
+          )}
+
+          {data.referenceNumber && (
+            <View style={{ marginTop: 5 }}>
+              <View style={styles.row}>
+                <Text style={styles.label}>{locale === 'no' ? 'Referanse' : 'Reference'}</Text>
+                <Text style={styles.value}>{data.referenceNumber}</Text>
               </View>
             </View>
           )}

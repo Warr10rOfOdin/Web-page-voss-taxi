@@ -36,15 +36,19 @@ export async function GET(request: NextRequest) {
 
     const bookingData = await statusResponse.json();
 
-    // Only allow receipt for completed trips
-    const completedStatuses = ['CO', 'FI'];
-    if (!completedStatuses.includes(bookingData.tripStatus)) {
+    // Check if receipt is available for this booking status
+    // Use the last character of the status sequence (current status)
+    const currentStatus = bookingData.tripStatus?.slice(-1);
+    const allowedStatuses = ['N', 'l']; // N = Ready for invoicing, l = Delivered
+
+    if (!currentStatus || !allowedStatuses.includes(currentStatus)) {
       return NextResponse.json(
         {
           error: locale === 'no'
-            ? 'Kvittering er berre tilgjengeleg for fullførte turar'
-            : 'Receipt is only available for completed trips',
-          currentStatus: bookingData.tripStatus
+            ? 'Kvittering er berre tilgjengeleg for fullførte turar (status N eller l)'
+            : 'Receipt is only available for completed trips (status N or l)',
+          currentStatus: bookingData.tripStatus,
+          lastStatus: currentStatus
         },
         { status: 400 }
       );
@@ -91,10 +95,20 @@ export async function GET(request: NextRequest) {
       vehicleNumber: bookingData.vehicleNo?.toString(),
       licenseNumber: bookingData.licenseNo,
       driverName: receiptApiData.driverName,
+      driverId: receiptApiData.driverId || receiptApiData.driverID,
+      tariff: receiptApiData.tariff || receiptApiData.tariffName || receiptApiData.tariffCode,
       price: receiptApiData.price || receiptApiData.totalPrice || 0,
-      vat: receiptApiData.vat,
+      vat: receiptApiData.vat || receiptApiData.vatAmount,
       currency: 'NOK',
       paymentMethod: receiptApiData.paymentMethod || (locale === 'no' ? 'Kontant/Kort' : 'Cash/Card'),
+      receiptNumber: receiptApiData.receiptNumber || receiptApiData.receiptNo,
+      invoiceNumber: receiptApiData.invoiceNumber || receiptApiData.invoiceNo,
+      fromZone: receiptApiData.fromZone || passenger.fromZone,
+      toZone: receiptApiData.toZone || passenger.toZone,
+      tripSpecification: receiptApiData.tripSpecification || receiptApiData.specification,
+      cardTerminal: receiptApiData.cardTerminal || receiptApiData.terminal,
+      authorization: receiptApiData.authorization || receiptApiData.authCode,
+      referenceNumber: receiptApiData.referenceNumber || receiptApiData.reference || receiptApiData.ref,
     };
 
     // Generate PDF - call component as function to get Document element

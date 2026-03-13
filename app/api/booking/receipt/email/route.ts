@@ -99,10 +99,20 @@ export async function POST(request: NextRequest) {
       vehicleNumber: bookingData.vehicleNo?.toString(),
       licenseNumber: bookingData.licenseNo,
       driverName: receiptApiData.driverName,
+      driverId: receiptApiData.driverId || receiptApiData.driverID,
+      tariff: receiptApiData.tariff || receiptApiData.tariffName || receiptApiData.tariffCode,
       price: receiptApiData.price || receiptApiData.totalPrice || 0,
-      vat: receiptApiData.vat,
+      vat: receiptApiData.vat || receiptApiData.vatAmount,
       currency: 'NOK',
       paymentMethod: receiptApiData.paymentMethod || (locale === 'no' ? 'Kontant/Kort' : 'Cash/Card'),
+      receiptNumber: receiptApiData.receiptNumber || receiptApiData.receiptNo,
+      invoiceNumber: receiptApiData.invoiceNumber || receiptApiData.invoiceNo,
+      fromZone: receiptApiData.fromZone || passenger.fromZone,
+      toZone: receiptApiData.toZone || passenger.toZone,
+      tripSpecification: receiptApiData.tripSpecification || receiptApiData.specification,
+      cardTerminal: receiptApiData.cardTerminal || receiptApiData.terminal,
+      authorization: receiptApiData.authorization || receiptApiData.authCode,
+      referenceNumber: receiptApiData.referenceNumber || receiptApiData.reference || receiptApiData.ref,
     };
 
     // Generate PDF - call component as function to get Document element
