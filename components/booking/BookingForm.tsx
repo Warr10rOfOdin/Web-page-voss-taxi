@@ -29,7 +29,6 @@ export function BookingForm({ locale }: BookingFormProps) {
   const [toLon, setToLon] = useState<number | null>(null);
   const [pickupTime, setPickupTime] = useState('');
   const [passengerCount, setPassengerCount] = useState(1);
-  const [clientNote, setClientNote] = useState('');
   const [messageToCar, setMessageToCar] = useState('');
 
   // Price quote state
@@ -270,8 +269,6 @@ export function BookingForm({ locale }: BookingFormProps) {
           toLat,
           toLon,
           pickupTime: finalPickupTime,
-          clientNote: clientNote || undefined,
-          clientNoteToCar: true,
         }],
       };
 
@@ -329,7 +326,6 @@ export function BookingForm({ locale }: BookingFormProps) {
     setToPostalCode('');
     setPickupTime('');
     setPassengerCount(1);
-    setClientNote('');
     setMessageToCar('');
     setPriceQuote(null);
     setPriceError(null);
@@ -385,6 +381,55 @@ export function BookingForm({ locale }: BookingFormProps) {
             <p className="text-xs text-taxi-light-grey/60 mt-3">
               {locale === 'no' ? 'Ta vare på denne referansen' : 'Save this reference number'}
             </p>
+          </div>
+
+          {/* Booking Details Card */}
+          <div className="glass-strong backdrop-blur-xl rounded-2xl p-6 depth-2 border border-white/10 text-left">
+            <h3 className="text-lg font-bold text-white mb-4">
+              {locale === 'no' ? 'Bookingdetaljer' : 'Booking Details'}
+            </h3>
+            <div className="space-y-3 text-sm">
+              <div>
+                <p className="text-taxi-light-grey/60 mb-1">
+                  {locale === 'no' ? 'Henting' : 'Pickup'}
+                </p>
+                <p className="text-white font-semibold">
+                  {fromStreet}, {fromCity} {fromPostalCode}
+                </p>
+              </div>
+              {toStreet && (
+                <div>
+                  <p className="text-taxi-light-grey/60 mb-1">
+                    {locale === 'no' ? 'Destinasjon' : 'Destination'}
+                  </p>
+                  <p className="text-white font-semibold">
+                    {toStreet}, {toCity} {toPostalCode}
+                  </p>
+                </div>
+              )}
+              <div>
+                <p className="text-taxi-light-grey/60 mb-1">
+                  {locale === 'no' ? 'Hentetid' : 'Pickup Time'}
+                </p>
+                <p className="text-white font-semibold">
+                  {pickupTime
+                    ? new Date(pickupTime).toLocaleString(locale === 'no' ? 'no-NO' : 'en-US', {
+                        dateStyle: 'medium',
+                        timeStyle: 'short'
+                      })
+                    : (locale === 'no' ? 'Snarast mogleg' : 'As soon as possible')
+                  }
+                </p>
+              </div>
+              <div>
+                <p className="text-taxi-light-grey/60 mb-1">
+                  {locale === 'no' ? 'Passasjerer' : 'Passengers'}
+                </p>
+                <p className="text-white font-semibold">
+                  {passengerCount} {passengerCount === 1 ? (locale === 'no' ? 'passasjer' : 'passenger') : (locale === 'no' ? 'passasjerer' : 'passengers')}
+                </p>
+              </div>
+            </div>
           </div>
 
           <p className="text-taxi-light-grey/90">{t('confirmationNote')}</p>
@@ -730,20 +775,6 @@ export function BookingForm({ locale }: BookingFormProps) {
                 ))}
               </div>
             )}
-          </div>
-
-          {/* Notes */}
-          <div className="mt-4">
-            <label className="block text-sm font-semibold mb-2 text-white">
-              {locale === 'no' ? 'Notat' : 'Note'} <span className="text-taxi-light-grey/60 font-normal text-xs">({locale === 'no' ? 'valfritt' : 'optional'})</span>
-            </label>
-            <textarea
-              value={clientNote}
-              onChange={(e) => setClientNote(e.target.value)}
-              rows={2}
-              className="w-full px-4 py-3 glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
-              placeholder={locale === 'no' ? 'T.d. bagasje, spesielle ønskje...' : 'E.g. luggage, special requests...'}
-            />
           </div>
 
           {/* General Message to Driver */}
