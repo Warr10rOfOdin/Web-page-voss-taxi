@@ -36,8 +36,10 @@ export async function POST(request: NextRequest) {
       numberOfCars: body.numberOfCars || 1, // Default to 1 car
     };
 
-    // Remove attributes field - not supported by general booking endpoint
-    delete bookingData.attributes;
+    // Convert attributes array to comma-separated string if present
+    if (Array.isArray(bookingData.attributes) && bookingData.attributes.length > 0) {
+      bookingData.attributes = bookingData.attributes.join(',');
+    }
 
     console.log('Sending general booking request:', JSON.stringify(bookingData, null, 2));
 
