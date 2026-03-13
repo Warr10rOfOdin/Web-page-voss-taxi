@@ -51,14 +51,15 @@ export function BookingChecker({ locale }: BookingCheckerProps) {
   };
 
   return (
-    <div className="glass-dark backdrop-blur-md border border-white/20 rounded-xl p-6 depth-2">
-      <h2 className="text-2xl font-bold text-white mb-4">
-        {locale === 'no' ? '🔍 Sjekk din bestilling' : '🔍 Check Your Booking'}
+    <div className="glass-dark backdrop-blur-md border border-white/20 rounded-xl p-5 depth-2">
+      <h2 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
+        <span>🔍</span>
+        <span>{locale === 'no' ? 'Sjekk bestilling' : 'Check Booking'}</span>
       </h2>
-      <p className="text-taxi-light-grey/80 mb-6 text-sm">
+      <p className="text-taxi-light-grey/70 mb-4 text-xs">
         {locale === 'no'
-          ? 'Skriv inn bestillingsreferansen din for å sjå status'
-          : 'Enter your booking reference to check status'}
+          ? 'Skriv inn bestillingsreferansen'
+          : 'Enter booking reference'}
       </p>
 
       <form onSubmit={handleCheck} className="space-y-4">
@@ -76,8 +77,7 @@ export function BookingChecker({ locale }: BookingCheckerProps) {
         <Button
           type="submit"
           variant="primary"
-          size="lg"
-          className="w-full"
+          className="w-full py-2.5"
           disabled={loading || !bookRef.trim()}
         >
           {loading
@@ -85,8 +85,8 @@ export function BookingChecker({ locale }: BookingCheckerProps) {
               ? 'Sjekkar...'
               : 'Checking...'
             : locale === 'no'
-            ? 'Sjekk bestilling'
-            : 'Check Booking'}
+            ? 'Sjekk'
+            : 'Check'}
         </Button>
       </form>
 
@@ -97,15 +97,15 @@ export function BookingChecker({ locale }: BookingCheckerProps) {
       )}
 
       {bookingInfo && (
-        <div className="mt-6 bg-green-900/20 border border-green-500/50 rounded-lg p-4 space-y-3">
-          <div className="flex items-center space-x-2 mb-3">
-            <span className="text-2xl">✅</span>
-            <h3 className="text-xl font-bold text-white">
-              {locale === 'no' ? 'Bestilling funnen!' : 'Booking Found!'}
+        <div className="mt-4 bg-green-900/20 border border-green-500/50 rounded-lg p-3 space-y-2">
+          <div className="flex items-center space-x-2 mb-2">
+            <span className="text-lg">✅</span>
+            <h3 className="text-base font-bold text-white">
+              {locale === 'no' ? 'Funnen!' : 'Found!'}
             </h3>
           </div>
 
-          <div className="space-y-2 text-sm">
+          <div className="space-y-1.5 text-xs">
             <div className="flex justify-between text-white/90">
               <span className="text-taxi-light-grey/70">
                 {locale === 'no' ? 'Referanse:' : 'Reference:'}
@@ -125,9 +125,14 @@ export function BookingChecker({ locale }: BookingCheckerProps) {
             {bookingInfo.pickupTime && (
               <div className="flex justify-between text-white/90">
                 <span className="text-taxi-light-grey/70">
-                  {locale === 'no' ? 'Hentetid:' : 'Pickup Time:'}
+                  {locale === 'no' ? 'Hentetid:' : 'Pickup:'}
                 </span>
-                <span>{new Date(bookingInfo.pickupTime).toLocaleString(locale === 'no' ? 'no-NO' : 'en-US')}</span>
+                <span className="text-right">
+                  {new Date(bookingInfo.pickupTime).toLocaleString(locale === 'no' ? 'no-NO' : 'en-US', {
+                    dateStyle: 'short',
+                    timeStyle: 'short'
+                  })}
+                </span>
               </div>
             )}
 
@@ -150,26 +155,25 @@ export function BookingChecker({ locale }: BookingCheckerProps) {
             )}
 
             {bookingInfo.status && (
-              <div className="flex justify-between text-white/90 mt-4 pt-3 border-t border-green-500/30">
-                <span className="text-taxi-light-grey/70">
-                  {locale === 'no' ? 'Status:' : 'Status:'}
-                </span>
+              <div className="flex justify-between text-white/90 mt-2 pt-2 border-t border-green-500/30">
+                <span className="text-taxi-light-grey/70">Status:</span>
                 <span className="font-bold text-green-400">{bookingInfo.status}</span>
               </div>
             )}
           </div>
 
-          <div className="mt-4 pt-4 border-t border-green-500/30">
-            <p className="text-xs text-taxi-light-grey/70 text-center">
-              {locale === 'no'
-                ? 'Spørsmål? Ring oss på +47 56 51 13 40'
-                : 'Questions? Call us at +47 56 51 13 40'}
-            </p>
+          <div className="mt-2 pt-2 border-t border-green-500/30">
+            <a
+              href="tel:+4756511340"
+              className="text-xs text-taxi-yellow hover:underline block text-center"
+            >
+              {locale === 'no' ? '📞 Ring oss' : '📞 Call us'}
+            </a>
           </div>
         </div>
       )}
 
-      <div className="mt-4 text-xs text-taxi-light-grey/60 text-center">
+      <div className="mt-3 text-[10px] text-taxi-light-grey/50 text-center">
         {locale === 'no'
           ? 'Finn bestillingsreferansen i e-posten din'
           : 'Find your booking reference in your confirmation email'}

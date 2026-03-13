@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
 
     // Call Taxi4U API to get booking details
     const response = await taxi4uFetch(
-      `https://api.taxi4u.cab/api/book/status?centralCode=${centralCode}&bookRef=${encodeURIComponent(bookRef)}`,
+      `https://api.taxi4u.cab/api/bookingdetails?centralCode=${centralCode}&bookRef=${encodeURIComponent(bookRef)}`,
       {
         method: 'GET',
         headers: {

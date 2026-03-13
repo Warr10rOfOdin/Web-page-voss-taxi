@@ -452,14 +452,14 @@ export function BookingForm({ locale }: BookingFormProps) {
 
           {/* Passenger Count */}
           <div>
-            <label className="block text-sm font-medium mb-1">
-              {locale === 'no' ? 'Antall passasjerer *' : 'Number of passengers *'}
+            <label className="block text-sm font-semibold mb-2 text-white">
+              {locale === 'no' ? 'Antall passasjerer *' : 'Number of Passengers *'}
             </label>
             <select
               value={passengerCount}
               onChange={(e) => setPassengerCount(Number(e.target.value))}
               required
-              className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+              className="w-full px-4 py-3 glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
             >
               <option value={1}>1 {locale === 'no' ? 'passasjer' : 'passenger'}</option>
               <option value={2}>2 {locale === 'no' ? 'passasjerer' : 'passengers'}</option>
@@ -473,14 +473,14 @@ export function BookingForm({ locale }: BookingFormProps) {
           </div>
 
           {/* Pickup Location */}
-          <div className="glass-strong backdrop-blur-md rounded-2xl p-6 border border-white/10 space-y-4">
-            <div className="flex items-center justify-between">
-              <h4 className="text-lg font-bold text-taxi-yellow flex items-center">
+          <div className="glass-strong backdrop-blur-md rounded-2xl p-6 border border-white/10 space-y-5 mt-6">
+            <div className="flex items-center justify-between mb-1">
+              <h3 className="text-xl font-bold text-taxi-yellow flex items-center">
                 <svg className="w-5 h-5 text-taxi-yellow mr-2" fill="currentColor" viewBox="0 0 20 20">
                   <circle cx="10" cy="10" r="8" />
                 </svg>
                 {t('pickupLocation')}
-              </h4>
+              </h3>
               <button
                 type="button"
                 onClick={getMyLocation}
@@ -545,17 +545,17 @@ export function BookingForm({ locale }: BookingFormProps) {
           </div>
 
           {/* Destination */}
-          <div className="glass-strong backdrop-blur-md rounded-2xl p-6 border border-white/10 space-y-4">
-            <h4 className="text-lg font-bold text-taxi-yellow flex items-center">
-              <svg className="w-5 h-5 text-taxi-yellow mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="glass-strong backdrop-blur-md rounded-2xl p-6 border border-white/10 space-y-5 mt-4">
+            <h3 className="text-xl font-bold text-taxi-yellow flex items-center mb-1">
+              <svg className="w-6 h-6 text-taxi-yellow mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
               {t('destination')}
-              <span className="ml-2 text-sm text-taxi-light-grey/70 font-normal">
+              <span className="ml-2 text-xs text-taxi-light-grey/60 font-normal">
                 ({locale === 'no' ? 'valfritt' : 'optional'})
               </span>
-            </h4>
+            </h3>
 
             <AddressAutocomplete
               value={toStreet}
@@ -661,8 +661,8 @@ export function BookingForm({ locale }: BookingFormProps) {
           )}
 
           {/* Pickup Time */}
-          <div>
-            <label className="block text-sm font-medium mb-1">
+          <div className="mt-4">
+            <label className="block text-sm font-semibold mb-2 text-white">
               {t('pickupTime')}
             </label>
             <input
@@ -685,9 +685,9 @@ export function BookingForm({ locale }: BookingFormProps) {
               }}
               min={getMinDateTime()}
               step="300"
-              className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+              className="w-full px-4 py-3 glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
             />
-            <p className="text-xs text-taxi-grey mt-1">{t('pickupTimeNote')}</p>
+            <p className="text-xs text-taxi-light-grey/60 mt-2">{t('pickupTimeNote')}</p>
 
             {/* Rule Restrictions */}
             {hasRestrictions && ruleRestrictions.length > 0 && (
@@ -733,29 +733,29 @@ export function BookingForm({ locale }: BookingFormProps) {
           </div>
 
           {/* Notes */}
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              {locale === 'no' ? 'Notat (valfritt)' : 'Note (optional)'}
+          <div className="mt-4">
+            <label className="block text-sm font-semibold mb-2 text-white">
+              {locale === 'no' ? 'Notat' : 'Note'} <span className="text-taxi-light-grey/60 font-normal text-xs">({locale === 'no' ? 'valfritt' : 'optional'})</span>
             </label>
             <textarea
               value={clientNote}
               onChange={(e) => setClientNote(e.target.value)}
               rows={2}
-              className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+              className="w-full px-4 py-3 glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
               placeholder={locale === 'no' ? 'T.d. bagasje, spesielle ønskje...' : 'E.g. luggage, special requests...'}
             />
           </div>
 
           {/* General Message to Driver */}
-          <div>
-            <label className="block text-sm font-medium mb-1">
+          <div className="mt-4">
+            <label className="block text-sm font-semibold mb-2 text-white">
               {t('messageOptional')}
             </label>
             <textarea
               value={messageToCar}
               onChange={(e) => setMessageToCar(e.target.value)}
               rows={3}
-              className="w-full px-4 py-2 border border-taxi-grey rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+              className="w-full px-4 py-3 glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
               placeholder={t('messagePlaceholder')}
             />
           </div>
