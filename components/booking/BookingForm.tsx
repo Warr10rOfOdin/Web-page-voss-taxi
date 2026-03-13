@@ -151,13 +151,23 @@ export function BookingForm({ locale }: BookingFormProps) {
 
     try {
       // Calculate attributes based on passenger count
-      // ONLY send attributes for 2-4 passengers (standard taxi)
-      // For 5+ passengers, rely solely on carGroupId (2 or 3)
+      // Attribute codes from Taxi4U API:
+      // 83=2 PERSONER, 84=3 PERSONER, 85=4 PERSONER
+      // 0=6 SETER, 1=7 SETER, 89=8 SETER
       const attributes: number[] = [];
-      if (passengerCount >= 2 && passengerCount <= 4) {
-        attributes.push(passengerCount); // 2 PERSONER, 3 PERSONER, 4 PERSONER
+      if (passengerCount === 2) {
+        attributes.push(83); // 2 PERSONER
+      } else if (passengerCount === 3) {
+        attributes.push(84); // 3 PERSONER
+      } else if (passengerCount === 4) {
+        attributes.push(85); // 4 PERSONER
+      } else if (passengerCount === 5 || passengerCount === 6) {
+        attributes.push(0); // 6 SETER
+      } else if (passengerCount === 7) {
+        attributes.push(1); // 7 SETER
+      } else if (passengerCount === 8) {
+        attributes.push(89); // 8 SETER
       }
-      // 5-8 passengers: no attributes, carGroupId determines vehicle type
 
       const response = await fetch('/api/pricequote', {
         method: 'POST',
@@ -206,13 +216,23 @@ export function BookingForm({ locale }: BookingFormProps) {
 
     try {
       // Calculate attributes based on passenger count
-      // ONLY send attributes for 2-4 passengers (standard taxi)
-      // For 5+ passengers, rely solely on carGroupId (2 or 3)
+      // Attribute codes from Taxi4U API:
+      // 83=2 PERSONER, 84=3 PERSONER, 85=4 PERSONER
+      // 0=6 SETER, 1=7 SETER, 89=8 SETER
       const attributes: number[] = [];
-      if (passengerCount >= 2 && passengerCount <= 4) {
-        attributes.push(passengerCount); // 2 PERSONER, 3 PERSONER, 4 PERSONER
+      if (passengerCount === 2) {
+        attributes.push(83); // 2 PERSONER
+      } else if (passengerCount === 3) {
+        attributes.push(84); // 3 PERSONER
+      } else if (passengerCount === 4) {
+        attributes.push(85); // 4 PERSONER
+      } else if (passengerCount === 5 || passengerCount === 6) {
+        attributes.push(0); // 6 SETER
+      } else if (passengerCount === 7) {
+        attributes.push(1); // 7 SETER
+      } else if (passengerCount === 8) {
+        attributes.push(89); // 8 SETER
       }
-      // 5-8 passengers: no attributes, carGroupId determines vehicle type
 
       // Prepare booking data for API
       // Calculate pickup time - round to nearest 5 minutes
