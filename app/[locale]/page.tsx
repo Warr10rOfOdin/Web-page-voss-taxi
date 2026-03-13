@@ -41,30 +41,30 @@ export default async function HomePage({
             </div>
 
             {/* Booking Checker Sidebar */}
-            <div className="lg:sticky lg:top-24 self-start">
+            <div className="lg:sticky lg:top-24 self-start space-y-6">
               <BookingChecker locale={locale} />
-            </div>
-          </div>
 
-          {/* Emergency Contact - More Prominent */}
-          <div className="mt-12 md:mt-16 text-center">
-            <div className="inline-block bg-gradient-to-br from-taxi-yellow/20 to-taxi-yellow/10 backdrop-blur-md border-2 border-taxi-yellow/40 rounded-2xl p-8 md:p-10 shadow-2xl hover:scale-105 transition-transform duration-300">
-              <p className="text-base md:text-lg text-white mb-4 font-semibold">
-                {locale === 'no'
-                  ? 'Treng taxi med ein gong? Ring oss direkte!'
-                  : 'Need a taxi right now? Call us directly!'}
-              </p>
-              <a
-                href="tel:+4756511340"
-                className="text-3xl md:text-4xl lg:text-5xl font-bold text-taxi-yellow hover:text-white transition-colors inline-block drop-shadow-lg mb-4"
-              >
-                +47 56 51 13 40
-              </a>
-              <p className="text-sm text-white/80 mt-4 bg-white/10 px-6 py-3 rounded-full inline-block">
-                {locale === 'no'
-                  ? '🚖 Tilgjengeleg 24/7, alle dagar i året'
-                  : '🚖 Available 24/7, every day of the year'}
-              </p>
+              {/* Emergency Contact Card */}
+              <div className="text-center">
+                <div className="bg-gradient-to-br from-taxi-yellow/20 to-taxi-yellow/10 backdrop-blur-md border-2 border-taxi-yellow/40 rounded-2xl p-6 md:p-8 shadow-2xl hover:scale-105 transition-transform duration-300">
+                  <p className="text-sm md:text-base text-white mb-3 font-semibold">
+                    {locale === 'no'
+                      ? 'Treng taxi med ein gong? Ring oss direkte!'
+                      : 'Need a taxi right now? Call us directly!'}
+                  </p>
+                  <a
+                    href="tel:+4756511340"
+                    className="text-2xl md:text-3xl font-bold text-taxi-yellow hover:text-white transition-colors inline-block drop-shadow-lg mb-3"
+                  >
+                    +47 56 51 13 40
+                  </a>
+                  <p className="text-xs text-white/80 mt-3 bg-white/10 px-4 py-2 rounded-full inline-block">
+                    {locale === 'no'
+                      ? '🚖 Tilgjengeleg 24/7, alle dagar i året'
+                      : '🚖 Available 24/7, every day of the year'}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
