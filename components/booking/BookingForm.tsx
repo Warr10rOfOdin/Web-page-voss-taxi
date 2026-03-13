@@ -19,6 +19,7 @@ export function BookingForm({ locale }: BookingFormProps) {
   const [clientName, setClientName] = useState('');
   const [tel, setTel] = useState('');
   const [email, setEmail] = useState('');
+  const [sendSmsConfirmation, setSendSmsConfirmation] = useState(false);
   const [fromStreet, setFromStreet] = useState('');
   const [fromCity, setFromCity] = useState('Voss');
   const [fromPostalCode, setFromPostalCode] = useState('5700');
@@ -301,24 +302,26 @@ export function BookingForm({ locale }: BookingFormProps) {
       setSuccess(true);
       setBookRef(data.bookRef);
 
-      // Send SMS confirmation (non-blocking)
-      try {
-        const pickupTimeFormatted = pickupTime
-          ? new Date(pickupTime).toLocaleString(locale === 'no' ? 'no-NO' : 'en-US')
-          : (locale === 'no' ? 'Snarast mogleg' : 'As soon as possible');
+      // Send SMS confirmation (non-blocking) - only if user opted in
+      if (sendSmsConfirmation) {
+        try {
+          const pickupTimeFormatted = pickupTime
+            ? new Date(pickupTime).toLocaleString(locale === 'no' ? 'no-NO' : 'en-US')
+            : (locale === 'no' ? 'Snarast mogleg' : 'As soon as possible');
 
-        await fetch('/api/sms/send', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            to: tel,
-            bookRef: data.bookRef,
-            pickupTime: pickupTimeFormatted,
-            from: `${fromStreet}, ${fromCity}`,
-          }),
-        });
-      } catch (smsError) {
-        console.error('SMS send failed:', smsError);
+          await fetch('/api/sms/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              to: tel,
+              bookRef: data.bookRef,
+              pickupTime: pickupTimeFormatted,
+              from: `${fromStreet}, ${fromCity}`,
+            }),
+          });
+        } catch (smsError) {
+          console.error('SMS send failed:', smsError);
+        }
       }
 
       // Send email confirmation (non-blocking) if email was provided
@@ -360,6 +363,7 @@ export function BookingForm({ locale }: BookingFormProps) {
     setClientName('');
     setTel('');
     setEmail('');
+    setSendSmsConfirmation(false);
     setFromStreet('');
     setFromCity('Voss');
     setFromPostalCode('5700');
@@ -398,7 +402,9 @@ export function BookingForm({ locale }: BookingFormProps) {
             {t('successTitle')}
           </h2>
 
-          <p className="text-lg text-taxi-light-grey/90">{t('successMessage')}</p>
+          <p className="text-lg text-taxi-light-grey/90">
+            {sendSmsConfirmation ? t('successMessageWithSms') : t('successMessage')}
+          </p>
 
           {/* Booking Reference Card */}
           <div className="glass-strong backdrop-blur-xl rounded-2xl p-6 depth-2 border-2 border-taxi-yellow/30">
@@ -460,7 +466,9 @@ export function BookingForm({ locale }: BookingFormProps) {
             </div>
           </div>
 
-          <p className="text-taxi-light-grey/90">{t('confirmationNote')}</p>
+          <p className="text-taxi-light-grey/90">
+            {sendSmsConfirmation ? t('confirmationNoteWithSms') : t('confirmationNote')}
+          </p>
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
@@ -541,6 +549,26 @@ export function BookingForm({ locale }: BookingFormProps) {
             <p className="text-xs text-white/70 mt-2">
               {t('emailNote')}
             </p>
+          </div>
+
+          {/* SMS Confirmation Opt-in */}
+          <div className="bg-white/10 backdrop-blur-md rounded-xl p-5 border border-white/20">
+            <label className="flex items-start gap-4 cursor-pointer group">
+              <input
+                type="checkbox"
+                checked={sendSmsConfirmation}
+                onChange={(e) => setSendSmsConfirmation(e.target.checked)}
+                className="mt-1 w-5 h-5 rounded border-2 border-white/30 bg-white/90 text-taxi-yellow focus:ring-2 focus:ring-taxi-yellow focus:ring-offset-0 cursor-pointer"
+              />
+              <div className="flex-1">
+                <span className="text-base font-semibold text-white group-hover:text-taxi-yellow smooth-transition">
+                  {t('smsConfirmation')}
+                </span>
+                <p className="text-sm text-white/70 mt-1">
+                  {t('smsConfirmationNote')}
+                </p>
+              </div>
+            </label>
           </div>
 
           {/* Passenger Count */}

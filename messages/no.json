@@ -188,9 +188,13 @@
     "errorTitle": "Bestillingsfeil",
     "optionalDestination": "Valfritt - kan oppgjevast til sjåføren",
     "successTitle": "Bestilling Stadfesta!",
-    "successMessage": "Taxien din er bestilt. Du vil motta ein SMS-stadfesting med alle detaljar.",
+    "successMessage": "Taxien din er bestilt.",
+    "successMessageWithSms": "Taxien din er bestilt. Du vil motta ein SMS-stadfesting med alle detaljar.",
     "bookingReference": "Bestillingsreferanse",
-    "confirmationNote": "Ver vennleg å lagra bestillingsreferansen din. Sjekk SMS-en din for stadfesting. Sjåføren vil kontakta deg snart.",
-    "bookAnother": "Bestill Ein Taxi Til"
+    "confirmationNote": "Ver vennleg å lagra bestillingsreferansen din. Sjåføren vil kontakta deg snart.",
+    "confirmationNoteWithSms": "Ver vennleg å lagra bestillingsreferansen din. Sjekk SMS-en din for stadfesting. Sjåføren vil kontakta deg snart.",
+    "bookAnother": "Bestill Ein Taxi Til",
+    "smsConfirmation": "Send SMS-stadfesting",
+    "smsConfirmationNote": "Motta ei SMS når bookinga er stadfesta"
   }
 }

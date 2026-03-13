@@ -20,8 +20,10 @@ export async function POST(request: NextRequest) {
     // Format phone number (ensure it starts with +)
     const formattedTo = to.startsWith('+') ? to : `+47${to.replace(/\s/g, '')}`;
 
-    // Create SMS message
-    const message = `Voss Taxi: Din bestilling er bekreftet! Referanse: ${bookRef}. Henting: ${from || 'Som oppgitt'}. Tidspunkt: ${pickupTime}. Ring 56 51 13 40 ved spørsmål.`;
+    // Create SMS message matching Taxi4U format
+    const message = `BEKREFTET ${bookRef}
+#1. - OPPMØTE: ${pickupTime}
+FRA: ${from || 'Som oppgitt'}`;
 
     // Send via Twilio
     const auth = Buffer.from(`${accountSid}:${authToken}`).toString('base64');
