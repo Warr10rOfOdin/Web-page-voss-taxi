@@ -46,6 +46,18 @@ export async function GET(request: NextRequest) {
 
     const data = await response.json();
 
+    // Log unknown status codes for discovery
+    const knownStatuses = ['A0', 'CA', 'AU', 'OP', 'AS', 'AC', 'EN', 'AR', 'PU', 'CO', 'FI'];
+    if (data.tripStatus && !knownStatuses.includes(data.tripStatus)) {
+      console.warn('⚠️ Unknown Taxi4U status code detected:', {
+        bookRef: data.bookRef,
+        status: data.tripStatus,
+        vehicleNo: data.vehicleNo,
+        licenseNo: data.licenseNo,
+        timestamp: new Date().toISOString(),
+      });
+    }
+
     // Extract the first passenger's data for display
     const firstPassenger = data.passengers?.[0] || {};
 

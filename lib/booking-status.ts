@@ -58,6 +58,14 @@ export const STATUS_CODES: Record<string, StatusInfo> = {
     canDelete: true,
     icon: '⏳'
   },
+  'BUGIMN': {
+    code: 'BUGIMN',
+    label: { no: 'Under behandling', en: 'Under Review' },
+    description: { no: 'Bestillinga er under behandling av systemet', en: 'Booking is being processed by the system' },
+    type: 'pending',
+    canDelete: true,
+    icon: '🔄'
+  },
 
   // Assigned/Active statuses
   'AS': {
