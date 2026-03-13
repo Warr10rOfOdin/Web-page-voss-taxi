@@ -480,7 +480,7 @@ export function BookingForm({ locale }: BookingFormProps) {
                   <circle cx="10" cy="10" r="8" />
                 </svg>
                 {t('pickupLocation')}
-              </h4>
+              </h3>
               <button
                 type="button"
                 onClick={getMyLocation}
