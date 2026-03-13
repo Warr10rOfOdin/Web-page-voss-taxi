@@ -95,13 +95,17 @@ www.vosstaxi.no
         text: emailBody,
       });
 
-      return NextResponse.json({ success: true });
+      return NextResponse.json({ success: true, emailSent: true });
     } catch (emailError) {
       console.error('Failed to send email:', emailError);
-      return NextResponse.json(
-        { error: 'Failed to send email', details: emailError instanceof Error ? emailError.message : 'Unknown error' },
-        { status: 500 }
-      );
+      // Don't fail the entire request if email fails - the booking was successful
+      // Just log the error and return success with a warning
+      return NextResponse.json({
+        success: true,
+        emailSent: false,
+        warning: 'Email delivery failed. Please check SMTP configuration.',
+        details: emailError instanceof Error ? emailError.message : 'Unknown error'
+      });
     }
   } catch (error) {
     console.error('Email confirmation API error:', error);
