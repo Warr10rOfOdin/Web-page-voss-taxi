@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { AddressAutocomplete } from '@/components/ui/AddressAutocomplete';
+import { formatDateForTaxi4U, roundToNearest5Minutes } from '@/lib/date-utils';
 
 interface BookingFormProps {
   locale: string;
@@ -184,7 +185,7 @@ export function BookingForm({ locale }: BookingFormProps) {
           toLat: 0,
           toLon: 0,
           attributes,
-          pickupTime: pickupTime || new Date().toISOString(),
+          pickupTime: pickupTime ? formatDateForTaxi4U(new Date(pickupTime)) : formatDateForTaxi4U(new Date()),
         }),
       });
 
@@ -238,11 +239,11 @@ export function BookingForm({ locale }: BookingFormProps) {
       // Calculate pickup time - round to nearest 5 minutes
       const calculatePickupTime = (): string => {
         if (pickupTime) {
-          return new Date(pickupTime).toISOString();
+          return formatDateForTaxi4U(new Date(pickupTime));
         }
         // Book now: add 15 minutes and round to nearest 5
         const now = new Date(Date.now() + 15 * 60000);
-        return roundToNearest5Minutes(now).toISOString();
+        return formatDateForTaxi4U(roundToNearest5Minutes(now));
       };
 
       const finalPickupTime = calculatePickupTime();
@@ -341,20 +342,6 @@ export function BookingForm({ locale }: BookingFormProps) {
     setPriceError(null);
     setSuccess(false);
     setBookRef(null);
-  };
-
-  // Round time to nearest 5-minute increment
-  const roundToNearest5Minutes = (date: Date): Date => {
-    const minutes = date.getMinutes();
-    const remainder = minutes % 5;
-    const roundedMinutes = remainder >= 2.5 ? minutes + (5 - remainder) : minutes - remainder;
-
-    const newDate = new Date(date);
-    newDate.setMinutes(roundedMinutes);
-    newDate.setSeconds(0);
-    newDate.setMilliseconds(0);
-
-    return newDate;
   };
 
   // Get minimum datetime (now + 15 minutes, rounded to nearest 5)
@@ -732,7 +719,7 @@ export function BookingForm({ locale }: BookingFormProps) {
                   const timeStr = rounded.toISOString().slice(0, 16);
                   setPickupTime(timeStr);
                   // Check rules for this time
-                  checkRules(rounded.toISOString());
+                  checkRules(formatDateForTaxi4U(rounded));
                 } else {
                   setPickupTime(e.target.value);
                   // Clear rules if no time selected
