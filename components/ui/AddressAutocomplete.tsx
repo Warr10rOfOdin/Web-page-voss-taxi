@@ -116,8 +116,8 @@ export function AddressAutocomplete({
   return (
     <div ref={containerRef} className="relative">
       {label && (
-        <label className="block text-sm font-medium mb-2">
-          {label} {required && <span className="text-red-500">*</span>}
+        <label className="block text-sm font-semibold mb-3 text-white">
+          {label} {required && <span className="text-taxi-yellow">*</span>}
         </label>
       )}
       <div className="relative">
@@ -132,31 +132,32 @@ export function AddressAutocomplete({
           placeholder={placeholder}
           required={required}
           className={cn(
-            'w-full px-4 py-2 border border-gray-300 rounded-lg',
-            'focus:ring-2 focus:ring-taxi-yellow focus:border-transparent',
-            'transition-all duration-200',
+            'w-full px-5 py-4 text-base bg-white/95 border-2 border-white/30 rounded-xl',
+            'text-taxi-black placeholder-gray-400',
+            'focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white',
+            'smooth-transition shadow-sm',
             className
           )}
         />
         {loading && (
-          <div className="absolute right-3 top-1/2 -translate-y-1/2">
-            <div className="animate-spin h-4 w-4 border-2 border-taxi-yellow border-t-transparent rounded-full" />
+          <div className="absolute right-4 top-1/2 -translate-y-1/2">
+            <div className="animate-spin h-5 w-5 border-2 border-taxi-yellow border-t-transparent rounded-full" />
           </div>
         )}
       </div>
 
       {/* Suggestions dropdown */}
       {showSuggestions && suggestions.length > 0 && (
-        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+        <div className="absolute z-50 w-full mt-2 bg-white border-2 border-gray-200 rounded-xl shadow-2xl max-h-60 overflow-y-auto">
           {suggestions.map((suggestion, index) => (
             <button
               key={index}
               type="button"
               onClick={() => handleSelect(suggestion)}
-              className="w-full px-4 py-3 text-left hover:bg-taxi-yellow/10 transition-colors border-b border-gray-100 last:border-b-0"
+              className="w-full px-5 py-4 text-left hover:bg-taxi-yellow/20 transition-colors border-b border-gray-100 last:border-b-0 first:rounded-t-xl last:rounded-b-xl"
             >
-              <div className="font-medium text-gray-900">{suggestion.street}</div>
-              <div className="text-sm text-gray-600">
+              <div className="font-semibold text-gray-900">{suggestion.street}</div>
+              <div className="text-sm text-gray-600 mt-1">
                 {suggestion.postalCode} {suggestion.city}
               </div>
             </button>

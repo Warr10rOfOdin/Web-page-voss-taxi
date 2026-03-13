@@ -12,20 +12,21 @@ export default async function HomePage({
   setRequestLocale(locale);
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-taxi-black via-gray-900 to-taxi-black overflow-hidden">
-      {/* Subtle Background Element */}
-      <div className="absolute top-20 left-10 w-96 h-96 bg-taxi-yellow/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-taxi-yellow/5 rounded-full blur-3xl" />
+    <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden">
+      {/* Enhanced Background Elements */}
+      <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-taxi-yellow/10 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-taxi-yellow/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-taxi-yellow/5 rounded-full blur-3xl" />
 
-      <Container className="relative z-10 py-16">
+      <Container className="relative z-10 py-12 md:py-20">
         <div className="max-w-7xl mx-auto">
-          {/* Page Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-4">
+          {/* Page Header - More Prominent */}
+          <div className="text-center mb-12 md:mb-16">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold text-white mb-6 drop-shadow-lg">
               {locale === 'no' ? 'Voss Taxi' : 'Voss Taxi'}
             </h1>
-            <div className="w-24 h-1 bg-taxi-yellow mx-auto mb-6" />
-            <p className="text-xl text-taxi-light-grey/80">
+            <div className="w-32 h-1.5 bg-gradient-to-r from-transparent via-taxi-yellow to-transparent mx-auto mb-8 rounded-full" />
+            <p className="text-xl md:text-2xl text-white/90 font-medium">
               {locale === 'no'
                 ? 'Bestill din tur enkelt og raskt'
                 : 'Book your ride easily and quickly'}
@@ -33,7 +34,7 @@ export default async function HomePage({
           </div>
 
           {/* Main Content Grid */}
-          <div className="grid lg:grid-cols-[1fr_380px] gap-8">
+          <div className="grid lg:grid-cols-[1fr_400px] gap-6 lg:gap-10">
             {/* Booking Form */}
             <div>
               <BookingForm locale={locale} />
@@ -45,24 +46,24 @@ export default async function HomePage({
             </div>
           </div>
 
-          {/* Emergency Contact */}
-          <div className="mt-8 text-center">
-            <div className="inline-block bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
-              <p className="text-sm text-taxi-light-grey/70 mb-3">
+          {/* Emergency Contact - More Prominent */}
+          <div className="mt-12 md:mt-16 text-center">
+            <div className="inline-block bg-gradient-to-br from-taxi-yellow/20 to-taxi-yellow/10 backdrop-blur-md border-2 border-taxi-yellow/40 rounded-2xl p-8 md:p-10 shadow-2xl hover:scale-105 transition-transform duration-300">
+              <p className="text-base md:text-lg text-white mb-4 font-semibold">
                 {locale === 'no'
-                  ? 'Treng taxi med ein gong? Ring oss direkte'
-                  : 'Need a taxi right now? Call us directly'}
+                  ? 'Treng taxi med ein gong? Ring oss direkte!'
+                  : 'Need a taxi right now? Call us directly!'}
               </p>
               <a
                 href="tel:+4756511340"
-                className="text-2xl md:text-3xl font-bold text-white hover:text-taxi-yellow transition-colors inline-block"
+                className="text-3xl md:text-4xl lg:text-5xl font-bold text-taxi-yellow hover:text-white transition-colors inline-block drop-shadow-lg mb-4"
               >
                 +47 56 51 13 40
               </a>
-              <p className="text-xs text-taxi-light-grey/60 mt-3">
+              <p className="text-sm text-white/80 mt-4 bg-white/10 px-6 py-3 rounded-full inline-block">
                 {locale === 'no'
-                  ? 'Tilgjengeleg 24/7, alle dagar i året'
-                  : 'Available 24/7, every day of the year'}
+                  ? '🚖 Tilgjengeleg 24/7, alle dagar i året'
+                  : '🚖 Available 24/7, every day of the year'}
               </p>
             </div>
           </div>
