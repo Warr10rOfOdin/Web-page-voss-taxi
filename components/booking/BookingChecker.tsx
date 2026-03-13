@@ -273,83 +273,29 @@ export function BookingChecker({ locale }: BookingCheckerProps) {
         </div>
       </div>
 
-      {/* Receipt Card Section - Only show for completed trips */}
-      {booking && canGetReceipt && (
-        <div className="space-y-4">
-          {/* Receipt Card Preview */}
-          <ReceiptCard
-            data={{
-              bookRef: booking.bookRef,
-              date: booking.bookedTimeStamp,
-              customerName: booking.passengers[0]?.clientName || '',
-              customerPhone: booking.passengers[0]?.tel,
-              pickupAddress: `${booking.passengers[0]?.fromStreet}, ${booking.passengers[0]?.fromPostalCode} ${booking.passengers[0]?.fromCity}`,
-              dropoffAddress: booking.passengers[0]?.toStreet
-                ? `${booking.passengers[0].toStreet}, ${booking.passengers[0].toPostalCode} ${booking.passengers[0].toCity}`
-                : locale === 'no' ? 'Ikkje spesifisert' : 'Not specified',
-              pickupTime: booking.pickupTime,
-              vehicleNumber: booking.vehicleNo > 0 ? String(booking.vehicleNo) : undefined,
-              licenseNumber: booking.licenseNo || undefined,
-              tripStatus: booking.tripStatus,
-            }}
-            locale={locale === 'no' ? 'no' : 'en'}
-          />
-
-          {/* Receipt Action Buttons */}
-          <div className="bg-white/10 backdrop-blur-md border-2 border-taxi-yellow/30 rounded-2xl p-6 depth-3 shadow-xl space-y-4">
-            <h4 className="font-bold text-lg text-white">
-              {locale === 'no' ? '📥 Last ned eller send kvittering' : '📥 Download or Send Receipt'}
-            </h4>
-
-            {/* Download and Print Buttons */}
-            <div className="grid grid-cols-2 gap-2">
-              <Button
-                onClick={handleDownloadReceipt}
-                disabled={downloadingReceipt}
-                className="bg-taxi-yellow hover:bg-taxi-yellow/90 text-taxi-black"
-              >
-                {downloadingReceipt
-                  ? (locale === 'no' ? 'Lastar...' : 'Loading...')
-                  : (locale === 'no' ? '⬇️ Last ned PDF' : '⬇️ Download PDF')}
-              </Button>
-              <Button
-                onClick={handlePrintReceipt}
-                className="bg-white hover:bg-white/90 text-taxi-black"
-              >
-                {locale === 'no' ? '🖨️ Skriv ut' : '🖨️ Print'}
-              </Button>
-            </div>
-
-            {/* Email Receipt Section */}
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-white/90">
-                {locale === 'no' ? 'Send kvittering på e-post' : 'Email Receipt'}
-              </label>
-              <div className="flex gap-2">
-                <input
-                  type="email"
-                  value={receiptEmail}
-                  onChange={(e) => setReceiptEmail(e.target.value)}
-                  placeholder={locale === 'no' ? 'din@epost.no' : 'your@email.com'}
-                  className="flex-1 px-4 py-2 border-2 border-white/30 rounded-lg bg-white/95 text-taxi-black placeholder-gray-400 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow"
-                />
-                <Button
-                  onClick={handleEmailReceipt}
-                  disabled={emailingReceipt || !receiptEmail}
-                  className="bg-green-600 hover:bg-green-700 text-white"
-                >
-                  {emailingReceipt
-                    ? (locale === 'no' ? 'Sender...' : 'Sending...')
-                    : (locale === 'no' ? '📧 Send' : '📧 Send')}
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* Receipt Card - Show for ALL bookings found */}
+      {booking && (
+        <ReceiptCard
+          data={{
+            bookRef: booking.bookRef,
+            date: booking.bookedTimeStamp,
+            customerName: booking.passengers[0]?.clientName || '',
+            customerPhone: booking.passengers[0]?.tel,
+            pickupAddress: `${booking.passengers[0]?.fromStreet}, ${booking.passengers[0]?.fromPostalCode} ${booking.passengers[0]?.fromCity}`,
+            dropoffAddress: booking.passengers[0]?.toStreet
+              ? `${booking.passengers[0].toStreet}, ${booking.passengers[0].toPostalCode} ${booking.passengers[0].toCity}`
+              : locale === 'no' ? 'Ikkje spesifisert' : 'Not specified',
+            pickupTime: booking.pickupTime,
+            vehicleNumber: booking.vehicleNo > 0 ? String(booking.vehicleNo) : undefined,
+            licenseNumber: booking.licenseNo || undefined,
+            tripStatus: booking.tripStatus,
+          }}
+          locale={locale === 'no' ? 'no' : 'en'}
+        />
       )}
 
-      {/* Booking Found but No Receipt Available */}
-      {booking && !canGetReceipt && (
+      {/* Status Info Card - Show when booking found */}
+      {booking && (
         <div className="bg-white/10 backdrop-blur-md border-2 border-taxi-yellow/30 rounded-2xl p-6 depth-3 shadow-xl">
           <div className="space-y-3">
             <h3 className="text-lg font-bold text-white flex items-center gap-2">
@@ -357,32 +303,8 @@ export function BookingChecker({ locale }: BookingCheckerProps) {
               <span>{statusInfo?.label[locale === 'no' ? 'no' : 'en']}</span>
             </h3>
 
-            <div className="space-y-2 text-sm text-white/90">
-              <div className="flex justify-between">
-                <span className="text-white/70">{locale === 'no' ? 'Referanse:' : 'Reference:'}</span>
-                <span className="font-bold text-taxi-yellow">{booking.bookRef}</span>
-              </div>
-
-              <div className="flex justify-between">
-                <span className="text-white/70">{locale === 'no' ? 'Status:' : 'Status:'}</span>
-                <span>{statusInfo?.label[locale === 'no' ? 'no' : 'en']}</span>
-              </div>
-
-              <div className="flex justify-between">
-                <span className="text-white/70">{locale === 'no' ? 'Hentingstid:' : 'Pickup Time:'}</span>
-                <span>{new Date(booking.pickupTime).toLocaleString(locale === 'no' ? 'no-NO' : 'en-US')}</span>
-              </div>
-
-              {statusInfo?.showLoyve && booking.licenseNo && (
-                <div className="flex justify-between">
-                  <span className="text-white/70">{locale === 'no' ? 'Løyve:' : 'Taxi:'}</span>
-                  <span className="font-semibold text-taxi-yellow">🚕 {booking.licenseNo}</span>
-                </div>
-              )}
-            </div>
-
             <div className="pt-3 border-t border-white/20">
-              <p className="text-xs text-white/70">
+              <p className="text-sm text-white/80">
                 {statusInfo?.description[locale === 'no' ? 'no' : 'en']}
               </p>
             </div>
@@ -392,8 +314,61 @@ export function BookingChecker({ locale }: BookingCheckerProps) {
                 href={`/${locale}/manage-booking?ref=${encodeURIComponent(bookRef)}&phone=${encodeURIComponent(phoneNumber)}`}
                 className="text-sm text-taxi-yellow hover:underline block text-center font-medium"
               >
-                {locale === 'no' ? '📋 Sjå fullstendige detaljar' : '📋 View full details'}
+                {locale === 'no' ? '📋 Handter bestilling' : '📋 Manage Booking'}
               </a>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Receipt Action Buttons - Only for completed trips */}
+      {booking && canGetReceipt && (
+        <div className="bg-white/10 backdrop-blur-md border-2 border-taxi-yellow/30 rounded-2xl p-6 depth-3 shadow-xl space-y-4">
+          <h4 className="font-bold text-lg text-white">
+            {locale === 'no' ? '📥 Last ned eller send kvittering' : '📥 Download or Send Receipt'}
+          </h4>
+
+          {/* Download and Print Buttons */}
+          <div className="grid grid-cols-2 gap-2">
+            <Button
+              onClick={handleDownloadReceipt}
+              disabled={downloadingReceipt}
+              className="bg-taxi-yellow hover:bg-taxi-yellow/90 text-taxi-black"
+            >
+              {downloadingReceipt
+                ? (locale === 'no' ? 'Lastar...' : 'Loading...')
+                : (locale === 'no' ? '⬇️ Last ned PDF' : '⬇️ Download PDF')}
+            </Button>
+            <Button
+              onClick={handlePrintReceipt}
+              className="bg-white hover:bg-white/90 text-taxi-black"
+            >
+              {locale === 'no' ? '🖨️ Skriv ut' : '🖨️ Print'}
+            </Button>
+          </div>
+
+          {/* Email Receipt Section */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-white/90">
+              {locale === 'no' ? 'Send kvittering på e-post' : 'Email Receipt'}
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="email"
+                value={receiptEmail}
+                onChange={(e) => setReceiptEmail(e.target.value)}
+                placeholder={locale === 'no' ? 'din@epost.no' : 'your@email.com'}
+                className="flex-1 px-4 py-2 border-2 border-white/30 rounded-lg bg-white/95 text-taxi-black placeholder-gray-400 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow"
+              />
+              <Button
+                onClick={handleEmailReceipt}
+                disabled={emailingReceipt || !receiptEmail}
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                {emailingReceipt
+                  ? (locale === 'no' ? 'Sender...' : 'Sending...')
+                  : (locale === 'no' ? '📧 Send' : '📧 Send')}
+              </Button>
             </div>
           </div>
         </div>

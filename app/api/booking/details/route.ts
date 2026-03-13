@@ -54,7 +54,13 @@ export async function GET(request: NextRequest) {
     // GDPR Security: Verify phone number matches booking
     // Normalize phone numbers for comparison (remove spaces, dashes, country codes)
     const normalizePhone = (phone: string) => {
-      return phone.replace(/[\s\-\+]/g, '').replace(/^47/, ''); // Remove Norwegian country code
+      // Remove all non-digit characters
+      const digitsOnly = phone.replace(/\D/g, '');
+      // Remove leading country code if present (47 for Norway)
+      if (digitsOnly.startsWith('47') && digitsOnly.length > 8) {
+        return digitsOnly.substring(2);
+      }
+      return digitsOnly;
     };
 
     const inputPhone = normalizePhone(phoneNumber);
@@ -62,8 +68,29 @@ export async function GET(request: NextRequest) {
       ? normalizePhone(bookingData.passengers[0].tel)
       : '';
 
-    if (!bookingPhone || !inputPhone.endsWith(bookingPhone.slice(-8))) {
-      // Check last 8 digits to allow for different formats
+    console.log('Phone verification:', {
+      input: phoneNumber,
+      inputNormalized: inputPhone,
+      booking: bookingData.passengers?.[0]?.tel,
+      bookingNormalized: bookingPhone,
+    });
+
+    if (!bookingPhone) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'No phone number associated with this booking.'
+        },
+        { status: 403 }
+      );
+    }
+
+    // Compare last 8 digits (standard Norwegian mobile number length)
+    const inputLast8 = inputPhone.slice(-8);
+    const bookingLast8 = bookingPhone.slice(-8);
+
+    if (inputLast8 !== bookingLast8) {
+      console.log('Phone mismatch:', { inputLast8, bookingLast8 });
       return NextResponse.json(
         {
           success: false,
