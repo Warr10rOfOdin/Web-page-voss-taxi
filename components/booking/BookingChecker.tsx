@@ -110,15 +110,6 @@ export function BookingChecker({ locale }: BookingCheckerProps) {
               </h3>
             </div>
 
-            {/* Status Description - prominent for cancelled bookings */}
-            {statusInfo.type === 'cancelled' && (
-              <div className="mb-3 pb-2 border-b border-red-500/30">
-                <p className="text-xs text-red-200 font-medium">
-                  {statusInfo.description[locale === 'no' ? 'no' : 'en']}
-                </p>
-              </div>
-            )}
-
             <div className="space-y-1.5 text-xs">
               <div className="flex justify-between">
                 <span className="text-white/70">
@@ -195,11 +186,9 @@ export function BookingChecker({ locale }: BookingCheckerProps) {
                     )}
                   </div>
                 </div>
-                {statusInfo.type !== 'cancelled' && (
-                  <p className="text-[10px] text-white/60 mt-1">
-                    {statusInfo.description[locale === 'no' ? 'no' : 'en']}
-                  </p>
-                )}
+                <p className="text-[10px] text-white/60 mt-1">
+                  {statusInfo.description[locale === 'no' ? 'no' : 'en']}
+                </p>
               </div>
             </div>
 
