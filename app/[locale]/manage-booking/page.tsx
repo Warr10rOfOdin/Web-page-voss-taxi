@@ -29,12 +29,42 @@ interface BookingDetails {
   }>;
 }
 
+interface ReceiptData {
+  km?: number;
+  distance?: number;
+  minutes?: number;
+  duration?: number;
+  driverName?: string;
+  driver?: string;
+  driverId?: string;
+  driverID?: string;
+  tariff?: string;
+  tariffName?: string;
+  tariffCode?: string;
+  price?: number;
+  totalPrice?: number;
+  amount?: number;
+  total?: number;
+  vat?: number;
+  vatAmount?: number;
+  paymentMethod?: string;
+  paymentType?: string;
+  stopTime?: string;
+  endTime?: string;
+  dropoffTime?: string;
+  receiptNumber?: string;
+  receiptNo?: string;
+  invoiceNumber?: string;
+  invoiceNo?: string;
+}
+
 function ManageBookingContent({ locale }: { locale: string }) {
   const searchParams = useSearchParams();
 
   const [bookRef, setBookRef] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [booking, setBooking] = useState<BookingDetails | null>(null);
+  const [receiptData, setReceiptData] = useState<ReceiptData | null>(null);
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -80,6 +110,7 @@ function ManageBookingContent({ locale }: { locale: string }) {
     setError(null);
     setSuccess(null);
     setBooking(null);
+    setReceiptData(null);
 
     try {
       const response = await fetch(
@@ -92,6 +123,24 @@ function ManageBookingContent({ locale }: { locale: string }) {
       }
 
       setBooking(data.booking);
+
+      // Also try to fetch receipt data if available
+      try {
+        const receiptResponse = await fetch(
+          `/api/booking/receipt?bookRef=${encodeURIComponent(bookRef)}`
+        );
+
+        if (receiptResponse.ok && receiptResponse.status !== 204) {
+          const receipt = await receiptResponse.json();
+          setReceiptData(receipt);
+          console.log('Receipt data loaded:', receipt);
+        } else {
+          console.log('No receipt data available yet');
+        }
+      } catch (receiptErr) {
+        console.warn('Could not fetch receipt data:', receiptErr);
+        // Don't show error for receipt - it may not be available yet
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch booking');
     } finally {
@@ -405,12 +454,20 @@ function ManageBookingContent({ locale }: { locale: string }) {
                       date: booking.bookedTimeStamp,
                       customerName: booking.passengers[0]?.clientName || '',
                       customerPhone: booking.passengers[0]?.tel,
-                      pickupAddress: `${booking.passengers[0]?.fromStreet}, ${booking.passengers[0]?.fromPostalCode} ${booking.passengers[0]?.fromCity}`,
+                      pickupAddress: `${booking.passengers[0]?.fromStreet || ''}, ${booking.passengers[0]?.fromPostalCode || ''} ${booking.passengers[0]?.fromCity || ''}`.trim(),
                       dropoffAddress: booking.passengers[0]?.toStreet
-                        ? `${booking.passengers[0].toStreet}, ${booking.passengers[0].toPostalCode} ${booking.passengers[0].toCity}`
+                        ? `${booking.passengers[0].toStreet}, ${booking.passengers[0].toPostalCode || ''} ${booking.passengers[0].toCity || ''}`.trim()
                         : locale === 'no' ? 'Ikkje spesifisert' : 'Not specified',
                       pickupTime: booking.pickupTime,
+                      dropoffTime: receiptData?.stopTime || receiptData?.endTime || receiptData?.dropoffTime,
+                      distance: receiptData?.km || receiptData?.distance,
+                      duration: receiptData?.minutes || receiptData?.duration,
                       licenseNumber: booking.licenseNo || undefined,
+                      driverName: receiptData?.driverName || receiptData?.driver,
+                      tariff: receiptData?.tariff || receiptData?.tariffName || receiptData?.tariffCode,
+                      price: receiptData?.price || receiptData?.totalPrice || receiptData?.amount || receiptData?.total,
+                      vat: receiptData?.vat || receiptData?.vatAmount,
+                      paymentMethod: receiptData?.paymentMethod || receiptData?.paymentType,
                       tripStatus: booking.tripStatus,
                     }}
                     locale={locale === 'no' ? 'no' : 'en'}
