@@ -151,20 +151,13 @@ export function BookingForm({ locale }: BookingFormProps) {
 
     try {
       // Calculate attributes based on passenger count
-      // 2-4: 2 PERSONER, 3 PERSONER, 4 PERSONER
-      // 5-6: 6 SETER (5 passengers use 6-seater vehicle)
-      // 7: 7 SETER
-      // 8: 8 SETER
+      // ONLY send attributes for 2-4 passengers (standard taxi)
+      // For 5+ passengers, rely solely on carGroupId (2 or 3)
       const attributes: number[] = [];
       if (passengerCount >= 2 && passengerCount <= 4) {
-        attributes.push(passengerCount);
-      } else if (passengerCount === 5 || passengerCount === 6) {
-        attributes.push(6); // 6 SETER for both 5 and 6 passengers
-      } else if (passengerCount === 7) {
-        attributes.push(7); // 7 SETER
-      } else if (passengerCount === 8) {
-        attributes.push(8); // 8 SETER
+        attributes.push(passengerCount); // 2 PERSONER, 3 PERSONER, 4 PERSONER
       }
+      // 5-8 passengers: no attributes, carGroupId determines vehicle type
 
       const response = await fetch('/api/pricequote', {
         method: 'POST',
@@ -213,20 +206,13 @@ export function BookingForm({ locale }: BookingFormProps) {
 
     try {
       // Calculate attributes based on passenger count
-      // 2-4: 2 PERSONER, 3 PERSONER, 4 PERSONER
-      // 5-6: 6 SETER (5 passengers use 6-seater vehicle)
-      // 7: 7 SETER
-      // 8: 8 SETER
+      // ONLY send attributes for 2-4 passengers (standard taxi)
+      // For 5+ passengers, rely solely on carGroupId (2 or 3)
       const attributes: number[] = [];
       if (passengerCount >= 2 && passengerCount <= 4) {
-        attributes.push(passengerCount);
-      } else if (passengerCount === 5 || passengerCount === 6) {
-        attributes.push(6); // 6 SETER for both 5 and 6 passengers
-      } else if (passengerCount === 7) {
-        attributes.push(7); // 7 SETER
-      } else if (passengerCount === 8) {
-        attributes.push(8); // 8 SETER
+        attributes.push(passengerCount); // 2 PERSONER, 3 PERSONER, 4 PERSONER
       }
+      // 5-8 passengers: no attributes, carGroupId determines vehicle type
 
       // Prepare booking data for API
       // Calculate pickup time - round to nearest 5 minutes
