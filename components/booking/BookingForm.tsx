@@ -266,8 +266,8 @@ export function BookingForm({ locale }: BookingFormProps) {
           toStreet: toStreet || undefined,
           toCity: toCity || undefined,
           toPostalCode: toPostalCode || undefined,
-          toLat,
-          toLon,
+          toLat: toLat || undefined,
+          toLon: toLon || undefined,
           pickupTime: finalPickupTime,
         }],
       };
