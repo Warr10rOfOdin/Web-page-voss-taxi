@@ -110,15 +110,6 @@ export function BookingChecker({ locale }: BookingCheckerProps) {
               </h3>
             </div>
 
-            {/* Status Description - prominent for cancelled bookings */}
-            {statusInfo.type === 'cancelled' && (
-              <div className="mb-3 pb-2 border-b border-red-500/30">
-                <p className="text-xs text-red-200 font-medium">
-                  {statusInfo.description[locale === 'no' ? 'no' : 'en']}
-                </p>
-              </div>
-            )}
-
             <div className="space-y-1.5 text-xs">
               <div className="flex justify-between">
                 <span className="text-white/70">
@@ -187,13 +178,17 @@ export function BookingChecker({ locale }: BookingCheckerProps) {
                     <div className="text-[10px] text-white/60 mt-0.5">
                       {statusInfo.code}
                     </div>
+                    {/* Show løyve (license) for M/I statuses (accepted by car) */}
+                    {statusInfo.showLoyve && bookingInfo.licenseNo && (
+                      <div className="text-xs font-semibold text-taxi-yellow mt-1">
+                        {locale === 'no' ? '🚕 Løyve:' : '🚕 Taxi:'} {bookingInfo.licenseNo}
+                      </div>
+                    )}
                   </div>
                 </div>
-                {statusInfo.type !== 'cancelled' && (
-                  <p className="text-[10px] text-white/60 mt-1">
-                    {statusInfo.description[locale === 'no' ? 'no' : 'en']}
-                  </p>
-                )}
+                <p className="text-[10px] text-white/60 mt-1">
+                  {statusInfo.description[locale === 'no' ? 'no' : 'en']}
+                </p>
               </div>
             </div>
 

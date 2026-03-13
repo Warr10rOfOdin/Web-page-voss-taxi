@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { getStatusInfo, getStatusColorClass } from '@/lib/booking-status';
+import { ReceiptCard } from '@/components/receipts/ReceiptCard';
 
 interface BookingDetails {
   centralCode: string;
@@ -32,6 +33,7 @@ function ManageBookingContent({ locale }: { locale: string }) {
   const searchParams = useSearchParams();
 
   const [bookRef, setBookRef] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [booking, setBooking] = useState<BookingDetails | null>(null);
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -60,13 +62,20 @@ function ManageBookingContent({ locale }: { locale: string }) {
       return;
     }
 
+    if (!phoneNumber) {
+      setError(locale === 'no' ? 'Skriv inn telefonnummer' : 'Please enter phone number');
+      return;
+    }
+
     setLoading(true);
     setError(null);
     setSuccess(null);
     setBooking(null);
 
     try {
-      const response = await fetch(`/api/booking/details?bookRef=${encodeURIComponent(bookRef)}`);
+      const response = await fetch(
+        `/api/booking/details?bookRef=${encodeURIComponent(bookRef)}&phoneNumber=${encodeURIComponent(phoneNumber)}`
+      );
       const data = await response.json();
 
       if (!response.ok || !data.success) {
@@ -82,10 +91,10 @@ function ManageBookingContent({ locale }: { locale: string }) {
   };
 
   const handleDelete = async () => {
-    if (!bookRef || !booking) return;
+    if (!bookRef || !phoneNumber || !booking) return;
 
-    const confirmMsg = locale === 'no' 
-      ? 'Er du sikker på at du vil slette denne bookinga?' 
+    const confirmMsg = locale === 'no'
+      ? 'Er du sikker på at du vil slette denne bookinga?'
       : 'Are you sure you want to delete this booking?';
 
     if (!confirm(confirmMsg)) return;
@@ -95,9 +104,12 @@ function ManageBookingContent({ locale }: { locale: string }) {
     setSuccess(null);
 
     try {
-      const response = await fetch(`/api/booking/delete?bookRef=${encodeURIComponent(bookRef)}`, {
-        method: 'DELETE',
-      });
+      const response = await fetch(
+        `/api/booking/delete?bookRef=${encodeURIComponent(bookRef)}&phoneNumber=${encodeURIComponent(phoneNumber)}`,
+        {
+          method: 'DELETE',
+        }
+      );
       const data = await response.json();
 
       if (!response.ok || !data.success) {
@@ -107,6 +119,7 @@ function ManageBookingContent({ locale }: { locale: string }) {
       setSuccess(locale === 'no' ? 'Booking sletta!' : 'Booking deleted successfully!');
       setBooking(null);
       setBookRef('');
+      setPhoneNumber('');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to delete booking');
     } finally {
@@ -114,17 +127,10 @@ function ManageBookingContent({ locale }: { locale: string }) {
     }
   };
 
-  const canDelete = booking && (
-    booking.tripStatus === 'AU' ||
-    booking.vehicleNo === 0 ||
-    !booking.licenseNo ||
-    booking.licenseNo === ''
-  );
-
-  const canGetReceipt = booking && (
-    booking.tripStatus === 'CO' ||
-    booking.tripStatus === 'FI'
-  );
+  // Get status info and check capabilities based on current status
+  const statusInfo = booking ? getStatusInfo(booking.tripStatus) : null;
+  const canDelete = booking && statusInfo ? statusInfo.canDelete : false;
+  const canGetReceipt = booking && statusInfo ? statusInfo.canGetReceipt === true : false;
 
   const handleDownloadReceipt = async () => {
     if (!bookRef) return;
@@ -164,6 +170,9 @@ function ManageBookingContent({ locale }: { locale: string }) {
   const handlePrintReceipt = async () => {
     if (!bookRef) return;
 
+    // Open print window before awaiting network request to avoid popup blocking
+    const printWindow = window.open('', '_blank');
+
     try {
       const response = await fetch(
         `/api/booking/receipt/pdf?bookRef=${encodeURIComponent(bookRef)}&locale=${locale}`
@@ -171,15 +180,16 @@ function ManageBookingContent({ locale }: { locale: string }) {
 
       if (!response.ok) {
         const data = await response.json();
+        printWindow?.close();
         throw new Error(data.error || 'Failed to load receipt');
       }
 
-      // Open PDF in new window for printing
+      // Load PDF into the already-open window
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const printWindow = window.open(url, '_blank');
 
       if (printWindow) {
+        printWindow.location.href = url;
         printWindow.onload = () => {
           printWindow.print();
         };
@@ -255,6 +265,24 @@ function ManageBookingContent({ locale }: { locale: string }) {
               />
             </div>
 
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                {locale === 'no' ? 'Telefonnummer' : 'Phone Number'}
+              </label>
+              <input
+                type="tel"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                placeholder={locale === 'no' ? '12345678' : '12345678'}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                {locale === 'no'
+                  ? '🔒 For di tryggleik krev vi både bookingkode og telefonnummer'
+                  : '🔒 For your security, we require both booking reference and phone number'}
+              </p>
+            </div>
+
             <Button
               onClick={handleSearch}
               disabled={loading}
@@ -299,19 +327,20 @@ function ManageBookingContent({ locale }: { locale: string }) {
                     <span className="font-medium">{locale === 'no' ? 'Status:' : 'Status:'}</span>
                     <div className="text-right">
                       {(() => {
-                        const statusInfo = getStatusInfo(booking.tripStatus);
+                        const currentStatusInfo = getStatusInfo(booking.tripStatus);
                         return (
                           <div>
                             <div className="flex items-center justify-end gap-1">
-                              <span>{statusInfo.icon}</span>
-                              <span className="font-semibold">{statusInfo.label[locale === 'no' ? 'no' : 'en']}</span>
+                              <span>{currentStatusInfo.icon}</span>
+                              <span className="font-semibold">{currentStatusInfo.label[locale === 'no' ? 'no' : 'en']}</span>
                             </div>
                             <div className="text-xs text-gray-500 mt-0.5">
-                              {statusInfo.description[locale === 'no' ? 'no' : 'en']}
+                              {currentStatusInfo.description[locale === 'no' ? 'no' : 'en']}
                             </div>
-                            {booking.vehicleNo && booking.vehicleNo > 0 && (
-                              <div className="text-xs text-gray-600 mt-1">
-                                {locale === 'no' ? 'Taxi:' : 'Taxi:'} {booking.licenseNo}
+                            {/* Show løyve (license) for M/I statuses (accepted by car) */}
+                            {currentStatusInfo.showLoyve && booking.licenseNo && (
+                              <div className="text-xs font-semibold text-taxi-yellow mt-1">
+                                {locale === 'no' ? '🚕 Løyve:' : '🚕 Taxi:'} {booking.licenseNo}
                               </div>
                             )}
                           </div>
@@ -359,52 +388,74 @@ function ManageBookingContent({ locale }: { locale: string }) {
 
               {/* Receipt Section - Only for completed trips */}
               {canGetReceipt && (
-                <div className="space-y-4 border-t pt-6">
-                  <h4 className="font-bold text-lg">
-                    {locale === 'no' ? '📄 Kvittering' : '📄 Receipt'}
-                  </h4>
+                <div className="space-y-6 border-t pt-6">
+                  {/* Receipt Card Preview */}
+                  <ReceiptCard
+                    data={{
+                      bookRef: booking.bookRef,
+                      date: booking.bookedTimeStamp,
+                      customerName: booking.passengers[0]?.clientName || '',
+                      customerPhone: booking.passengers[0]?.tel,
+                      pickupAddress: `${booking.passengers[0]?.fromStreet}, ${booking.passengers[0]?.fromPostalCode} ${booking.passengers[0]?.fromCity}`,
+                      dropoffAddress: booking.passengers[0]?.toStreet
+                        ? `${booking.passengers[0].toStreet}, ${booking.passengers[0].toPostalCode} ${booking.passengers[0].toCity}`
+                        : locale === 'no' ? 'Ikkje spesifisert' : 'Not specified',
+                      pickupTime: booking.pickupTime,
+                      vehicleNumber: booking.vehicleNo > 0 ? String(booking.vehicleNo) : undefined,
+                      licenseNumber: booking.licenseNo || undefined,
+                      tripStatus: booking.tripStatus,
+                    }}
+                    locale={locale === 'no' ? 'no' : 'en'}
+                  />
 
-                  {/* Download and Print Buttons */}
-                  <div className="grid grid-cols-2 gap-2">
-                    <Button
-                      onClick={handleDownloadReceipt}
-                      disabled={downloadingReceipt}
-                      className="bg-taxi-yellow hover:bg-taxi-yellow/90 text-taxi-black"
-                    >
-                      {downloadingReceipt
-                        ? (locale === 'no' ? 'Lastar...' : 'Loading...')
-                        : (locale === 'no' ? '⬇️ Last ned PDF' : '⬇️ Download PDF')}
-                    </Button>
-                    <Button
-                      onClick={handlePrintReceipt}
-                      className="bg-taxi-black hover:bg-taxi-black/90 text-white"
-                    >
-                      {locale === 'no' ? '🖨️ Skriv ut' : '🖨️ Print'}
-                    </Button>
-                  </div>
+                  {/* Receipt Action Buttons */}
+                  <div className="space-y-4">
+                    <h4 className="font-bold text-lg">
+                      {locale === 'no' ? '📥 Last ned eller send kvittering' : '📥 Download or Send Receipt'}
+                    </h4>
 
-                  {/* Email Receipt Section */}
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium">
-                      {locale === 'no' ? 'Send kvittering på e-post' : 'Email Receipt'}
-                    </label>
-                    <div className="flex gap-2">
-                      <input
-                        type="email"
-                        value={receiptEmail}
-                        onChange={(e) => setReceiptEmail(e.target.value)}
-                        placeholder={locale === 'no' ? 'din@epost.no' : 'your@email.com'}
-                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
-                      />
+                    {/* Download and Print Buttons */}
+                    <div className="grid grid-cols-2 gap-2">
                       <Button
-                        onClick={handleEmailReceipt}
-                        disabled={emailingReceipt || !receiptEmail}
-                        className="bg-green-600 hover:bg-green-700 text-white"
+                        onClick={handleDownloadReceipt}
+                        disabled={downloadingReceipt}
+                        className="bg-taxi-yellow hover:bg-taxi-yellow/90 text-taxi-black"
                       >
-                        {emailingReceipt
-                          ? (locale === 'no' ? 'Sender...' : 'Sending...')
-                          : (locale === 'no' ? '📧 Send' : '📧 Send')}
+                        {downloadingReceipt
+                          ? (locale === 'no' ? 'Lastar...' : 'Loading...')
+                          : (locale === 'no' ? '⬇️ Last ned PDF' : '⬇️ Download PDF')}
                       </Button>
+                      <Button
+                        onClick={handlePrintReceipt}
+                        className="bg-taxi-black hover:bg-taxi-black/90 text-white"
+                      >
+                        {locale === 'no' ? '🖨️ Skriv ut' : '🖨️ Print'}
+                      </Button>
+                    </div>
+
+                    {/* Email Receipt Section */}
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium">
+                        {locale === 'no' ? 'Send kvittering på e-post' : 'Email Receipt'}
+                      </label>
+                      <div className="flex gap-2">
+                        <input
+                          type="email"
+                          value={receiptEmail}
+                          onChange={(e) => setReceiptEmail(e.target.value)}
+                          placeholder={locale === 'no' ? 'din@epost.no' : 'your@email.com'}
+                          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+                        />
+                        <Button
+                          onClick={handleEmailReceipt}
+                          disabled={emailingReceipt || !receiptEmail}
+                          className="bg-green-600 hover:bg-green-700 text-white"
+                        >
+                          {emailingReceipt
+                            ? (locale === 'no' ? 'Sender...' : 'Sending...')
+                            : (locale === 'no' ? '📧 Send' : '📧 Send')}
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>

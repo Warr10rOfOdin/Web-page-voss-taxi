@@ -46,12 +46,14 @@ export async function GET(request: NextRequest) {
 
     const data = await response.json();
 
-    // Log unknown status codes for discovery
-    const knownStatuses = ['A0', 'CA', 'AU', 'OP', 'AS', 'AC', 'EN', 'AR', 'PU', 'CO', 'FI'];
-    if (data.tripStatus && !knownStatuses.includes(data.tripStatus)) {
-      console.warn('⚠️ Unknown Taxi4U status code detected:', {
+    // Note: Status codes are sequences (e.g., "BUGIMN") where the last character is the current status
+    // We extract the last character to determine the current status
+    // Known status characters: A, B, c, C, D, E, F, G, h, H, I, J, K, l, L, M, n, N, o, p, U, V, x, X
+    if (data.tripStatus) {
+      console.log('Booking status sequence:', {
         bookRef: data.bookRef,
-        status: data.tripStatus,
+        fullSequence: data.tripStatus,
+        currentStatus: data.tripStatus.slice(-1),
         vehicleNo: data.vehicleNo,
         licenseNo: data.licenseNo,
         timestamp: new Date().toISOString(),
@@ -73,6 +75,8 @@ export async function GET(request: NextRequest) {
       toCity: firstPassenger.toCity,
       toPostalCode: firstPassenger.toPostalCode,
       status: data.tripStatus,
+      licenseNo: data.licenseNo,
+      vehicleNo: data.vehicleNo,
       // Include full data for reference
       raw: data,
     };
