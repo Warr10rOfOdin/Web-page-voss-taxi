@@ -177,6 +177,8 @@
     "postalCode": "Postnummer",
     "name": "Fullt namn",
     "phone": "Telefonnummer",
+    "email": "E-post",
+    "emailNote": "Oppgi e-postadressa di for å få stadfesting på e-post",
     "pickupTime": "Hentetid (Valfritt)",
     "pickupTimeNote": "La stå tom for umiddelbar henting (så snart som mogleg)",
     "messageOptional": "Melding til sjåfør (Valfritt)",
@@ -186,9 +188,9 @@
     "errorTitle": "Bestillingsfeil",
     "optionalDestination": "Valfritt - kan oppgjevast til sjåføren",
     "successTitle": "Bestilling Stadfesta!",
-    "successMessage": "Taxien din er bestilt. Du vil motta ein SMS-stadfesting med alle detaljar.",
+    "successMessage": "Taxien din er bestilt.",
     "bookingReference": "Bestillingsreferanse",
-    "confirmationNote": "Ver vennleg å lagra bestillingsreferansen din. Sjekk SMS-en din for stadfesting. Sjåføren vil kontakta deg snart.",
+    "confirmationNote": "Ver vennleg å lagra bestillingsreferansen din. Sjåføren vil kontakta deg snart.",
     "bookAnother": "Bestill Ein Taxi Til"
   }
 }
