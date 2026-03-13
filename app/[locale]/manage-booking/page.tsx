@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { getStatusInfo, getStatusColorClass } from '@/lib/booking-status';
 
 interface BookingDetails {
   centralCode: string;
@@ -183,11 +184,27 @@ function ManageBookingContent({ locale }: { locale: string }) {
 
                   <div className="grid grid-cols-2 gap-2">
                     <span className="font-medium">{locale === 'no' ? 'Status:' : 'Status:'}</span>
-                    <span>
-                      {booking.vehicleNo && booking.vehicleNo > 0 
-                        ? `${locale === 'no' ? 'Taxi tilvist' : 'Taxi assigned'} (${booking.licenseNo})`
-                        : (locale === 'no' ? 'Ventar på taxi' : 'Waiting for taxi')}
-                    </span>
+                    <div className="text-right">
+                      {(() => {
+                        const statusInfo = getStatusInfo(booking.tripStatus);
+                        return (
+                          <div>
+                            <div className="flex items-center justify-end gap-1">
+                              <span>{statusInfo.icon}</span>
+                              <span className="font-semibold">{statusInfo.label[locale === 'no' ? 'no' : 'en']}</span>
+                            </div>
+                            <div className="text-xs text-gray-500 mt-0.5">
+                              {statusInfo.description[locale === 'no' ? 'no' : 'en']}
+                            </div>
+                            {booking.vehicleNo && booking.vehicleNo > 0 && (
+                              <div className="text-xs text-gray-600 mt-1">
+                                {locale === 'no' ? 'Taxi:' : 'Taxi:'} {booking.licenseNo}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })()}
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-2">
