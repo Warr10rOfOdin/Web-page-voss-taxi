@@ -272,6 +272,9 @@ export function BookingForm({ locale }: BookingFormProps) {
         }],
       };
 
+      // Log booking data for debugging
+      console.log('Sending booking data:', JSON.stringify(bookingData, null, 2));
+
       const response = await fetch('/api/booking/general', {
         method: 'POST',
         headers: {
@@ -283,6 +286,13 @@ export function BookingForm({ locale }: BookingFormProps) {
       const data = await response.json();
 
       if (!response.ok || !data.success) {
+        // Log full error details for debugging
+        console.error('Booking failed:', {
+          status: response.status,
+          error: data.error,
+          details: data.details,
+          fullResponse: data
+        });
         throw new Error(data.error || data.details || 'Booking failed');
       }
 
