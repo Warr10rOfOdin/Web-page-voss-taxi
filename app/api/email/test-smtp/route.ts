@@ -18,7 +18,7 @@ export async function GET() {
     }
 
     // Try to send a test email
-    const testEmail = process.env.SMTP_USER;
+    const testEmail = process.env.SMTP_USER || 'test@example.com';
 
     try {
       await sendEmail({
