@@ -50,7 +50,6 @@ ${passengerCount ? `Passasjerer: ${passengerCount}` : ''}
 Viktig informasjon:
 • Ta vare på bookingreferansen din: ${bookRef}
 • Sjåføren vil kontakte deg kort tid før henting
-• Du vil også få ein SMS-stadfesting
 
 Ved spørsmål eller endringar, ring oss på +47 56 51 13 40
 
@@ -78,7 +77,6 @@ ${passengerCount ? `Passengers: ${passengerCount}` : ''}
 Important Information:
 • Save your booking reference: ${bookRef}
 • The driver will contact you shortly before pickup
-• You will also receive an SMS confirmation
 
 For questions or changes, call us at +47 56 51 13 40
 
