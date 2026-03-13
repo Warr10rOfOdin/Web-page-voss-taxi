@@ -1,285 +1,539 @@
 {
   "statusCodes": {
-    "cancelled": [
+    "payment": [
       {
-        "code": "A0",
-        "lastChar": "0",
-        "category": "Cancelled",
+        "code": "A",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Payment",
         "label": {
-          "no": "Avbestilt/Sletta",
-          "en": "Cancelled/Deleted"
+          "no": "Kontant",
+          "en": "Cash"
         },
         "description": {
-          "no": "Denne turen er avbestilt eller sletta",
-          "en": "This trip has been cancelled or deleted"
+          "no": "Betaling med kontanter",
+          "en": "Cash payment"
         },
-        "icon": "❌",
-        "canDelete": false,
-        "canGetReceipt": false
-      },
-      {
-        "code": "CA",
-        "lastChar": "A",
-        "category": "Cancelled",
-        "label": {
-          "no": "Avbestilt",
-          "en": "Cancelled"
-        },
-        "description": {
-          "no": "Denne turen er avbestilt",
-          "en": "This trip has been cancelled"
-        },
-        "icon": "❌",
-        "canDelete": false,
-        "canGetReceipt": false
-      }
-    ],
-    "pending": [
-      {
-        "code": "AU",
-        "lastChar": "U",
-        "category": "Pending",
-        "label": {
-          "no": "Ventar på taxi",
-          "en": "Awaiting Taxi"
-        },
-        "description": {
-          "no": "Venter på at ein taxi skal akseptere turen",
-          "en": "Waiting for a taxi to accept the trip"
-        },
-        "icon": "⏳",
+        "icon": "💵",
         "canDelete": true,
         "canGetReceipt": false
       },
       {
-        "code": "OP",
-        "lastChar": "P",
-        "category": "Pending",
+        "code": "B",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Payment",
         "label": {
-          "no": "Åpen",
-          "en": "Open"
+          "no": "Kreditt",
+          "en": "Credit"
         },
         "description": {
-          "no": "Bestillinga er registrert og venter",
-          "en": "Booking is registered and waiting"
+          "no": "Betaling med kreditt",
+          "en": "Credit payment"
         },
-        "icon": "⏳",
-        "canDelete": true,
-        "canGetReceipt": false
-      },
-      {
-        "code": "BUGIMN",
-        "lastChar": "N",
-        "category": "Pending",
-        "label": {
-          "no": "Under behandling",
-          "en": "Under Review"
-        },
-        "description": {
-          "no": "Bestillinga er under behandling av systemet",
-          "en": "Booking is being processed by the system"
-        },
-        "icon": "🔄",
-        "canDelete": true,
-        "canGetReceipt": false
-      },
-      {
-        "code": "AUGIMN",
-        "lastChar": "N",
-        "category": "Pending",
-        "label": {
-          "no": "Ventar på behandling",
-          "en": "Awaiting Processing"
-        },
-        "description": {
-          "no": "Bestillinga ventar på å bli behandla av systemet",
-          "en": "Booking is awaiting system processing"
-        },
-        "icon": "⏳",
+        "icon": "💳",
         "canDelete": true,
         "canGetReceipt": false
       }
     ],
-    "active": [
+    "process": [
       {
-        "code": "AS",
-        "lastChar": "S",
-        "category": "Active",
+        "code": "c",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Process",
         "label": {
-          "no": "Taxi tildelt",
-          "en": "Taxi Assigned"
+          "no": "Kopiert",
+          "en": "Copied"
         },
         "description": {
-          "no": "Ein taxi er tildelt turen din",
-          "en": "A taxi has been assigned to your trip"
+          "no": "Bestillinga er kopiert",
+          "en": "Booking has been copied"
         },
-        "icon": "🚕",
-        "canDelete": false,
+        "icon": "📋",
+        "canDelete": true,
         "canGetReceipt": false
       },
       {
-        "code": "AC",
-        "lastChar": "C",
-        "category": "Active",
+        "code": "C",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Process",
         "label": {
-          "no": "Akseptert",
-          "en": "Accepted"
+          "no": "Sparsam",
+          "en": "Economical"
         },
         "description": {
-          "no": "Taxi har akseptert turen",
-          "en": "Taxi has accepted the trip"
+          "no": "Sparsam tur (delt)",
+          "en": "Economical trip (shared)"
         },
-        "icon": "✅",
-        "canDelete": false,
+        "icon": "🤝",
+        "canDelete": true,
         "canGetReceipt": false
       },
       {
-        "code": "EN",
-        "lastChar": "N",
-        "category": "Active",
+        "code": "D",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Process",
         "label": {
-          "no": "På veg",
-          "en": "En Route"
+          "no": "Autobook",
+          "en": "Autobook"
         },
         "description": {
-          "no": "Taxi er på veg til henting",
-          "en": "Taxi is on the way to pickup"
+          "no": "Automatisk bestilling",
+          "en": "Automatic booking"
         },
-        "icon": "🚖",
-        "canDelete": false,
+        "icon": "🤖",
+        "canDelete": true,
         "canGetReceipt": false
       },
       {
-        "code": "AR",
-        "lastChar": "R",
-        "category": "Active",
+        "code": "E",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Process",
         "label": {
-          "no": "Framme",
-          "en": "Arrived"
+          "no": "Fast tur",
+          "en": "Fixed Trip"
         },
         "description": {
-          "no": "Taxi har kome fram til hentestaden",
-          "en": "Taxi has arrived at pickup location"
+          "no": "Fast tur",
+          "en": "Fixed trip"
         },
-        "icon": "📍",
-        "canDelete": false,
+        "icon": "📅",
+        "canDelete": true,
         "canGetReceipt": false
       },
       {
-        "code": "PU",
-        "lastChar": "U",
-        "category": "Active",
+        "code": "F",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Process",
         "label": {
-          "no": "Passasjer om bord",
-          "en": "Passenger On Board"
+          "no": "Skoletur",
+          "en": "School Trip"
         },
         "description": {
-          "no": "Passasjer er om bord, turen pågår",
-          "en": "Passenger is on board, trip in progress"
+          "no": "Skoletur",
+          "en": "School trip"
+        },
+        "icon": "🎒",
+        "canDelete": true,
+        "canGetReceipt": false
+      },
+      {
+        "code": "h",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Process",
+        "label": {
+          "no": "Hentet",
+          "en": "Picked Up"
+        },
+        "description": {
+          "no": "Passasjer er hentet",
+          "en": "Passenger has been picked up"
         },
         "icon": "🚗",
         "canDelete": false,
+        "canGetReceipt": false
+      },
+      {
+        "code": "p",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Process",
+        "label": {
+          "no": "Pause",
+          "en": "Pause"
+        },
+        "description": {
+          "no": "Tur satt på pause",
+          "en": "Trip paused"
+        },
+        "icon": "⏸️",
+        "canDelete": true,
+        "canGetReceipt": false
+      },
+      {
+        "code": "x",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Process",
+        "label": {
+          "no": "Behandle manuelt",
+          "en": "Handle Manually"
+        },
+        "description": {
+          "no": "Må behandlast manuelt",
+          "en": "Must be handled manually"
+        },
+        "icon": "⚠️",
+        "canDelete": true,
+        "canGetReceipt": false
+      }
+    ],
+    "sent": [
+      {
+        "code": "G",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Sent",
+        "label": {
+          "no": "Under sending",
+          "en": "Being Sent"
+        },
+        "description": {
+          "no": "Bestillinga blir sendt til sjåfør",
+          "en": "Booking is being sent to driver"
+        },
+        "icon": "📤",
+        "canDelete": true,
+        "canGetReceipt": false
+      },
+      {
+        "code": "H",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Sent",
+        "label": {
+          "no": "Ingen kontakt",
+          "en": "No Contact"
+        },
+        "description": {
+          "no": "Ingen kontakt med sjåfør",
+          "en": "No contact with driver"
+        },
+        "icon": "📵",
+        "canDelete": true,
+        "canGetReceipt": false
+      },
+      {
+        "code": "L",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Sent",
+        "label": {
+          "no": "Manuelt sendt",
+          "en": "Manually Sent"
+        },
+        "description": {
+          "no": "Bestillinga er sendt manuelt",
+          "en": "Booking has been sent manually"
+        },
+        "icon": "✋",
+        "canDelete": true,
+        "canGetReceipt": false
+      },
+      {
+        "code": "X",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Sent",
+        "label": {
+          "no": "Forsendt",
+          "en": "Sent Too Early"
+        },
+        "description": {
+          "no": "Sendt for tidleg",
+          "en": "Sent too early"
+        },
+        "icon": "⏰",
+        "canDelete": true,
+        "canGetReceipt": false
+      }
+    ],
+    "response": [
+      {
+        "code": "I",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Response",
+        "label": {
+          "no": "Ja-svar",
+          "en": "Yes Answer"
+        },
+        "description": {
+          "no": "Bil har akseptert turen",
+          "en": "Car has accepted the trip"
+        },
+        "icon": "✅",
+        "canDelete": false,
+        "canGetReceipt": false,
+        "showLoyve": true
+      },
+      {
+        "code": "J",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Response",
+        "label": {
+          "no": "Nei-svar",
+          "en": "No Answer"
+        },
+        "description": {
+          "no": "Bil har avvist turen",
+          "en": "Car has rejected the trip"
+        },
+        "icon": "❌",
+        "canDelete": true,
+        "canGetReceipt": false
+      },
+      {
+        "code": "K",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Response",
+        "label": {
+          "no": "Timeout",
+          "en": "Timeout"
+        },
+        "description": {
+          "no": "Tidsavbrudd (ingen respons)",
+          "en": "Timeout (no response)"
+        },
+        "icon": "⏱️",
+        "canDelete": true,
+        "canGetReceipt": false
+      },
+      {
+        "code": "M",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Response",
+        "label": {
+          "no": "Ja-svar",
+          "en": "Yes Answer"
+        },
+        "description": {
+          "no": "Bil har akseptert turen",
+          "en": "Car has accepted the trip"
+        },
+        "icon": "✅",
+        "canDelete": false,
+        "canGetReceipt": false,
+        "showLoyve": true
+      },
+      {
+        "code": "o",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Response",
+        "label": {
+          "no": "Opptatt",
+          "en": "Busy"
+        },
+        "description": {
+          "no": "Bil er opptatt",
+          "en": "Car is busy"
+        },
+        "icon": "🔴",
+        "canDelete": true,
         "canGetReceipt": false
       }
     ],
     "completed": [
       {
-        "code": "CO",
-        "lastChar": "O",
+        "code": "l",
+        "sentralkode": "VS",
+        "vogn": 0,
         "category": "Completed",
         "label": {
-          "no": "Fullført",
-          "en": "Completed"
+          "no": "Levert",
+          "en": "Delivered"
         },
         "description": {
-          "no": "Turen er fullført",
-          "en": "Trip has been completed"
-        },
-        "icon": "✅",
-        "canDelete": false,
-        "canGetReceipt": true
-      },
-      {
-        "code": "FI",
-        "lastChar": "I",
-        "category": "Completed",
-        "label": {
-          "no": "Ferdig",
-          "en": "Finished"
-        },
-        "description": {
-          "no": "Turen er ferdig",
-          "en": "Trip is finished"
+          "no": "Passasjer er levert",
+          "en": "Passenger has been delivered"
         },
         "icon": "🏁",
         "canDelete": false,
         "canGetReceipt": true
+      },
+      {
+        "code": "n",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Completed",
+        "label": {
+          "no": "Noshow",
+          "en": "No Show"
+        },
+        "description": {
+          "no": "Passasjer møtte ikke opp",
+          "en": "Passenger did not show up"
+        },
+        "icon": "👻",
+        "canDelete": false,
+        "canGetReceipt": false
+      },
+      {
+        "code": "N",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Completed",
+        "label": {
+          "no": "Klar for fakturering",
+          "en": "Ready for Invoicing"
+        },
+        "description": {
+          "no": "Turen er ferdig og klar for fakturering",
+          "en": "Trip is completed and ready for invoicing"
+        },
+        "icon": "✅",
+        "canDelete": false,
+        "canGetReceipt": true
+      }
+    ],
+    "changed": [
+      {
+        "code": "U",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Changed",
+        "label": {
+          "no": "Endret",
+          "en": "Changed"
+        },
+        "description": {
+          "no": "Bestillinga er endret",
+          "en": "Booking has been changed"
+        },
+        "icon": "✏️",
+        "canDelete": true,
+        "canGetReceipt": false
+      },
+      {
+        "code": "V",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Changed",
+        "label": {
+          "no": "Manuelt endret",
+          "en": "Manually Changed"
+        },
+        "description": {
+          "no": "Bestillinga er endret manuelt",
+          "en": "Booking has been manually changed"
+        },
+        "icon": "✋✏️",
+        "canDelete": true,
+        "canGetReceipt": false
       }
     ]
   },
-  "lastCharMapping": {
-    "0": {
-      "type": "cancelled",
-      "label": { "no": "Avbestilt/Sletta", "en": "Cancelled/Deleted" },
-      "icon": "❌"
-    },
-    "A": {
-      "type": "cancelled",
-      "label": { "no": "Avbestilt", "en": "Cancelled" },
-      "icon": "❌"
-    },
-    "U": {
-      "type": "pending",
-      "label": { "no": "Ventar", "en": "Awaiting" },
-      "icon": "⏳",
-      "note": "Can be AU (Awaiting Taxi) or PU (Passenger On Board) - context dependent"
-    },
-    "P": {
-      "type": "pending",
-      "label": { "no": "Åpen", "en": "Open" },
-      "icon": "⏳"
-    },
-    "N": {
-      "type": "mixed",
-      "label": { "no": "Under behandling", "en": "Processing" },
-      "icon": "🔄",
-      "note": "Can be BUGIMN (Under Review), AUGIMN (Awaiting Processing), or EN (En Route) - context dependent"
-    },
-    "S": {
-      "type": "active",
-      "label": { "no": "Taxi tildelt", "en": "Taxi Assigned" },
-      "icon": "🚕"
-    },
-    "C": {
-      "type": "active",
-      "label": { "no": "Akseptert", "en": "Accepted" },
-      "icon": "✅"
-    },
-    "R": {
-      "type": "active",
-      "label": { "no": "Framme", "en": "Arrived" },
-      "icon": "📍"
-    },
-    "O": {
-      "type": "completed",
-      "label": { "no": "Fullført", "en": "Completed" },
-      "icon": "✅"
-    },
-    "I": {
-      "type": "completed",
-      "label": { "no": "Ferdig", "en": "Finished" },
-      "icon": "🏁"
-    }
+  "carStatusCodes": {
+    "availability": [
+      {
+        "code": "0",
+        "sentralkode": "VS",
+        "vogn": 1,
+        "category": "Availability",
+        "label": {
+          "no": "Logget ut",
+          "en": "Logged Out"
+        },
+        "description": {
+          "no": "Sjåfør er logget ut",
+          "en": "Driver is logged out"
+        },
+        "icon": "🚫",
+        "available": false
+      },
+      {
+        "code": "1",
+        "sentralkode": "VS",
+        "vogn": 1,
+        "category": "Availability",
+        "label": {
+          "no": "Ledig",
+          "en": "Available"
+        },
+        "description": {
+          "no": "Sjåfør er ledig",
+          "en": "Driver is available"
+        },
+        "icon": "🟢",
+        "available": true
+      },
+      {
+        "code": "11",
+        "sentralkode": "VS",
+        "vogn": 1,
+        "category": "Availability",
+        "label": {
+          "no": "Ledig korte",
+          "en": "Available Short Trips"
+        },
+        "description": {
+          "no": "Sjåfør er ledig for korte turer",
+          "en": "Driver is available for short trips"
+        },
+        "icon": "🟡",
+        "available": true
+      },
+      {
+        "code": "12",
+        "sentralkode": "VS",
+        "vogn": 1,
+        "category": "Availability",
+        "label": {
+          "no": "Ledig faste",
+          "en": "Available Fixed Trips"
+        },
+        "description": {
+          "no": "Sjåfør er ledig for faste turer",
+          "en": "Driver is available for fixed trips"
+        },
+        "icon": "🟡",
+        "available": true
+      },
+      {
+        "code": "13",
+        "sentralkode": "VS",
+        "vogn": 1,
+        "category": "Availability",
+        "label": {
+          "no": "Tur nei-svar",
+          "en": "Trip No Answer"
+        },
+        "description": {
+          "no": "Sjåfør har avvist tur",
+          "en": "Driver has rejected trip"
+        },
+        "icon": "❌",
+        "available": true
+      },
+      {
+        "code": "14",
+        "sentralkode": "VS",
+        "vogn": 1,
+        "category": "Availability",
+        "label": {
+          "no": "Tur ja-svar",
+          "en": "Trip Yes Answer"
+        },
+        "description": {
+          "no": "Sjåfør har akseptert tur",
+          "en": "Driver has accepted trip"
+        },
+        "icon": "✅",
+        "available": false
+      }
+    ]
   },
   "metadata": {
-    "description": "Comprehensive mapping of all Taxi4U booking status codes for Voss Taxi",
-    "version": "1.0",
+    "description": "Comprehensive mapping of all Taxi4U status codes for Voss Taxi",
+    "version": "2.0",
     "lastUpdated": "2026-03-13",
     "notes": [
-      "Some last characters (U, N) map to multiple codes with different meanings",
-      "Full status code should always be used for precise status determination",
-      "Last character can be used for quick category identification",
-      "Receipt can only be obtained for completed trips (CO, FI)"
+      "Status codes are SEQUENCES where each letter represents a status change",
+      "The LAST character in a sequence represents the CURRENT status",
+      "Example: 'BUGIMN' means the booking went through: B→U→G→I→M→N, current status is N",
+      "vogn=0 indicates booking status codes, vogn=1 indicates car status codes",
+      "Receipt can only be obtained for completed trips (l, N)",
+      "M and I statuses should display which løyve (license/car) accepted the trip"
     ]
   }
 }

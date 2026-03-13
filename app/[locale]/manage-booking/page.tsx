@@ -127,17 +127,10 @@ function ManageBookingContent({ locale }: { locale: string }) {
     }
   };
 
-  const canDelete = booking && (
-    booking.tripStatus === 'AU' ||
-    booking.vehicleNo === 0 ||
-    !booking.licenseNo ||
-    booking.licenseNo === ''
-  );
-
-  const canGetReceipt = booking && (
-    booking.tripStatus === 'CO' ||
-    booking.tripStatus === 'FI'
-  );
+  // Get status info and check capabilities based on current status
+  const statusInfo = booking ? getStatusInfo(booking.tripStatus) : null;
+  const canDelete = booking && statusInfo ? statusInfo.canDelete : false;
+  const canGetReceipt = booking && statusInfo ? statusInfo.canGetReceipt === true : false;
 
   const handleDownloadReceipt = async () => {
     if (!bookRef) return;
@@ -334,19 +327,20 @@ function ManageBookingContent({ locale }: { locale: string }) {
                     <span className="font-medium">{locale === 'no' ? 'Status:' : 'Status:'}</span>
                     <div className="text-right">
                       {(() => {
-                        const statusInfo = getStatusInfo(booking.tripStatus);
+                        const currentStatusInfo = getStatusInfo(booking.tripStatus);
                         return (
                           <div>
                             <div className="flex items-center justify-end gap-1">
-                              <span>{statusInfo.icon}</span>
-                              <span className="font-semibold">{statusInfo.label[locale === 'no' ? 'no' : 'en']}</span>
+                              <span>{currentStatusInfo.icon}</span>
+                              <span className="font-semibold">{currentStatusInfo.label[locale === 'no' ? 'no' : 'en']}</span>
                             </div>
                             <div className="text-xs text-gray-500 mt-0.5">
-                              {statusInfo.description[locale === 'no' ? 'no' : 'en']}
+                              {currentStatusInfo.description[locale === 'no' ? 'no' : 'en']}
                             </div>
-                            {booking.vehicleNo && booking.vehicleNo > 0 && (
-                              <div className="text-xs text-gray-600 mt-1">
-                                {locale === 'no' ? 'Taxi:' : 'Taxi:'} {booking.licenseNo}
+                            {/* Show løyve (license) for M/I statuses (accepted by car) */}
+                            {currentStatusInfo.showLoyve && booking.licenseNo && (
+                              <div className="text-xs font-semibold text-taxi-yellow mt-1">
+                                {locale === 'no' ? '🚕 Løyve:' : '🚕 Taxi:'} {booking.licenseNo}
                               </div>
                             )}
                           </div>
