@@ -151,10 +151,10 @@ export function BookingForm({ locale }: BookingFormProps) {
 
     try {
       // Calculate attributes based on passenger count
-      // Only 2-4 passengers have attribute IDs in the system
+      // Attributes: 2 PERSONER, 3 PERSONER, 4 PERSONER, 6 SETER, 7 SETER, 8 SETER
       const attributes: number[] = [];
-      if (passengerCount >= 2 && passengerCount <= 4) {
-        attributes.push(passengerCount); // 2 PERSONER, 3 PERSONER, 4 PERSONER
+      if (passengerCount >= 2 && passengerCount <= 8) {
+        attributes.push(passengerCount);
       }
 
       const response = await fetch('/api/pricequote', {
@@ -204,11 +204,10 @@ export function BookingForm({ locale }: BookingFormProps) {
 
     try {
       // Calculate attributes based on passenger count
-      // Only 2-4 passengers have attribute IDs in the system
-      // For 5+ passengers, the carGroupId (2 or 3) determines vehicle type
+      // Attributes: 2 PERSONER, 3 PERSONER, 4 PERSONER, 6 SETER, 7 SETER, 8 SETER
       const attributes: number[] = [];
-      if (passengerCount >= 2 && passengerCount <= 4) {
-        attributes.push(passengerCount); // 2 PERSONER, 3 PERSONER, 4 PERSONER
+      if (passengerCount >= 2 && passengerCount <= 8) {
+        attributes.push(passengerCount);
       }
 
       // Prepare booking data for API
