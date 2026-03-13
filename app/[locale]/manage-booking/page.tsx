@@ -43,12 +43,21 @@ function ManageBookingContent({ locale }: { locale: string }) {
   const [emailingReceipt, setEmailingReceipt] = useState(false);
   const [receiptEmail, setReceiptEmail] = useState('');
 
-  // Auto-search if ref is in URL
+  // Auto-search if ref and phone are in URL
   useEffect(() => {
     const ref = searchParams.get('ref');
+    const phone = searchParams.get('phone');
+
     if (ref) {
       setBookRef(ref.toUpperCase());
-      // Trigger search after setting ref
+    }
+
+    if (phone) {
+      setPhoneNumber(phone);
+    }
+
+    // Auto-trigger search if both params are present
+    if (ref && phone) {
       setTimeout(() => {
         const searchButton = document.querySelector('[data-search-button]') as HTMLButtonElement;
         searchButton?.click();
