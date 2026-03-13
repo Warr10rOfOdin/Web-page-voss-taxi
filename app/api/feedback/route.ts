@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: `Voss Taxi Feedback <${process.env.RESEND_FROM_EMAIL || 'feedback@vosstaxi.no'}>`,
+          from: `Voss Taxi Feedback <${process.env.RESEND_FROM_EMAIL || 'noreply@vosstaxi.no'}>`,
           to: [feedbackEmail],
           reply_to: email,
           subject: emailSubject,

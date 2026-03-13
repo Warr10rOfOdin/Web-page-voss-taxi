@@ -95,7 +95,7 @@ www.vosstaxi.no
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: process.env.RESEND_FROM_EMAIL || 'Voss Taxi <booking@vosstaxi.no>',
+          from: process.env.RESEND_FROM_EMAIL || 'Voss Taxi <noreply@vosstaxi.no>',
           to: [emailTo],
           subject: emailSubject,
           text: emailBody,
