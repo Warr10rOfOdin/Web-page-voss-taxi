@@ -33,8 +33,10 @@ export async function DELETE(request: NextRequest) {
     // Check if booking can be deleted
     // tripStatus "AU" = Auto/Unassigned, can be deleted
     // If a taxi is assigned or trip is in progress, don't allow deletion
-    const canDelete = bookingData.tripStatus === 'AU' || 
+    const canDelete = bookingData.tripStatus === 'AU' ||
                      bookingData.tripStatus === 'OP' || // Open/Pending
+                     bookingData.tripStatus === 'BUGIMN' || // Under review
+                     bookingData.tripStatus === 'AUGIMN' || // Awaiting processing
                      bookingData.vehicleNo === 0 ||      // No vehicle assigned
                      !bookingData.licenseNo;             // No license assigned
 

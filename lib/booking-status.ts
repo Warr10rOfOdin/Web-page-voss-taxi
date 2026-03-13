@@ -66,6 +66,14 @@ export const STATUS_CODES: Record<string, StatusInfo> = {
     canDelete: true,
     icon: '🔄'
   },
+  'AUGIMN': {
+    code: 'AUGIMN',
+    label: { no: 'Ventar på behandling', en: 'Awaiting Processing' },
+    description: { no: 'Bestillinga ventar på å bli behandla av systemet', en: 'Booking is awaiting system processing' },
+    type: 'pending',
+    canDelete: true,
+    icon: '⏳'
+  },
 
   // Assigned/Active statuses
   'AS': {
