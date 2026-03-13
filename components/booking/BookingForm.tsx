@@ -152,12 +152,8 @@ export function BookingForm({ locale }: BookingFormProps) {
     try {
       // Calculate attributes based on passenger count
       const attributes: number[] = [];
-      if (passengerCount === 2) {
-        attributes.push(2); // 2 PERSONER attribute ID
-      } else if (passengerCount === 3) {
-        attributes.push(3); // 3 PERSONER attribute ID
-      } else if (passengerCount === 4) {
-        attributes.push(4); // 4 PERSONER attribute ID
+      if (passengerCount >= 2 && passengerCount <= 8) {
+        attributes.push(passengerCount); // Passenger count attribute IDs: 2-8
       }
 
       const response = await fetch('/api/pricequote', {
@@ -207,18 +203,11 @@ export function BookingForm({ locale }: BookingFormProps) {
 
     try {
       // Calculate attributes based on passenger count
-      // NOTE: Attributes are only used for 2-4 passengers (standard taxi)
-      // For 5+ passengers, the carGroupId alone determines the vehicle type
+      // Passenger count is sent as attribute for all counts (2-8 passengers)
       const attributes: number[] = [];
-      if (passengerCount === 2) {
-        attributes.push(2); // 2 PERSONER attribute ID
-      } else if (passengerCount === 3) {
-        attributes.push(3); // 3 PERSONER attribute ID
-      } else if (passengerCount === 4) {
-        attributes.push(4); // 4 PERSONER attribute ID
+      if (passengerCount >= 2 && passengerCount <= 8) {
+        attributes.push(passengerCount); // Passenger count attribute IDs: 2-8
       }
-      // For 5+ passengers: carGroupId 2 (large taxi) or 3 (minibus) is sufficient
-      // No passenger count attributes needed for larger vehicles
 
       // Prepare booking data for API
       // Calculate pickup time - round to nearest 5 minutes
@@ -233,23 +222,9 @@ export function BookingForm({ locale }: BookingFormProps) {
 
       const finalPickupTime = calculatePickupTime();
 
-      // Build message to car - include passenger count for dispatcher visibility
-      let finalMessageToCar = messageToCar || '';
-
-      // For larger groups (5+ passengers), explicitly state passenger count
-      // since attributes don't apply to these vehicle types
-      if (passengerCount >= 5) {
-        const passengerInfo = locale === 'no'
-          ? `${passengerCount} passasjerar`
-          : `${passengerCount} passengers`;
-        finalMessageToCar = finalMessageToCar
-          ? `${passengerInfo}. ${finalMessageToCar}`
-          : passengerInfo;
-      }
-
       const bookingData = {
         orderedBy: 'Website',
-        messageToCar: finalMessageToCar || undefined,
+        messageToCar: messageToCar || undefined,
         pickupTime: finalPickupTime,
         carGroupId: carGroupId,
         numberOfCars: 1,
@@ -458,14 +433,14 @@ export function BookingForm({ locale }: BookingFormProps) {
   }
 
   return (
-    <div className="glass-dark backdrop-blur-xl rounded-3xl overflow-hidden depth-4">
-      <div className="p-8 md:p-12">
-        <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-2">
+    <div className="glass-dark backdrop-blur-xl rounded-2xl md:rounded-3xl overflow-hidden depth-4">
+      <div className="p-4 sm:p-6 md:p-12">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-white mb-2">
           {t('title')}
         </h2>
-        <div className="h-1 w-24 bg-gradient-to-r from-taxi-yellow to-transparent mb-8 rounded-full" />
+        <div className="h-1 w-20 sm:w-24 bg-gradient-to-r from-taxi-yellow to-transparent mb-6 sm:mb-8 rounded-full" />
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {/* Contact Info */}
           <div className="grid md:grid-cols-2 gap-4">
             <div>
@@ -477,7 +452,7 @@ export function BookingForm({ locale }: BookingFormProps) {
                 value={clientName}
                 onChange={(e) => setClientName(e.target.value)}
                 required
-                className="w-full px-4 py-3 glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
+                className="w-full px-4 py-4 text-base glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
               />
             </div>
             <div>
@@ -489,7 +464,7 @@ export function BookingForm({ locale }: BookingFormProps) {
                 value={tel}
                 onChange={(e) => setTel(e.target.value)}
                 required
-                className="w-full px-4 py-3 glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
+                className="w-full px-4 py-4 text-base glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
                 placeholder="+47 123 45 678"
               />
             </div>
@@ -504,7 +479,7 @@ export function BookingForm({ locale }: BookingFormProps) {
               value={passengerCount}
               onChange={(e) => setPassengerCount(Number(e.target.value))}
               required
-              className="w-full px-4 py-3 glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
+              className="w-full px-4 py-4 text-base glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
             >
               <option value={1}>1 {locale === 'no' ? 'passasjer' : 'passenger'}</option>
               <option value={2}>2 {locale === 'no' ? 'passasjerer' : 'passengers'}</option>
@@ -518,19 +493,20 @@ export function BookingForm({ locale }: BookingFormProps) {
           </div>
 
           {/* Pickup Location */}
-          <div className="glass-strong backdrop-blur-md rounded-2xl p-6 border border-white/10 space-y-5 mt-6">
-            <div className="flex items-center justify-between mb-1">
-              <h3 className="text-xl font-bold text-taxi-yellow flex items-center">
+          <div className="glass-strong backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-white/10 space-y-4 sm:space-y-5 mt-4 sm:mt-6">
+            <div className="flex items-center justify-between gap-2 mb-1">
+              <h3 className="text-lg sm:text-xl font-bold text-taxi-yellow flex items-center flex-shrink-0">
                 <svg className="w-5 h-5 text-taxi-yellow mr-2" fill="currentColor" viewBox="0 0 20 20">
                   <circle cx="10" cy="10" r="8" />
                 </svg>
-                {t('pickupLocation')}
+                <span className="hidden sm:inline">{t('pickupLocation')}</span>
+                <span className="sm:hidden">{locale === 'no' ? 'Henting' : 'Pickup'}</span>
               </h3>
               <button
                 type="button"
                 onClick={getMyLocation}
                 disabled={loadingLocation}
-                className="text-xs font-semibold text-taxi-yellow hover:text-white transition-colors flex items-center gap-1 disabled:opacity-50 glass-yellow px-3 py-2 rounded-full hover-scale smooth-transition"
+                className="text-xs sm:text-sm font-semibold text-taxi-black hover:text-taxi-black/80 transition-colors flex items-center gap-1 disabled:opacity-50 glass-yellow px-4 py-3 rounded-full hover-scale smooth-transition whitespace-nowrap"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -571,7 +547,7 @@ export function BookingForm({ locale }: BookingFormProps) {
                   value={fromCity}
                   onChange={(e) => setFromCity(e.target.value)}
                   required
-                  className="w-full px-4 py-3 glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
+                  className="w-full px-4 py-4 text-base glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
                 />
               </div>
               <div>
@@ -583,16 +559,16 @@ export function BookingForm({ locale }: BookingFormProps) {
                   value={fromPostalCode}
                   onChange={(e) => setFromPostalCode(e.target.value)}
                   required
-                  className="w-full px-4 py-3 glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
+                  className="w-full px-4 py-4 text-base glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
                 />
               </div>
             </div>
           </div>
 
           {/* Destination */}
-          <div className="glass-strong backdrop-blur-md rounded-2xl p-6 border border-white/10 space-y-5 mt-4">
-            <h3 className="text-xl font-bold text-taxi-yellow flex items-center mb-1">
-              <svg className="w-6 h-6 text-taxi-yellow mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="glass-strong backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-white/10 space-y-4 sm:space-y-5 mt-4">
+            <h3 className="text-lg sm:text-xl font-bold text-taxi-yellow flex items-center mb-1">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-taxi-yellow mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
@@ -629,7 +605,7 @@ export function BookingForm({ locale }: BookingFormProps) {
                   type="text"
                   value={toCity}
                   onChange={(e) => setToCity(e.target.value)}
-                  className="w-full px-4 py-3 glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
+                  className="w-full px-4 py-4 text-base glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
                 />
               </div>
               <div>
@@ -640,7 +616,7 @@ export function BookingForm({ locale }: BookingFormProps) {
                   type="text"
                   value={toPostalCode}
                   onChange={(e) => setToPostalCode(e.target.value)}
-                  className="w-full px-4 py-3 glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
+                  className="w-full px-4 py-4 text-base glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
                 />
               </div>
             </div>
@@ -730,7 +706,7 @@ export function BookingForm({ locale }: BookingFormProps) {
               }}
               min={getMinDateTime()}
               step="300"
-              className="w-full px-4 py-3 glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
+              className="w-full px-4 py-4 text-base glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
             />
             <p className="text-xs text-taxi-light-grey/60 mt-2">{t('pickupTimeNote')}</p>
 
@@ -786,7 +762,7 @@ export function BookingForm({ locale }: BookingFormProps) {
               value={messageToCar}
               onChange={(e) => setMessageToCar(e.target.value)}
               rows={3}
-              className="w-full px-4 py-3 glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
+              className="w-full px-4 py-4 text-base glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition resize-none"
               placeholder={t('messagePlaceholder')}
             />
           </div>
