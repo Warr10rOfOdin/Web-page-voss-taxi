@@ -97,9 +97,9 @@ export async function GET(request: NextRequest) {
       paymentMethod: receiptApiData.paymentMethod || (locale === 'no' ? 'Kontant/Kort' : 'Cash/Card'),
     };
 
-    // Generate PDF
-    const pdfElement = React.createElement(ReceiptPDF, { data: receiptData, locale });
-    const pdfBuffer = await ReactPDF.renderToBuffer(pdfElement);
+    // Generate PDF - call component as function to get Document element
+    const document = ReceiptPDF({ data: receiptData, locale });
+    const pdfBuffer = await ReactPDF.renderToBuffer(document);
 
     // Return PDF
     return new NextResponse(pdfBuffer, {
