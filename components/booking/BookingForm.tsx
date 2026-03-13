@@ -151,19 +151,22 @@ export function BookingForm({ locale }: BookingFormProps) {
 
     try {
       // Calculate attributes based on passenger count
-      // 2-4: 2 PERSONER, 3 PERSONER, 4 PERSONER
-      // 5-6: 6 SETER (5 passengers use 6-seater vehicle)
-      // 7: 7 SETER
-      // 8: 8 SETER
+      // Attribute codes from Taxi4U API:
+      // 83=2 PERSONER, 84=3 PERSONER, 85=4 PERSONER
+      // 0=6 SETER, 1=7 SETER, 89=8 SETER
       const attributes: number[] = [];
-      if (passengerCount >= 2 && passengerCount <= 4) {
-        attributes.push(passengerCount);
+      if (passengerCount === 2) {
+        attributes.push(83); // 2 PERSONER
+      } else if (passengerCount === 3) {
+        attributes.push(84); // 3 PERSONER
+      } else if (passengerCount === 4) {
+        attributes.push(85); // 4 PERSONER
       } else if (passengerCount === 5 || passengerCount === 6) {
-        attributes.push(6); // 6 SETER for both 5 and 6 passengers
+        attributes.push(0); // 6 SETER
       } else if (passengerCount === 7) {
-        attributes.push(7); // 7 SETER
+        attributes.push(1); // 7 SETER
       } else if (passengerCount === 8) {
-        attributes.push(8); // 8 SETER
+        attributes.push(89); // 8 SETER
       }
 
       const response = await fetch('/api/pricequote', {
@@ -213,19 +216,22 @@ export function BookingForm({ locale }: BookingFormProps) {
 
     try {
       // Calculate attributes based on passenger count
-      // 2-4: 2 PERSONER, 3 PERSONER, 4 PERSONER
-      // 5-6: 6 SETER (5 passengers use 6-seater vehicle)
-      // 7: 7 SETER
-      // 8: 8 SETER
+      // Attribute codes from Taxi4U API:
+      // 83=2 PERSONER, 84=3 PERSONER, 85=4 PERSONER
+      // 0=6 SETER, 1=7 SETER, 89=8 SETER
       const attributes: number[] = [];
-      if (passengerCount >= 2 && passengerCount <= 4) {
-        attributes.push(passengerCount);
+      if (passengerCount === 2) {
+        attributes.push(83); // 2 PERSONER
+      } else if (passengerCount === 3) {
+        attributes.push(84); // 3 PERSONER
+      } else if (passengerCount === 4) {
+        attributes.push(85); // 4 PERSONER
       } else if (passengerCount === 5 || passengerCount === 6) {
-        attributes.push(6); // 6 SETER for both 5 and 6 passengers
+        attributes.push(0); // 6 SETER
       } else if (passengerCount === 7) {
-        attributes.push(7); // 7 SETER
+        attributes.push(1); // 7 SETER
       } else if (passengerCount === 8) {
-        attributes.push(8); // 8 SETER
+        attributes.push(89); // 8 SETER
       }
 
       // Prepare booking data for API
