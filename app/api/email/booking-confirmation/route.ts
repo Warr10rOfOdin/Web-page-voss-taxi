@@ -4,12 +4,12 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const {
-      to: emailTo,
+      emailTo,
       bookRef,
       customerName,
       pickupTime,
       from,
-      to: destination,
+      destination,
       passengerCount,
       locale
     } = body;
