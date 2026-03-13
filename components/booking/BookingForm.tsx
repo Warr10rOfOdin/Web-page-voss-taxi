@@ -18,6 +18,7 @@ export function BookingForm({ locale }: BookingFormProps) {
   // Basic booking info
   const [clientName, setClientName] = useState('');
   const [tel, setTel] = useState('');
+  const [email, setEmail] = useState('');
   const [fromStreet, setFromStreet] = useState('');
   const [fromCity, setFromCity] = useState('Voss');
   const [fromPostalCode, setFromPostalCode] = useState('5700');
@@ -319,6 +320,35 @@ export function BookingForm({ locale }: BookingFormProps) {
       } catch (smsError) {
         console.error('SMS send failed:', smsError);
       }
+
+      // Send email confirmation (non-blocking) if email was provided
+      if (email) {
+        try {
+          const pickupTimeFormatted = pickupTime
+            ? new Date(pickupTime).toLocaleString(locale === 'no' ? 'no-NO' : 'en-US', {
+                dateStyle: 'medium',
+                timeStyle: 'short'
+              })
+            : (locale === 'no' ? 'Snarast mogleg' : 'As soon as possible');
+
+          await fetch('/api/email/booking-confirmation', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              to: email,
+              bookRef: data.bookRef,
+              customerName: clientName,
+              pickupTime: pickupTimeFormatted,
+              from: `${fromStreet}, ${fromCity}`,
+              to: toStreet ? `${toStreet}, ${toCity}` : undefined,
+              passengerCount,
+              locale,
+            }),
+          });
+        } catch (emailError) {
+          console.error('Email send failed:', emailError);
+        }
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -329,6 +359,7 @@ export function BookingForm({ locale }: BookingFormProps) {
   const resetForm = () => {
     setClientName('');
     setTel('');
+    setEmail('');
     setFromStreet('');
     setFromCity('Voss');
     setFromPostalCode('5700');
@@ -490,6 +521,26 @@ export function BookingForm({ locale }: BookingFormProps) {
                 placeholder="+47 123 45 678"
               />
             </div>
+          </div>
+
+          {/* Email (Optional) */}
+          <div>
+            <label className="block text-sm font-semibold mb-3 text-white">
+              {t('email')}
+              <span className="ml-2 text-xs text-white/70 font-normal bg-white/20 px-2 py-1 rounded-full">
+                {locale === 'no' ? 'valfritt' : 'optional'}
+              </span>
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-5 py-4 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black placeholder-gray-400 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm"
+              placeholder="din@epost.no"
+            />
+            <p className="text-xs text-white/70 mt-2">
+              {t('emailNote')}
+            </p>
           </div>
 
           {/* Passenger Count */}

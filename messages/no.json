@@ -177,6 +177,8 @@
     "postalCode": "Postnummer",
     "name": "Fullt namn",
     "phone": "Telefonnummer",
+    "email": "E-post",
+    "emailNote": "Oppgi e-postadressa di for å få stadfesting på e-post",
     "pickupTime": "Hentetid (Valfritt)",
     "pickupTimeNote": "La stå tom for umiddelbar henting (så snart som mogleg)",
     "messageOptional": "Melding til sjåfør (Valfritt)",

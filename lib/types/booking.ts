@@ -10,6 +10,7 @@ export interface Passenger {
   seqNo: number;
   clientName: string;
   tel: string;
+  email?: string;
   fromStreet: string;
   fromCity: string;
   fromPostalCode: string;
@@ -38,6 +39,7 @@ export interface GeneralBookingRequest {
 export interface SimpleBookingRequest {
   customerName: string;
   tel: string;
+  email?: string;
   fromStreet: string;
   fromCity: string;
   fromPostalCode: string;

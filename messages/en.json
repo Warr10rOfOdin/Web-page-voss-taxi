@@ -177,6 +177,8 @@
     "postalCode": "Postal Code",
     "name": "Full Name",
     "phone": "Phone Number",
+    "email": "Email",
+    "emailNote": "Provide your email to receive a booking confirmation",
     "pickupTime": "Pickup Time (Optional)",
     "pickupTimeNote": "Leave empty for immediate pickup (ASAP)",
     "messageOptional": "Message to Driver (Optional)",
