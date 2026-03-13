@@ -37,6 +37,9 @@ function ManageBookingContent({ locale }: { locale: string }) {
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [downloadingReceipt, setDownloadingReceipt] = useState(false);
+  const [emailingReceipt, setEmailingReceipt] = useState(false);
+  const [receiptEmail, setReceiptEmail] = useState('');
 
   // Auto-search if ref is in URL
   useEffect(() => {
@@ -112,11 +115,121 @@ function ManageBookingContent({ locale }: { locale: string }) {
   };
 
   const canDelete = booking && (
-    booking.tripStatus === 'AU' || 
-    booking.vehicleNo === 0 || 
+    booking.tripStatus === 'AU' ||
+    booking.vehicleNo === 0 ||
     !booking.licenseNo ||
     booking.licenseNo === ''
   );
+
+  const canGetReceipt = booking && (
+    booking.tripStatus === 'CO' ||
+    booking.tripStatus === 'FI'
+  );
+
+  const handleDownloadReceipt = async () => {
+    if (!bookRef) return;
+
+    setDownloadingReceipt(true);
+    setError(null);
+
+    try {
+      const response = await fetch(
+        `/api/booking/receipt/pdf?bookRef=${encodeURIComponent(bookRef)}&locale=${locale}`
+      );
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to download receipt');
+      }
+
+      // Download the PDF
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `voss-taxi-receipt-${bookRef}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+      setSuccess(locale === 'no' ? 'Kvittering lasta ned!' : 'Receipt downloaded!');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to download receipt');
+    } finally {
+      setDownloadingReceipt(false);
+    }
+  };
+
+  const handlePrintReceipt = async () => {
+    if (!bookRef) return;
+
+    try {
+      const response = await fetch(
+        `/api/booking/receipt/pdf?bookRef=${encodeURIComponent(bookRef)}&locale=${locale}`
+      );
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to load receipt');
+      }
+
+      // Open PDF in new window for printing
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const printWindow = window.open(url, '_blank');
+
+      if (printWindow) {
+        printWindow.onload = () => {
+          printWindow.print();
+        };
+      }
+
+      // Clean up after a delay
+      setTimeout(() => {
+        window.URL.revokeObjectURL(url);
+      }, 1000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to print receipt');
+    }
+  };
+
+  const handleEmailReceipt = async () => {
+    if (!bookRef || !receiptEmail) {
+      setError(locale === 'no' ? 'Skriv inn e-postadresse' : 'Please enter email address');
+      return;
+    }
+
+    setEmailingReceipt(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/booking/receipt/email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          bookRef,
+          email: receiptEmail,
+          locale,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Failed to send receipt');
+      }
+
+      setSuccess(data.message);
+      setReceiptEmail('');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to send receipt');
+    } finally {
+      setEmailingReceipt(false);
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-3xl">
@@ -244,22 +357,79 @@ function ManageBookingContent({ locale }: { locale: string }) {
                 </div>
               </div>
 
+              {/* Receipt Section - Only for completed trips */}
+              {canGetReceipt && (
+                <div className="space-y-4 border-t pt-6">
+                  <h4 className="font-bold text-lg">
+                    {locale === 'no' ? '📄 Kvittering' : '📄 Receipt'}
+                  </h4>
+
+                  {/* Download and Print Buttons */}
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      onClick={handleDownloadReceipt}
+                      disabled={downloadingReceipt}
+                      className="bg-taxi-yellow hover:bg-taxi-yellow/90 text-taxi-black"
+                    >
+                      {downloadingReceipt
+                        ? (locale === 'no' ? 'Lastar...' : 'Loading...')
+                        : (locale === 'no' ? '⬇️ Last ned PDF' : '⬇️ Download PDF')}
+                    </Button>
+                    <Button
+                      onClick={handlePrintReceipt}
+                      className="bg-taxi-black hover:bg-taxi-black/90 text-white"
+                    >
+                      {locale === 'no' ? '🖨️ Skriv ut' : '🖨️ Print'}
+                    </Button>
+                  </div>
+
+                  {/* Email Receipt Section */}
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium">
+                      {locale === 'no' ? 'Send kvittering på e-post' : 'Email Receipt'}
+                    </label>
+                    <div className="flex gap-2">
+                      <input
+                        type="email"
+                        value={receiptEmail}
+                        onChange={(e) => setReceiptEmail(e.target.value)}
+                        placeholder={locale === 'no' ? 'din@epost.no' : 'your@email.com'}
+                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+                      />
+                      <Button
+                        onClick={handleEmailReceipt}
+                        disabled={emailingReceipt || !receiptEmail}
+                        className="bg-green-600 hover:bg-green-700 text-white"
+                      >
+                        {emailingReceipt
+                          ? (locale === 'no' ? 'Sender...' : 'Sending...')
+                          : (locale === 'no' ? '📧 Send' : '📧 Send')}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Delete Button */}
-              {canDelete ? (
-                <Button
-                  onClick={handleDelete}
-                  disabled={deleting}
-                  className="w-full bg-red-600 hover:bg-red-700 text-white"
-                >
-                  {deleting
-                    ? (locale === 'no' ? 'Slettar...' : 'Deleting...')
-                    : (locale === 'no' ? 'Slett booking' : 'Delete Booking')}
-                </Button>
-              ) : (
+              {canDelete && (
+                <div className="border-t pt-6">
+                  <Button
+                    onClick={handleDelete}
+                    disabled={deleting}
+                    className="w-full bg-red-600 hover:bg-red-700 text-white"
+                  >
+                    {deleting
+                      ? (locale === 'no' ? 'Slettar...' : 'Deleting...')
+                      : (locale === 'no' ? 'Slett booking' : 'Delete Booking')}
+                  </Button>
+                </div>
+              )}
+
+              {!canDelete && !canGetReceipt && (
                 <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-yellow-800">
-                  {locale === 'no' 
-                    ? 'Kan ikkje slette - taxi har akseptert turen. Kontakt oss på telefon.' 
-                    : 'Cannot delete - taxi has accepted the trip. Please contact us by phone.'}
+                  {locale === 'no'
+                    ? 'Taxi har akseptert turen. Kontakt oss på telefon om du vil gjere endringar.'
+                    : 'Taxi has accepted the trip. Please contact us by phone for changes.'}
                 </div>
               )}
             </div>
