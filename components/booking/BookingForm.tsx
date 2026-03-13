@@ -455,18 +455,18 @@ export function BookingForm({ locale }: BookingFormProps) {
   }
 
   return (
-    <div className="glass-dark backdrop-blur-xl rounded-2xl md:rounded-3xl overflow-hidden depth-4">
-      <div className="p-4 sm:p-6 md:p-12">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-white mb-2">
+    <div className="bg-white/5 backdrop-blur-xl rounded-2xl md:rounded-3xl overflow-hidden depth-4 border-2 border-white/10 shadow-2xl">
+      <div className="p-6 sm:p-8 md:p-12">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-4">
           {t('title')}
         </h2>
-        <div className="h-1 w-20 sm:w-24 bg-gradient-to-r from-taxi-yellow to-transparent mb-6 sm:mb-8 rounded-full" />
+        <div className="h-1.5 w-24 sm:w-32 bg-gradient-to-r from-taxi-yellow via-taxi-yellow to-transparent mb-8 sm:mb-10 rounded-full shadow-lg" />
 
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {/* Contact Info */}
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-semibold mb-2 text-white">
+              <label className="block text-sm font-semibold mb-3 text-white">
                 {t('name')} *
               </label>
               <input
@@ -474,11 +474,11 @@ export function BookingForm({ locale }: BookingFormProps) {
                 value={clientName}
                 onChange={(e) => setClientName(e.target.value)}
                 required
-                className="w-full px-4 py-4 text-base glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
+                className="w-full px-5 py-4 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black placeholder-gray-400 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm"
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold mb-2 text-white">
+              <label className="block text-sm font-semibold mb-3 text-white">
                 {t('phone')} *
               </label>
               <input
@@ -486,7 +486,7 @@ export function BookingForm({ locale }: BookingFormProps) {
                 value={tel}
                 onChange={(e) => setTel(e.target.value)}
                 required
-                className="w-full px-4 py-4 text-base glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
+                className="w-full px-5 py-4 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black placeholder-gray-400 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm"
                 placeholder="+47 123 45 678"
               />
             </div>
@@ -494,14 +494,14 @@ export function BookingForm({ locale }: BookingFormProps) {
 
           {/* Passenger Count */}
           <div>
-            <label className="block text-sm font-semibold mb-2 text-white">
+            <label className="block text-sm font-semibold mb-3 text-white">
               {locale === 'no' ? 'Antall passasjerer *' : 'Number of Passengers *'}
             </label>
             <select
               value={passengerCount}
               onChange={(e) => setPassengerCount(Number(e.target.value))}
               required
-              className="w-full px-4 py-4 text-base glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
+              className="w-full px-5 py-4 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm cursor-pointer"
             >
               <option value={1}>1 {locale === 'no' ? 'passasjer' : 'passenger'}</option>
               <option value={2}>2 {locale === 'no' ? 'passasjerer' : 'passengers'}</option>
@@ -515,10 +515,10 @@ export function BookingForm({ locale }: BookingFormProps) {
           </div>
 
           {/* Pickup Location */}
-          <div className="glass-strong backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-white/10 space-y-4 sm:space-y-5 mt-4 sm:mt-6">
-            <div className="flex items-center justify-between gap-2 mb-1">
-              <h3 className="text-lg sm:text-xl font-bold text-taxi-yellow flex items-center flex-shrink-0">
-                <svg className="w-5 h-5 text-taxi-yellow mr-2" fill="currentColor" viewBox="0 0 20 20">
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 sm:p-8 border-2 border-taxi-yellow/30 space-y-5 mt-8">
+            <div className="flex items-center justify-between gap-3 mb-2">
+              <h3 className="text-xl sm:text-2xl font-bold text-taxi-yellow flex items-center flex-shrink-0">
+                <svg className="w-6 h-6 text-taxi-yellow mr-3" fill="currentColor" viewBox="0 0 20 20">
                   <circle cx="10" cy="10" r="8" />
                 </svg>
                 <span className="hidden sm:inline">{t('pickupLocation')}</span>
@@ -528,7 +528,7 @@ export function BookingForm({ locale }: BookingFormProps) {
                 type="button"
                 onClick={getMyLocation}
                 disabled={loadingLocation}
-                className="text-xs sm:text-sm font-semibold text-taxi-black hover:text-taxi-black/80 transition-colors flex items-center gap-1 disabled:opacity-50 glass-yellow px-4 py-3 rounded-full hover-scale smooth-transition whitespace-nowrap"
+                className="text-xs sm:text-sm font-bold text-taxi-black hover:text-taxi-black/80 transition-colors flex items-center gap-2 disabled:opacity-50 bg-taxi-yellow px-4 py-3 rounded-full hover-scale smooth-transition whitespace-nowrap shadow-lg"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -561,7 +561,7 @@ export function BookingForm({ locale }: BookingFormProps) {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-semibold mb-2 text-white">
+                <label className="block text-sm font-semibold mb-3 text-white">
                   {t('city')} *
                 </label>
                 <input
@@ -569,11 +569,11 @@ export function BookingForm({ locale }: BookingFormProps) {
                   value={fromCity}
                   onChange={(e) => setFromCity(e.target.value)}
                   required
-                  className="w-full px-4 py-4 text-base glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
+                  className="w-full px-5 py-4 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black placeholder-gray-400 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold mb-2 text-white">
+                <label className="block text-sm font-semibold mb-3 text-white">
                   {t('postalCode')} *
                 </label>
                 <input
@@ -581,22 +581,22 @@ export function BookingForm({ locale }: BookingFormProps) {
                   value={fromPostalCode}
                   onChange={(e) => setFromPostalCode(e.target.value)}
                   required
-                  className="w-full px-4 py-4 text-base glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
+                  className="w-full px-5 py-4 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black placeholder-gray-400 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm"
                 />
               </div>
             </div>
           </div>
 
           {/* Destination */}
-          <div className="glass-strong backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-white/10 space-y-4 sm:space-y-5 mt-4">
-            <h3 className="text-lg sm:text-xl font-bold text-taxi-yellow flex items-center mb-1">
-              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-taxi-yellow mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 sm:p-8 border-2 border-white/20 space-y-5 mt-6">
+            <h3 className="text-xl sm:text-2xl font-bold text-taxi-yellow flex items-center mb-2">
+              <svg className="w-6 h-6 text-taxi-yellow mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
               {t('destination')}
-              <span className="ml-2 text-xs text-taxi-light-grey/60 font-normal">
-                ({locale === 'no' ? 'valfritt' : 'optional'})
+              <span className="ml-3 text-sm text-white/70 font-normal bg-white/20 px-3 py-1 rounded-full">
+                {locale === 'no' ? 'valfritt' : 'optional'}
               </span>
             </h3>
 
@@ -620,25 +620,25 @@ export function BookingForm({ locale }: BookingFormProps) {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-semibold mb-2 text-white">
+                <label className="block text-sm font-semibold mb-3 text-white">
                   {t('city')}
                 </label>
                 <input
                   type="text"
                   value={toCity}
                   onChange={(e) => setToCity(e.target.value)}
-                  className="w-full px-4 py-4 text-base glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
+                  className="w-full px-5 py-4 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black placeholder-gray-400 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold mb-2 text-white">
+                <label className="block text-sm font-semibold mb-3 text-white">
                   {t('postalCode')}
                 </label>
                 <input
                   type="text"
                   value={toPostalCode}
                   onChange={(e) => setToPostalCode(e.target.value)}
-                  className="w-full px-4 py-4 text-base glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
+                  className="w-full px-5 py-4 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black placeholder-gray-400 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm"
                 />
               </div>
             </div>
@@ -704,8 +704,8 @@ export function BookingForm({ locale }: BookingFormProps) {
           )}
 
           {/* Pickup Time */}
-          <div className="mt-4">
-            <label className="block text-sm font-semibold mb-2 text-white">
+          <div className="mt-6">
+            <label className="block text-sm font-semibold mb-3 text-white">
               {t('pickupTime')}
             </label>
             <input
@@ -728,9 +728,9 @@ export function BookingForm({ locale }: BookingFormProps) {
               }}
               min={getMinDateTime()}
               step="300"
-              className="w-full px-4 py-4 text-base glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition"
+              className="w-full px-5 py-4 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm"
             />
-            <p className="text-xs text-taxi-light-grey/60 mt-2">{t('pickupTimeNote')}</p>
+            <p className="text-xs text-white/70 mt-3 bg-white/10 px-4 py-2 rounded-lg">{t('pickupTimeNote')}</p>
 
             {/* Rule Restrictions */}
             {hasRestrictions && ruleRestrictions.length > 0 && (
@@ -776,15 +776,15 @@ export function BookingForm({ locale }: BookingFormProps) {
           </div>
 
           {/* General Message to Driver */}
-          <div className="mt-4">
-            <label className="block text-sm font-semibold mb-2 text-white">
+          <div className="mt-6">
+            <label className="block text-sm font-semibold mb-3 text-white">
               {t('messageOptional')}
             </label>
             <textarea
               value={messageToCar}
               onChange={(e) => setMessageToCar(e.target.value)}
               rows={3}
-              className="w-full px-4 py-4 text-base glass-strong backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-taxi-light-grey/50 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow smooth-transition resize-none"
+              className="w-full px-5 py-4 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black placeholder-gray-400 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition resize-none shadow-sm"
               placeholder={t('messagePlaceholder')}
             />
           </div>

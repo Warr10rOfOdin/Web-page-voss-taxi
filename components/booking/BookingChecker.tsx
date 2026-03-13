@@ -51,15 +51,15 @@ export function BookingChecker({ locale }: BookingCheckerProps) {
   };
 
   return (
-    <div className="glass-dark backdrop-blur-md border border-white/20 rounded-xl p-5 depth-2">
-      <h2 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-        <span>🔍</span>
+    <div className="bg-white/10 backdrop-blur-md border-2 border-taxi-yellow/30 rounded-2xl p-6 depth-3 shadow-xl">
+      <h2 className="text-2xl font-bold text-white mb-3 flex items-center gap-3">
+        <span className="text-2xl">🔍</span>
         <span>{locale === 'no' ? 'Sjekk bestilling' : 'Check Booking'}</span>
       </h2>
-      <p className="text-taxi-light-grey/70 mb-4 text-xs">
+      <p className="text-white/80 mb-6 text-sm">
         {locale === 'no'
-          ? 'Skriv inn bestillingsreferansen'
-          : 'Enter booking reference'}
+          ? 'Skriv inn bestillingsreferansen din'
+          : 'Enter your booking reference'}
       </p>
 
       <form onSubmit={handleCheck} className="space-y-4">
@@ -69,7 +69,7 @@ export function BookingChecker({ locale }: BookingCheckerProps) {
             value={bookRef}
             onChange={(e) => setBookRef(e.target.value.toUpperCase())}
             placeholder={locale === 'no' ? 'T.d. VOSS123' : 'e.g., VOSS123'}
-            className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:ring-2 focus:ring-taxi-yellow focus:border-transparent"
+            className="w-full px-5 py-4 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black placeholder-gray-400 font-semibold tracking-wide focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm"
             disabled={loading}
           />
         </div>
@@ -77,7 +77,7 @@ export function BookingChecker({ locale }: BookingCheckerProps) {
         <Button
           type="submit"
           variant="primary"
-          className="w-full py-2.5"
+          className="w-full py-4 text-base font-bold"
           disabled={loading || !bookRef.trim()}
         >
           {loading
