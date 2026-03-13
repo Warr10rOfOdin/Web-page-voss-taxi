@@ -131,6 +131,7 @@ export interface ReceiptData {
   dropoffTime?: string;
   distance?: number;
   duration?: number;
+  vehicleNumber?: string;
   licenseNumber?: string;
   driverName?: string;
   tariff?: string;
