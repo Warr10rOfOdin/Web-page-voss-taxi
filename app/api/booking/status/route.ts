@@ -46,9 +46,28 @@ export async function GET(request: NextRequest) {
 
     const data = await response.json();
 
+    // Extract the first passenger's data for display
+    const firstPassenger = data.passengers?.[0] || {};
+
+    // Transform the response to a flatter structure for the frontend
+    const transformedBooking = {
+      bookRef: data.bookRef,
+      customerName: firstPassenger.clientName,
+      pickupTime: data.pickupTime || firstPassenger.pickupTime,
+      fromStreet: firstPassenger.fromStreet,
+      fromCity: firstPassenger.fromCity,
+      fromPostalCode: firstPassenger.fromPostalCode,
+      toStreet: firstPassenger.toStreet,
+      toCity: firstPassenger.toCity,
+      toPostalCode: firstPassenger.toPostalCode,
+      status: data.tripStatus,
+      // Include full data for reference
+      raw: data,
+    };
+
     return NextResponse.json({
       success: true,
-      booking: data,
+      booking: transformedBooking,
     });
   } catch (error) {
     console.error('Booking status error:', error);

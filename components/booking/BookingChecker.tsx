@@ -125,7 +125,7 @@ export function BookingChecker({ locale }: BookingCheckerProps) {
             {bookingInfo.pickupTime && (
               <div className="flex justify-between text-white/90">
                 <span className="text-taxi-light-grey/70">
-                  {locale === 'no' ? 'Hentetid:' : 'Pickup:'}
+                  {locale === 'no' ? 'Tid:' : 'Time:'}
                 </span>
                 <span className="text-right">
                   {new Date(bookingInfo.pickupTime).toLocaleString(locale === 'no' ? 'no-NO' : 'en-US', {
@@ -137,20 +137,28 @@ export function BookingChecker({ locale }: BookingCheckerProps) {
             )}
 
             {bookingInfo.fromStreet && (
-              <div className="flex justify-between text-white/90">
-                <span className="text-taxi-light-grey/70">
-                  {locale === 'no' ? 'Henting:' : 'Pickup:'}
+              <div className="text-white/90">
+                <span className="text-taxi-light-grey/70 block mb-1">
+                  {locale === 'no' ? 'Henting:' : 'From:'}
                 </span>
-                <span className="text-right">{bookingInfo.fromStreet}</span>
+                <span className="text-sm">
+                  {bookingInfo.fromStreet}
+                  {bookingInfo.fromCity && `, ${bookingInfo.fromCity}`}
+                  {bookingInfo.fromPostalCode && ` ${bookingInfo.fromPostalCode}`}
+                </span>
               </div>
             )}
 
             {bookingInfo.toStreet && (
-              <div className="flex justify-between text-white/90">
-                <span className="text-taxi-light-grey/70">
-                  {locale === 'no' ? 'Levering:' : 'Destination:'}
+              <div className="text-white/90">
+                <span className="text-taxi-light-grey/70 block mb-1">
+                  {locale === 'no' ? 'Til:' : 'To:'}
                 </span>
-                <span className="text-right">{bookingInfo.toStreet}</span>
+                <span className="text-sm">
+                  {bookingInfo.toStreet}
+                  {bookingInfo.toCity && `, ${bookingInfo.toCity}`}
+                  {bookingInfo.toPostalCode && ` ${bookingInfo.toPostalCode}`}
+                </span>
               </div>
             )}
 
