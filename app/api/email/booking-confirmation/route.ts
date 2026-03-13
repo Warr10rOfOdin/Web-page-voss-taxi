@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { sendEmail } from '@/lib/smtp-mailer';
 
 export async function POST(request: NextRequest) {
   try {
@@ -86,47 +87,21 @@ Uttrågata 19, 5700 Voss
 www.vosstaxi.no
     `.trim();
 
-    // If Resend API is configured, send email
-    if (process.env.RESEND_API_KEY) {
-      const response = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          from: process.env.RESEND_FROM_EMAIL || 'Voss Taxi <booking@vosstaxi.no>',
-          to: [emailTo],
-          subject: emailSubject,
-          text: emailBody,
-        }),
+    // Send email via SMTP
+    try {
+      await sendEmail({
+        to: emailTo,
+        subject: emailSubject,
+        text: emailBody,
       });
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Failed to send email via Resend:', errorText);
-        return NextResponse.json(
-          { error: 'Failed to send email', details: errorText },
-          { status: 500 }
-        );
-      }
-
-      const result = await response.json();
-      console.log('Email sent successfully:', result);
-      return NextResponse.json({ success: true, data: result });
-    } else {
-      // Log the email for development
-      console.log('=== EMAIL CONFIRMATION (DEVELOPMENT) ===');
-      console.log(`To: ${emailTo}`);
-      console.log(`Subject: ${emailSubject}`);
-      console.log(emailBody);
-      console.log('========================================');
-      console.log('NOTE: Set RESEND_API_KEY env var to enable email delivery');
-
-      return NextResponse.json({
-        success: true,
-        message: 'Email logged (RESEND_API_KEY not configured)'
-      });
+      return NextResponse.json({ success: true });
+    } catch (emailError) {
+      console.error('Failed to send email:', emailError);
+      return NextResponse.json(
+        { error: 'Failed to send email', details: emailError instanceof Error ? emailError.message : 'Unknown error' },
+        { status: 500 }
+      );
     }
   } catch (error) {
     console.error('Email confirmation API error:', error);
