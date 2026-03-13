@@ -14,9 +14,9 @@ export interface ReceiptCardData {
   dropoffTime?: string;
   distance?: number;
   duration?: number;
-  vehicleNumber?: string;
   licenseNumber?: string;
   driverName?: string;
+  tariff?: string;
   price?: number;
   vat?: number;
   currency?: string;
@@ -43,9 +43,9 @@ export const ReceiptCard: React.FC<ReceiptCardProps> = ({ data, locale }) => {
     dropoffTime: 'Avleveringstid',
     distance: 'Avstand',
     duration: 'Varighet',
-    vehicle: 'Køyretøy',
     license: 'Løyve',
     driver: 'Sjåfør',
+    tariff: 'Takst',
     subtotal: 'Delsum',
     vat: 'MVA (25%)',
     total: 'Totalt',
@@ -64,9 +64,9 @@ export const ReceiptCard: React.FC<ReceiptCardProps> = ({ data, locale }) => {
     dropoffTime: 'Drop-off Time',
     distance: 'Distance',
     duration: 'Duration',
-    vehicle: 'Vehicle',
     license: 'License',
     driver: 'Driver',
+    tariff: 'Tariff',
     subtotal: 'Subtotal',
     vat: 'VAT (25%)',
     total: 'Total',
@@ -200,14 +200,8 @@ export const ReceiptCard: React.FC<ReceiptCardProps> = ({ data, locale }) => {
                 <span className="font-medium">{formatDuration(data.duration)}</span>
               </div>
             )}
-            {(data.vehicleNumber || data.licenseNumber || data.driverName) && (
+            {(data.licenseNumber || data.driverName) && (
               <div className="h-px bg-gray-200 my-2"></div>
-            )}
-            {data.vehicleNumber && (
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-600">{t.vehicle}:</span>
-                <span className="font-medium">{data.vehicleNumber}</span>
-              </div>
             )}
             {data.licenseNumber && (
               <div className="flex justify-between">
@@ -221,6 +215,12 @@ export const ReceiptCard: React.FC<ReceiptCardProps> = ({ data, locale }) => {
                 <span className="font-medium">{data.driverName}</span>
               </div>
             )}
+            {data.tariff && (
+              <div className="flex justify-between">
+                <span className="text-sm text-gray-600">{t.tariff}:</span>
+                <span className="font-medium">{data.tariff}</span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -231,6 +231,12 @@ export const ReceiptCard: React.FC<ReceiptCardProps> = ({ data, locale }) => {
               {t.total}
             </h4>
             <div className="space-y-2 bg-gray-50 p-4 rounded-lg">
+              {data.tariff && (
+                <div className="flex justify-between text-sm bg-taxi-yellow/10 -mx-4 px-4 py-2 mb-2">
+                  <span className="text-gray-700 font-medium">{t.tariff}:</span>
+                  <span className="font-semibold text-taxi-black">{data.tariff}</span>
+                </div>
+              )}
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">{t.subtotal}:</span>
                 <span className="font-medium">{formatCurrency(calculateSubtotal())}</span>

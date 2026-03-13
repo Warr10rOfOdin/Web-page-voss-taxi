@@ -131,9 +131,9 @@ export interface ReceiptData {
   dropoffTime?: string;
   distance?: number;
   duration?: number;
-  vehicleNumber?: string;
   licenseNumber?: string;
   driverName?: string;
+  tariff?: string;
   price: number;
   vat?: number;
   currency?: string;
@@ -161,9 +161,9 @@ export const ReceiptPDF: React.FC<ReceiptPDFProps> = ({ data, locale }) => {
     dropoffTime: 'Avleveringstid',
     distance: 'Avstand',
     duration: 'Varighet',
-    vehicle: 'Køyretøy',
     license: 'Løyve',
     driver: 'Sjåfør',
+    tariff: 'Takst',
     subtotal: 'Delsum',
     vat: 'MVA (25%)',
     total: 'Totalt å betale',
@@ -190,9 +190,9 @@ export const ReceiptPDF: React.FC<ReceiptPDFProps> = ({ data, locale }) => {
     dropoffTime: 'Drop-off Time',
     distance: 'Distance',
     duration: 'Duration',
-    vehicle: 'Vehicle',
     license: 'License',
     driver: 'Driver',
+    tariff: 'Tariff',
     subtotal: 'Subtotal',
     vat: 'VAT (25%)',
     total: 'Total Amount',
@@ -320,12 +320,6 @@ export const ReceiptPDF: React.FC<ReceiptPDFProps> = ({ data, locale }) => {
               <Text style={styles.value}>{formatDuration(data.duration)}</Text>
             </View>
           )}
-          {data.vehicleNumber && (
-            <View style={styles.row}>
-              <Text style={styles.label}>{t.vehicle}</Text>
-              <Text style={styles.value}>{data.vehicleNumber}</Text>
-            </View>
-          )}
           {data.licenseNumber && (
             <View style={styles.row}>
               <Text style={styles.label}>{t.license}</Text>
@@ -338,11 +332,26 @@ export const ReceiptPDF: React.FC<ReceiptPDFProps> = ({ data, locale }) => {
               <Text style={styles.value}>{data.driverName}</Text>
             </View>
           )}
+          {data.tariff && (
+            <View style={styles.row}>
+              <Text style={styles.label}>{t.tariff}</Text>
+              <Text style={styles.value}>{data.tariff}</Text>
+            </View>
+          )}
         </View>
 
         {/* Economic Details */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t.economicDetails}</Text>
+
+          {data.tariff && (
+            <View style={styles.highlight}>
+              <View style={styles.row}>
+                <Text style={{ ...styles.label, fontWeight: 'bold', color: '#1a1a1a' }}>{t.tariff}</Text>
+                <Text style={{ ...styles.value, fontWeight: 'bold' }}>{data.tariff}</Text>
+              </View>
+            </View>
+          )}
 
           <View style={styles.vatSection}>
             <View style={styles.vatRow}>

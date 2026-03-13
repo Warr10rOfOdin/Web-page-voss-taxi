@@ -286,7 +286,6 @@ export function BookingChecker({ locale }: BookingCheckerProps) {
               ? `${booking.passengers[0].toStreet}, ${booking.passengers[0].toPostalCode} ${booking.passengers[0].toCity}`
               : locale === 'no' ? 'Ikkje spesifisert' : 'Not specified',
             pickupTime: booking.pickupTime,
-            vehicleNumber: booking.vehicleNo > 0 ? String(booking.vehicleNo) : undefined,
             licenseNumber: booking.licenseNo || undefined,
             tripStatus: booking.tripStatus,
           }}
