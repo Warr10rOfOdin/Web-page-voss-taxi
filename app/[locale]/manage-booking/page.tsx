@@ -164,6 +164,9 @@ function ManageBookingContent({ locale }: { locale: string }) {
   const handlePrintReceipt = async () => {
     if (!bookRef) return;
 
+    // Open print window before awaiting network request to avoid popup blocking
+    const printWindow = window.open('', '_blank');
+
     try {
       const response = await fetch(
         `/api/booking/receipt/pdf?bookRef=${encodeURIComponent(bookRef)}&locale=${locale}`
@@ -171,15 +174,16 @@ function ManageBookingContent({ locale }: { locale: string }) {
 
       if (!response.ok) {
         const data = await response.json();
+        printWindow?.close();
         throw new Error(data.error || 'Failed to load receipt');
       }
 
-      // Open PDF in new window for printing
+      // Load PDF into the already-open window
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const printWindow = window.open(url, '_blank');
 
       if (printWindow) {
+        printWindow.location.href = url;
         printWindow.onload = () => {
           printWindow.print();
         };

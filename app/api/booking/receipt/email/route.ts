@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
     if (receiptResponse.status === 204) {
       return NextResponse.json(
         { error: locale === 'no' ? 'Ingen kvittering tilgjengeleg enno' : 'No receipt available yet' },
-        { status: 204 }
+        { status: 404 }
       );
     }
 
