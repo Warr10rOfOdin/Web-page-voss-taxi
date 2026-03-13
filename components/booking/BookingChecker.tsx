@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
+import { getStatusInfo, getStatusColorClass } from '@/lib/booking-status';
 
 interface BookingCheckerProps {
   locale: string;
@@ -96,90 +97,117 @@ export function BookingChecker({ locale }: BookingCheckerProps) {
         </div>
       )}
 
-      {bookingInfo && (
-        <div className="mt-4 bg-green-900/20 border border-green-500/50 rounded-lg p-3 space-y-2">
-          <div className="flex items-center space-x-2 mb-2">
-            <span className="text-lg">✅</span>
-            <h3 className="text-base font-bold text-white">
-              {locale === 'no' ? 'Funnen!' : 'Found!'}
-            </h3>
-          </div>
+      {bookingInfo && (() => {
+        const statusInfo = getStatusInfo(bookingInfo.status);
+        const colorClass = getStatusColorClass(statusInfo.type);
 
-          <div className="space-y-1.5 text-xs">
-            <div className="flex justify-between text-white/90">
-              <span className="text-taxi-light-grey/70">
-                {locale === 'no' ? 'Referanse:' : 'Reference:'}
-              </span>
-              <span className="font-bold text-taxi-yellow">{bookingInfo.bookRef}</span>
+        return (
+          <div className={`mt-4 border rounded-lg p-3 space-y-2 ${colorClass}`}>
+            <div className="flex items-center space-x-2 mb-2">
+              <span className="text-lg">{statusInfo.icon}</span>
+              <h3 className="text-base font-bold">
+                {statusInfo.label[locale === 'no' ? 'no' : 'en']}
+              </h3>
             </div>
 
-            {bookingInfo.customerName && (
-              <div className="flex justify-between text-white/90">
-                <span className="text-taxi-light-grey/70">
-                  {locale === 'no' ? 'Namn:' : 'Name:'}
-                </span>
-                <span>{bookingInfo.customerName}</span>
+            {/* Status Description - prominent for cancelled bookings */}
+            {statusInfo.type === 'cancelled' && (
+              <div className="mb-3 pb-2 border-b border-red-500/30">
+                <p className="text-xs text-red-200 font-medium">
+                  {statusInfo.description[locale === 'no' ? 'no' : 'en']}
+                </p>
               </div>
             )}
 
-            {bookingInfo.pickupTime && (
-              <div className="flex justify-between text-white/90">
-                <span className="text-taxi-light-grey/70">
-                  {locale === 'no' ? 'Tid:' : 'Time:'}
+            <div className="space-y-1.5 text-xs">
+              <div className="flex justify-between">
+                <span className="text-white/70">
+                  {locale === 'no' ? 'Referanse:' : 'Reference:'}
                 </span>
-                <span className="text-right">
-                  {new Date(bookingInfo.pickupTime).toLocaleString(locale === 'no' ? 'no-NO' : 'en-US', {
-                    dateStyle: 'short',
-                    timeStyle: 'short'
-                  })}
-                </span>
+                <span className="font-bold text-taxi-yellow">{bookingInfo.bookRef}</span>
               </div>
-            )}
 
-            {bookingInfo.fromStreet && (
-              <div className="text-white/90">
-                <span className="text-taxi-light-grey/70 block mb-1">
-                  {locale === 'no' ? 'Henting:' : 'From:'}
-                </span>
-                <span className="text-sm">
-                  {bookingInfo.fromStreet}
-                  {bookingInfo.fromCity && `, ${bookingInfo.fromCity}`}
-                  {bookingInfo.fromPostalCode && ` ${bookingInfo.fromPostalCode}`}
-                </span>
-              </div>
-            )}
+              {bookingInfo.customerName && (
+                <div className="flex justify-between">
+                  <span className="text-white/70">
+                    {locale === 'no' ? 'Namn:' : 'Name:'}
+                  </span>
+                  <span className="text-white/90">{bookingInfo.customerName}</span>
+                </div>
+              )}
 
-            {bookingInfo.toStreet && (
-              <div className="text-white/90">
-                <span className="text-taxi-light-grey/70 block mb-1">
-                  {locale === 'no' ? 'Til:' : 'To:'}
-                </span>
-                <span className="text-sm">
-                  {bookingInfo.toStreet}
-                  {bookingInfo.toCity && `, ${bookingInfo.toCity}`}
-                  {bookingInfo.toPostalCode && ` ${bookingInfo.toPostalCode}`}
-                </span>
-              </div>
-            )}
+              {bookingInfo.pickupTime && (
+                <div className="flex justify-between">
+                  <span className="text-white/70">
+                    {locale === 'no' ? 'Tid:' : 'Time:'}
+                  </span>
+                  <span className="text-right text-white/90">
+                    {new Date(bookingInfo.pickupTime).toLocaleString(locale === 'no' ? 'no-NO' : 'en-US', {
+                      dateStyle: 'short',
+                      timeStyle: 'short'
+                    })}
+                  </span>
+                </div>
+              )}
 
-            {bookingInfo.status && (
-              <div className="flex justify-between text-white/90 mt-2 pt-2 border-t border-green-500/30">
-                <span className="text-taxi-light-grey/70">Status:</span>
-                <span className="font-bold text-green-400">{bookingInfo.status}</span>
+              {bookingInfo.fromStreet && (
+                <div>
+                  <span className="text-white/70 block mb-1">
+                    {locale === 'no' ? 'Henting:' : 'From:'}
+                  </span>
+                  <span className="text-sm text-white/90">
+                    {bookingInfo.fromStreet}
+                    {bookingInfo.fromCity && `, ${bookingInfo.fromCity}`}
+                    {bookingInfo.fromPostalCode && ` ${bookingInfo.fromPostalCode}`}
+                  </span>
+                </div>
+              )}
+
+              {bookingInfo.toStreet && (
+                <div>
+                  <span className="text-white/70 block mb-1">
+                    {locale === 'no' ? 'Til:' : 'To:'}
+                  </span>
+                  <span className="text-sm text-white/90">
+                    {bookingInfo.toStreet}
+                    {bookingInfo.toCity && `, ${bookingInfo.toCity}`}
+                    {bookingInfo.toPostalCode && ` ${bookingInfo.toPostalCode}`}
+                  </span>
+                </div>
+              )}
+
+              {/* Detailed status information */}
+              <div className="mt-2 pt-2 border-t border-white/20">
+                <div className="flex justify-between items-start">
+                  <span className="text-white/70">Status:</span>
+                  <div className="text-right">
+                    <div className="font-bold">
+                      {statusInfo.label[locale === 'no' ? 'no' : 'en']}
+                    </div>
+                    <div className="text-[10px] text-white/60 mt-0.5">
+                      {statusInfo.code}
+                    </div>
+                  </div>
+                </div>
+                {statusInfo.type !== 'cancelled' && (
+                  <p className="text-[10px] text-white/60 mt-1">
+                    {statusInfo.description[locale === 'no' ? 'no' : 'en']}
+                  </p>
+                )}
               </div>
-            )}
+            </div>
+
+            <div className="mt-2 pt-2 border-t border-white/20">
+              <a
+                href="tel:+4756511340"
+                className="text-xs text-taxi-yellow hover:underline block text-center font-medium"
+              >
+                {locale === 'no' ? '📞 Ring oss' : '📞 Call us'}
+              </a>
+            </div>
           </div>
-
-          <div className="mt-2 pt-2 border-t border-green-500/30">
-            <a
-              href="tel:+4756511340"
-              className="text-xs text-taxi-yellow hover:underline block text-center"
-            >
-              {locale === 'no' ? '📞 Ring oss' : '📞 Call us'}
-            </a>
-          </div>
-        </div>
-      )}
+        );
+      })()}
 
       <div className="mt-3 text-[10px] text-taxi-light-grey/50 text-center">
         {locale === 'no'
