@@ -36,6 +36,9 @@ export async function POST(request: NextRequest) {
       numberOfCars: body.numberOfCars || 1, // Default to 1 car
     };
 
+    // Remove attributes field - not supported by general booking endpoint
+    delete bookingData.attributes;
+
     console.log('Sending general booking request:', JSON.stringify(bookingData, null, 2));
 
     // Call Taxi4U API with authentication (handles token refresh)
