@@ -47,7 +47,7 @@ export const ReceiptCard: React.FC<ReceiptCardProps> = ({ data, locale }) => {
     driver: 'Sjåfør',
     tariff: 'Takst',
     subtotal: 'Delsum',
-    vat: 'MVA (25%)',
+    vat: 'MVA (12%)',
     total: 'Totalt',
     paymentMethod: 'Betalingsmåte',
     thankYou: 'Takk for at du reiser med Voss Taxi!',
@@ -68,7 +68,7 @@ export const ReceiptCard: React.FC<ReceiptCardProps> = ({ data, locale }) => {
     driver: 'Driver',
     tariff: 'Tariff',
     subtotal: 'Subtotal',
-    vat: 'VAT (25%)',
+    vat: 'VAT (12%)',
     total: 'Total',
     paymentMethod: 'Payment Method',
     thankYou: 'Thank you for traveling with Voss Taxi!',
@@ -97,7 +97,10 @@ export const ReceiptCard: React.FC<ReceiptCardProps> = ({ data, locale }) => {
   const calculateVAT = () => {
     if (!data.price) return 0;
     if (data.vat !== undefined) return data.vat;
-    return data.price * 0.25;
+    // Norwegian VAT for passenger transport is 12% of base amount
+    // Total price includes VAT, so: total = base * 1.12
+    // Therefore: VAT = total - (total / 1.12) = total * (12/112)
+    return data.price * (12 / 112);
   };
 
   const calculateSubtotal = () => {
