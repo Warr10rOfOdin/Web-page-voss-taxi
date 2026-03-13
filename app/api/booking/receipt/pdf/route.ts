@@ -76,40 +76,49 @@ export async function GET(request: NextRequest) {
 
     const receiptApiData = await receiptResponse.json();
 
+    console.log('Receipt API data:', JSON.stringify(receiptApiData, null, 2));
+    console.log('Booking data:', JSON.stringify(bookingData, null, 2));
+
     // Transform API data to ReceiptData format
     const passenger = bookingData.passengers?.[0] || {};
 
+    // Build addresses more carefully, handling potential issues
+    const buildAddress = (street?: string, postalCode?: string, city?: string) => {
+      const parts = [street, postalCode, city].filter(part => part && part.trim());
+      return parts.join(', ') || (locale === 'no' ? 'Ikke spesifisert' : 'Not specified');
+    };
+
     const receiptData: ReceiptData = {
-      bookRef: bookingData.bookRef,
-      date: new Date().toISOString(),
-      customerName: passenger.clientName || 'Unknown',
+      bookRef: bookingData.bookRef || bookRef,
+      date: bookingData.bookedTimeStamp || new Date().toISOString(),
+      customerName: passenger.clientName || (locale === 'no' ? 'Ukjent' : 'Unknown'),
       customerPhone: passenger.tel,
-      pickupAddress: `${passenger.fromStreet || ''}, ${passenger.fromPostalCode || ''} ${passenger.fromCity || ''}`.trim(),
-      dropoffAddress: passenger.toStreet
-        ? `${passenger.toStreet}, ${passenger.toPostalCode || ''} ${passenger.toCity || ''}`.trim()
-        : '',
-      pickupTime: bookingData.pickupTime,
-      dropoffTime: receiptApiData.stopTime,
-      distance: receiptApiData.km,
-      duration: receiptApiData.minutes,
+      pickupAddress: buildAddress(passenger.fromStreet, passenger.fromPostalCode, passenger.fromCity),
+      dropoffAddress: buildAddress(passenger.toStreet, passenger.toPostalCode, passenger.toCity),
+      pickupTime: bookingData.pickupTime || new Date().toISOString(),
+      dropoffTime: receiptApiData.stopTime || receiptApiData.endTime || receiptApiData.dropoffTime,
+      distance: receiptApiData.km || receiptApiData.distance,
+      duration: receiptApiData.minutes || receiptApiData.duration,
       vehicleNumber: bookingData.vehicleNo?.toString(),
-      licenseNumber: bookingData.licenseNo,
-      driverName: receiptApiData.driverName,
-      driverId: receiptApiData.driverId || receiptApiData.driverID,
-      tariff: receiptApiData.tariff || receiptApiData.tariffName || receiptApiData.tariffCode,
-      price: receiptApiData.price || receiptApiData.totalPrice || 0,
-      vat: receiptApiData.vat || receiptApiData.vatAmount,
+      licenseNumber: bookingData.licenseNo || receiptApiData.licenseNo,
+      driverName: receiptApiData.driverName || receiptApiData.driver,
+      driverId: receiptApiData.driverId || receiptApiData.driverID || receiptApiData.driverid,
+      tariff: receiptApiData.tariff || receiptApiData.tariffName || receiptApiData.tariffCode || receiptApiData.tariffDescription,
+      price: receiptApiData.price || receiptApiData.totalPrice || receiptApiData.amount || receiptApiData.total || 0,
+      vat: receiptApiData.vat || receiptApiData.vatAmount || receiptApiData.mva,
       currency: 'NOK',
-      paymentMethod: receiptApiData.paymentMethod || (locale === 'no' ? 'Kontant/Kort' : 'Cash/Card'),
-      receiptNumber: receiptApiData.receiptNumber || receiptApiData.receiptNo,
-      invoiceNumber: receiptApiData.invoiceNumber || receiptApiData.invoiceNo,
+      paymentMethod: receiptApiData.paymentMethod || receiptApiData.paymentType || (locale === 'no' ? 'Kontant/Kort' : 'Cash/Card'),
+      receiptNumber: receiptApiData.receiptNumber || receiptApiData.receiptNo || receiptApiData.receiptId,
+      invoiceNumber: receiptApiData.invoiceNumber || receiptApiData.invoiceNo || receiptApiData.invoiceId,
       fromZone: receiptApiData.fromZone || passenger.fromZone,
       toZone: receiptApiData.toZone || passenger.toZone,
-      tripSpecification: receiptApiData.tripSpecification || receiptApiData.specification,
-      cardTerminal: receiptApiData.cardTerminal || receiptApiData.terminal,
-      authorization: receiptApiData.authorization || receiptApiData.authCode,
+      tripSpecification: receiptApiData.tripSpecification || receiptApiData.specification || receiptApiData.details,
+      cardTerminal: receiptApiData.cardTerminal || receiptApiData.terminal || receiptApiData.terminalId,
+      authorization: receiptApiData.authorization || receiptApiData.authCode || receiptApiData.authorizationCode,
       referenceNumber: receiptApiData.referenceNumber || receiptApiData.reference || receiptApiData.ref,
     };
+
+    console.log('Transformed receipt data:', JSON.stringify(receiptData, null, 2));
 
     // Generate PDF - call component as function to get Document element
     // Type assertion needed for server-side PDF rendering
@@ -127,10 +136,12 @@ export async function GET(request: NextRequest) {
 
   } catch (error) {
     console.error('PDF generation error:', error);
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
     return NextResponse.json(
       {
         error: 'Failed to generate PDF receipt',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
       },
       { status: 500 }
     );

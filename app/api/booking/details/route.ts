@@ -54,11 +54,16 @@ export async function GET(request: NextRequest) {
     // GDPR Security: Verify phone number matches booking
     // Normalize phone numbers for comparison (remove spaces, dashes, country codes)
     const normalizePhone = (phone: string) => {
+      if (!phone) return '';
       // Remove all non-digit characters
       const digitsOnly = phone.replace(/\D/g, '');
       // Remove leading country code if present (47 for Norway)
       if (digitsOnly.startsWith('47') && digitsOnly.length > 8) {
         return digitsOnly.substring(2);
+      }
+      // Remove leading 0 if present (some Norwegian numbers)
+      if (digitsOnly.startsWith('0') && digitsOnly.length === 9) {
+        return digitsOnly.substring(1);
       }
       return digitsOnly;
     };
@@ -86,11 +91,16 @@ export async function GET(request: NextRequest) {
     }
 
     // Compare last 8 digits (standard Norwegian mobile number length)
+    // Also try comparing full normalized numbers
     const inputLast8 = inputPhone.slice(-8);
     const bookingLast8 = bookingPhone.slice(-8);
+    const fullMatch = inputPhone === bookingPhone;
+    const last8Match = inputLast8 === bookingLast8;
 
-    if (inputLast8 !== bookingLast8) {
-      console.log('Phone mismatch:', { inputLast8, bookingLast8 });
+    console.log('Phone comparison:', { inputLast8, bookingLast8, fullMatch, last8Match });
+
+    if (!fullMatch && !last8Match) {
+      console.log('Phone mismatch - both full and last 8 digits failed');
       return NextResponse.json(
         {
           success: false,
