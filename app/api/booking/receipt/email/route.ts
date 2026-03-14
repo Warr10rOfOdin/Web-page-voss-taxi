@@ -51,15 +51,19 @@ export async function POST(request: NextRequest) {
 
     const bookingData = await statusResponse.json();
 
-    // Only allow receipt for completed trips
-    const completedStatuses = ['CO', 'FI'];
-    if (!completedStatuses.includes(bookingData.tripStatus)) {
+    // Get the last character of the status sequence (current status)
+    const currentStatus = bookingData.tripStatus?.slice(-1) || '';
+
+    // Only allow receipt for completed trips (l = Levert, N = Ready for invoicing)
+    const completedStatuses = ['l', 'N'];
+    if (!completedStatuses.includes(currentStatus)) {
       return NextResponse.json(
         {
           error: locale === 'no'
             ? 'Kvittering er berre tilgjengeleg for fullførte turar'
             : 'Receipt is only available for completed trips',
-          currentStatus: bookingData.tripStatus
+          currentStatus: bookingData.tripStatus,
+          lastStatus: currentStatus
         },
         { status: 400 }
       );
