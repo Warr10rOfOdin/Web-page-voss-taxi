@@ -132,16 +132,17 @@ export async function GET(request: NextRequest) {
 
     // Generate PDF - ReceiptPDF returns a Document element
     console.log('Starting PDF generation...');
-    const receiptElement = ReceiptPDF({ data: receiptData, locale });
+    const receiptElement = React.createElement(ReceiptPDF, { data: receiptData, locale });
 
     try {
       // Use renderToStream which is the correct API for @react-pdf/renderer v4
-      const stream = await renderToStream(receiptElement);
+      // Type assertion needed because ReceiptPDF wrapper doesn't match exact Document type
+      const stream = await renderToStream(receiptElement as any);
 
       // Convert stream to buffer
-      const chunks: Uint8Array[] = [];
+      const chunks: Buffer[] = [];
       for await (const chunk of stream) {
-        chunks.push(chunk);
+        chunks.push(chunk as Buffer);
       }
       const pdfBuffer = Buffer.concat(chunks);
 
