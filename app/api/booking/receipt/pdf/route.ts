@@ -90,41 +90,49 @@ export async function GET(request: NextRequest) {
       return parts.join(', ') || (locale === 'no' ? 'Ikke spesifisert' : 'Not specified');
     };
 
+    // Calculate duration in minutes from startDateTime and endDateTime
+    const calculateDuration = (start?: string, end?: string): number | undefined => {
+      if (!start || !end) return undefined;
+      const startTime = new Date(start).getTime();
+      const endTime = new Date(end).getTime();
+      return Math.round((endTime - startTime) / 60000); // Convert milliseconds to minutes
+    };
+
     const receiptData: ReceiptData = {
       bookRef: bookingData.bookRef || bookRef,
-      date: bookingData.bookedTimeStamp || new Date().toISOString(),
+      date: bookingData.bookedTimeStamp || receiptApiData.bookeDateTime || new Date().toISOString(),
       customerName: passenger.clientName || (locale === 'no' ? 'Ukjent' : 'Unknown'),
       customerPhone: passenger.tel,
-      pickupAddress: buildAddress(passenger.fromStreet, passenger.fromPostalCode, passenger.fromCity),
-      dropoffAddress: buildAddress(passenger.toStreet, passenger.toPostalCode, passenger.toCity),
-      pickupTime: bookingData.pickupTime || new Date().toISOString(),
-      dropoffTime: receiptApiData.stopTime || receiptApiData.endTime || receiptApiData.dropoffTime,
-      distance: receiptApiData.km || receiptApiData.distance,
-      duration: receiptApiData.minutes || receiptApiData.duration,
+      pickupAddress: receiptApiData.fromAddress || buildAddress(passenger.fromStreet, passenger.fromPostalCode, passenger.fromCity),
+      dropoffAddress: receiptApiData.toAddress || buildAddress(passenger.toStreet, passenger.toPostalCode, passenger.toCity),
+      pickupTime: receiptApiData.startDateTime || bookingData.pickupTime || new Date().toISOString(),
+      dropoffTime: receiptApiData.endDateTime,
+      distance: receiptApiData.km,
+      duration: calculateDuration(receiptApiData.startDateTime, receiptApiData.endDateTime),
       vehicleNumber: bookingData.vehicleNo?.toString(),
-      licenseNumber: bookingData.licenseNo || receiptApiData.licenseNo,
-      driverName: receiptApiData.driverName || receiptApiData.driver,
-      driverId: receiptApiData.driverId || receiptApiData.driverID || receiptApiData.driverid,
-      tariff: receiptApiData.tariff || receiptApiData.tariffName || receiptApiData.tariffCode || receiptApiData.tariffDescription,
-      price: receiptApiData.price || receiptApiData.totalPrice || receiptApiData.amount || receiptApiData.total || 0,
-      vat: receiptApiData.vat || receiptApiData.vatAmount || receiptApiData.mva,
+      licenseNumber: receiptApiData.licenseNo || bookingData.licenseNo,
+      driverName: undefined, // Not provided in API response
+      driverId: receiptApiData.driverId?.toString(),
+      tariff: undefined, // Not provided in API response
+      price: receiptApiData.total || 0,
+      vat: receiptApiData.vat,
       currency: 'NOK',
-      paymentMethod: receiptApiData.paymentMethod || receiptApiData.paymentType || (locale === 'no' ? 'Kontant/Kort' : 'Cash/Card'),
-      receiptNumber: receiptApiData.receiptNumber || receiptApiData.receiptNo || receiptApiData.receiptId,
-      invoiceNumber: receiptApiData.invoiceNumber || receiptApiData.invoiceNo || receiptApiData.invoiceId,
-      fromZone: receiptApiData.fromZone || passenger.fromZone,
-      toZone: receiptApiData.toZone || passenger.toZone,
-      tripSpecification: receiptApiData.tripSpecification || receiptApiData.specification || receiptApiData.details,
-      cardTerminal: receiptApiData.cardTerminal || receiptApiData.terminal || receiptApiData.terminalId,
-      authorization: receiptApiData.authorization || receiptApiData.authCode || receiptApiData.authorizationCode,
-      referenceNumber: receiptApiData.referenceNumber || receiptApiData.reference || receiptApiData.ref,
+      paymentMethod: undefined, // Not provided in API response
+      receiptNumber: receiptApiData.receiptNo?.toString(),
+      invoiceNumber: undefined,
+      fromZone: undefined,
+      toZone: undefined,
+      tripSpecification: undefined,
+      cardTerminal: undefined,
+      authorization: undefined,
+      referenceNumber: undefined,
     };
 
     console.log('Transformed receipt data:', JSON.stringify(receiptData, null, 2));
 
     // Generate PDF - ReceiptPDF returns a Document element
     console.log('Starting PDF generation...');
-    const receiptElement = React.createElement(ReceiptPDF, { data: receiptData, locale });
+    const receiptElement = ReceiptPDF({ data: receiptData, locale });
 
     try {
       // Use renderToStream which is the correct API for @react-pdf/renderer v4
