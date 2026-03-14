@@ -30,32 +30,26 @@ interface BookingDetails {
 }
 
 interface ReceiptData {
-  km?: number;
-  distance?: number;
-  minutes?: number;
-  duration?: number;
-  driverName?: string;
-  driver?: string;
-  driverId?: string;
-  driverID?: string;
-  tariff?: string;
-  tariffName?: string;
-  tariffCode?: string;
-  price?: number;
-  totalPrice?: number;
-  amount?: number;
-  total?: number;
-  vat?: number;
-  vatAmount?: number;
-  paymentMethod?: string;
-  paymentType?: string;
-  stopTime?: string;
-  endTime?: string;
-  dropoffTime?: string;
-  receiptNumber?: string;
-  receiptNo?: string;
-  invoiceNumber?: string;
-  invoiceNo?: string;
+  bookRef: string;
+  receiptNo: number;
+  licenseNo: string;
+  driverId: number;
+  taxiAccountNo: string;
+  maxPrice: number;
+  originalMaxPrice: number;
+  total: number;
+  sceduledPickup: string;
+  startDateTime: string;
+  endDateTime: string;
+  bookeDateTime: string;
+  km: number;
+  fromAddress: string;
+  toAddress: string;
+  fixedPrice: string;
+  vatPercentage: number;
+  vat: number;
+  vatBasis: number;
+  vatRegistrationNo: string;
 }
 
 function ManageBookingContent({ locale }: { locale: string }) {
@@ -454,20 +448,20 @@ function ManageBookingContent({ locale }: { locale: string }) {
                       date: booking.bookedTimeStamp,
                       customerName: booking.passengers[0]?.clientName || '',
                       customerPhone: booking.passengers[0]?.tel,
-                      pickupAddress: `${booking.passengers[0]?.fromStreet || ''}, ${booking.passengers[0]?.fromPostalCode || ''} ${booking.passengers[0]?.fromCity || ''}`.trim(),
-                      dropoffAddress: booking.passengers[0]?.toStreet
+                      pickupAddress: receiptData?.fromAddress || `${booking.passengers[0]?.fromStreet || ''}, ${booking.passengers[0]?.fromPostalCode || ''} ${booking.passengers[0]?.fromCity || ''}`.trim(),
+                      dropoffAddress: receiptData?.toAddress || (booking.passengers[0]?.toStreet
                         ? `${booking.passengers[0].toStreet}, ${booking.passengers[0].toPostalCode || ''} ${booking.passengers[0].toCity || ''}`.trim()
-                        : locale === 'no' ? 'Ikkje spesifisert' : 'Not specified',
-                      pickupTime: booking.pickupTime,
-                      dropoffTime: receiptData?.stopTime || receiptData?.endTime || receiptData?.dropoffTime,
-                      distance: receiptData?.km || receiptData?.distance,
-                      duration: receiptData?.minutes || receiptData?.duration,
-                      licenseNumber: booking.licenseNo || undefined,
-                      driverName: receiptData?.driverName || receiptData?.driver,
-                      tariff: receiptData?.tariff || receiptData?.tariffName || receiptData?.tariffCode,
-                      price: receiptData?.price || receiptData?.totalPrice || receiptData?.amount || receiptData?.total,
-                      vat: receiptData?.vat || receiptData?.vatAmount,
-                      paymentMethod: receiptData?.paymentMethod || receiptData?.paymentType,
+                        : locale === 'no' ? 'Ikkje spesifisert' : 'Not specified'),
+                      pickupTime: receiptData?.startDateTime || booking.pickupTime,
+                      dropoffTime: receiptData?.endDateTime,
+                      distance: receiptData?.km,
+                      duration: receiptData ? Math.round((new Date(receiptData.endDateTime).getTime() - new Date(receiptData.startDateTime).getTime()) / 60000) : undefined,
+                      licenseNumber: receiptData?.licenseNo || booking.licenseNo || undefined,
+                      driverName: undefined,
+                      tariff: undefined,
+                      price: receiptData?.total,
+                      vat: receiptData?.vat,
+                      paymentMethod: undefined,
                       tripStatus: booking.tripStatus,
                     }}
                     locale={locale === 'no' ? 'no' : 'en'}

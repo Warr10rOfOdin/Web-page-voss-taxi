@@ -33,8 +33,25 @@ interface StatsData {
   logs: BookingLog[];
 }
 
+// Check if we're in a writable environment (not Vercel serverless)
+function isWritableEnvironment(): boolean {
+  try {
+    const testDir = path.join(process.cwd(), 'data');
+    if (!fs.existsSync(testDir)) {
+      fs.mkdirSync(testDir, { recursive: true });
+    }
+    return true;
+  } catch (error) {
+    // Running on read-only file system (e.g., Vercel)
+    return false;
+  }
+}
+
 // Ensure data directory exists
 function ensureDataDir() {
+  if (!isWritableEnvironment()) {
+    return;
+  }
   const dataDir = path.join(process.cwd(), 'data');
   if (!fs.existsSync(dataDir)) {
     fs.mkdirSync(dataDir, { recursive: true });
@@ -43,6 +60,11 @@ function ensureDataDir() {
 
 // Read stats from file
 function readStatsFile(): StatsData {
+  if (!isWritableEnvironment()) {
+    console.log('Read-only environment detected, returning empty stats');
+    return { logs: [] };
+  }
+
   ensureDataDir();
 
   if (!fs.existsSync(STATS_FILE)) {
@@ -60,14 +82,19 @@ function readStatsFile(): StatsData {
 
 // Write stats to file
 function writeStatsFile(data: StatsData) {
+  if (!isWritableEnvironment()) {
+    console.log('Skipping stats write in read-only environment (Vercel serverless)');
+    return;
+  }
+
   ensureDataDir();
 
   try {
     fs.writeFileSync(STATS_FILE, JSON.stringify(data, null, 2), 'utf-8');
   } catch (error) {
-    console.error('CRITICAL ERROR writing stats file:', error);
-    // Re-throw to make errors visible
-    throw new Error(`Failed to write booking stats: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    console.error('ERROR writing stats file (non-fatal):', error);
+    // Don't throw - gracefully handle read-only filesystems
+    console.warn('Stats logging is disabled due to read-only file system');
   }
 }
 
