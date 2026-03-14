@@ -3,6 +3,7 @@ import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { Header } from '@/components/layout/Header';
+import { DisclaimerBanner } from '@/components/layout/DisclaimerBanner';
 import { Footer } from '@/components/layout/Footer';
 import '@/app/globals.css';
 import '@/styles/glassmorphism.css';
@@ -102,6 +103,7 @@ export default async function LocaleLayout({
       <body>
         <NextIntlClientProvider messages={messages}>
           <Header />
+          <DisclaimerBanner />
           <main>{children}</main>
           <Footer />
         </NextIntlClientProvider>

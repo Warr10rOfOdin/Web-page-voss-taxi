@@ -192,5 +192,10 @@
     "bookingReference": "Bestillingsreferanse",
     "confirmationNote": "Ver vennleg å lagra bestillingsreferansen din. Sjåføren vil kontakta deg snart.",
     "bookAnother": "Bestill Ein Taxi Til"
+  },
+  "disclaimer": {
+    "title": "Nettsida er under utvikling",
+    "message": "Denne nettsida er for tida under utvikling. Nokre funksjonar fungerer kanskje ikkje, og det kan vera feil. Dersom du bestiller ein taxi og får stadfesting med bestillingsreferanse, har bestillinga di gått igjennom.",
+    "close": "Lukk"
   }
 }

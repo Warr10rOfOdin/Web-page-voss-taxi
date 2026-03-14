@@ -192,5 +192,10 @@
     "bookingReference": "Booking Reference",
     "confirmationNote": "Please save your booking reference. The driver will contact you shortly.",
     "bookAnother": "Book Another Taxi"
+  },
+  "disclaimer": {
+    "title": "Website Under Development",
+    "message": "This website is currently under development. Some functions may not work and there may be bugs. If you make a booking and receive a confirmation with a booking reference, your booking has been successfully processed.",
+    "close": "Close"
   }
 }
