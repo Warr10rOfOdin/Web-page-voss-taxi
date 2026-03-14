@@ -117,33 +117,56 @@ export function BookingChecker({ locale }: BookingCheckerProps) {
   const handlePrintReceipt = async () => {
     if (!bookRef) return;
 
-    const printWindow = window.open('', '_blank');
+    setError(null);
 
     try {
+      // Fetch the PDF
       const response = await fetch(
         `/api/booking/receipt/pdf?bookRef=${encodeURIComponent(bookRef)}&locale=${locale}`
       );
 
       if (!response.ok) {
         const data = await response.json();
-        printWindow?.close();
         throw new Error(data.error || 'Failed to load receipt');
       }
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
 
-      if (printWindow) {
-        printWindow.location.href = url;
-        printWindow.onload = () => {
-          printWindow.print();
-        };
+      // Open in new window for printing
+      const printWindow = window.open(url, '_blank');
+
+      if (!printWindow) {
+        // Popup blocked - provide alternative
+        setError(
+          locale === 'no'
+            ? 'Kunne ikkje opne vindauge. Ver grei og tillat popup-vindauge eller last ned PDF i staden.'
+            : 'Could not open window. Please allow popups or download the PDF instead.'
+        );
+        window.URL.revokeObjectURL(url);
+        return;
       }
 
+      // Set up print dialog when PDF loads
+      printWindow.addEventListener('load', () => {
+        setTimeout(() => {
+          try {
+            printWindow.print();
+          } catch (printError) {
+            console.error('Print error:', printError);
+          }
+        }, 250); // Small delay to ensure PDF is fully loaded
+      });
+
+      // Clean up the blob URL after a delay
       setTimeout(() => {
         window.URL.revokeObjectURL(url);
-      }, 1000);
+      }, 5000); // Keep URL valid longer for slower connections
+
+      setSuccess(locale === 'no' ? 'Print-dialog opna!' : 'Print dialog opened!');
+      setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
+      console.error('Print receipt error:', err);
       setError(err instanceof Error ? err.message : 'Failed to print receipt');
     }
   };

@@ -8,9 +8,11 @@ export const dynamic = 'force-dynamic';
 
 // Generate PDF receipt
 export async function GET(request: NextRequest) {
+  let bookRef: string | null = null;
+
   try {
     const searchParams = request.nextUrl.searchParams;
-    const bookRef = searchParams.get('bookRef');
+    bookRef = searchParams.get('bookRef');
     const locale = (searchParams.get('locale') || 'no') as 'no' | 'en';
 
     if (!bookRef) {
@@ -121,27 +123,48 @@ export async function GET(request: NextRequest) {
     console.log('Transformed receipt data:', JSON.stringify(receiptData, null, 2));
 
     // Generate PDF - ReceiptPDF returns a Document element
+    console.log('Starting PDF generation...');
     const receiptElement = React.createElement(ReceiptPDF, { data: receiptData, locale });
-    const pdfBuffer = await ReactPDF.renderToBuffer(receiptElement as any);
+
+    let pdfBuffer: Buffer;
+    try {
+      pdfBuffer = await ReactPDF.renderToBuffer(receiptElement as any);
+      console.log(`✓ PDF generated successfully (${pdfBuffer.length} bytes)`);
+    } catch (pdfError) {
+      console.error('PDF rendering error:', pdfError);
+      throw new Error(`PDF rendering failed: ${pdfError instanceof Error ? pdfError.message : 'Unknown error'}`);
+    }
 
     // Return PDF - convert buffer to Uint8Array for NextResponse compatibility
     return new NextResponse(new Uint8Array(pdfBuffer), {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="voss-taxi-receipt-${bookRef}.pdf"`,
+        'Content-Length': pdfBuffer.length.toString(),
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
       },
     });
 
   } catch (error) {
     console.error('PDF generation error:', error);
     console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
-    return NextResponse.json(
-      {
-        error: 'Failed to generate PDF receipt',
-        details: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined
-      },
-      { status: 500 }
-    );
+
+    // Return detailed error message
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorDetails = {
+      error: 'Failed to generate PDF receipt',
+      details: errorMessage,
+      bookRef,
+      timestamp: new Date().toISOString(),
+    };
+
+    // Add stack trace in development
+    if (process.env.NODE_ENV === 'development' && error instanceof Error) {
+      (errorDetails as any).stack = error.stack;
+    }
+
+    return NextResponse.json(errorDetails, { status: 500 });
   }
 }
