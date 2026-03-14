@@ -70,17 +70,21 @@ export async function POST(request: NextRequest) {
     // Check for error in response
     if (data.errorMessage) {
       // Log failed booking
-      const firstPassenger = body.passengers?.[0] || {};
-      logBooking({
-        bookRef: undefined,
-        internalNo: undefined,
-        customerName: body.orderedBy || firstPassenger.customerName || 'Unknown',
-        fromCity: firstPassenger.fromCity || 'Unknown',
-        toCity: firstPassenger.toCity || '',
-        pickupTime: firstPassenger.pickupTime || body.pickupTime || '',
-        bookingType: 'general',
-        success: false,
-      });
+      try {
+        const firstPassenger = body.passengers?.[0] || {};
+        logBooking({
+          bookRef: undefined,
+          internalNo: undefined,
+          customerName: body.orderedBy || firstPassenger.customerName || 'Unknown',
+          fromCity: firstPassenger.fromCity || 'Unknown',
+          toCity: firstPassenger.toCity || '',
+          pickupTime: firstPassenger.pickupTime || body.pickupTime || '',
+          bookingType: 'general',
+          success: false,
+        });
+      } catch (logError) {
+        console.error('Failed to log failed booking:', logError);
+      }
 
       return NextResponse.json(
         { error: 'Booking failed', details: data.errorMessage },
@@ -89,17 +93,22 @@ export async function POST(request: NextRequest) {
     }
 
     // Log successful booking
-    const firstPassenger = body.passengers?.[0] || {};
-    logBooking({
-      bookRef: data.bookRef,
-      internalNo: data.internalNo,
-      customerName: body.orderedBy || firstPassenger.customerName || 'Unknown',
-      fromCity: firstPassenger.fromCity || 'Unknown',
-      toCity: firstPassenger.toCity || '',
-      pickupTime: firstPassenger.pickupTime || body.pickupTime || '',
-      bookingType: 'general',
-      success: true,
-    });
+    try {
+      const firstPassenger = body.passengers?.[0] || {};
+      logBooking({
+        bookRef: data.bookRef,
+        internalNo: data.internalNo,
+        customerName: body.orderedBy || firstPassenger.customerName || 'Unknown',
+        fromCity: firstPassenger.fromCity || 'Unknown',
+        toCity: firstPassenger.toCity || '',
+        pickupTime: firstPassenger.pickupTime || body.pickupTime || '',
+        bookingType: 'general',
+        success: true,
+      });
+    } catch (logError) {
+      console.error('Failed to log successful booking:', logError);
+      // Don't fail the booking just because logging failed
+    }
 
     return NextResponse.json({
       success: true,

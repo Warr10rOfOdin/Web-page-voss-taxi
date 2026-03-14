@@ -86,6 +86,24 @@ export default function AdminPage() {
     }
   };
 
+  const testStatsLogging = async () => {
+    try {
+      const response = await fetch('/api/admin/test-stats', {
+        method: 'POST',
+      });
+      const data = await response.json();
+      if (data.success) {
+        alert('Test booking logged successfully! Refresh stats to see it.');
+        await fetchStats();
+      } else {
+        alert('Failed to log test booking: ' + (data.error || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error('Error testing stats:', error);
+      alert('Error testing stats logging');
+    }
+  };
+
   const fetchRules = async () => {
     setLoading(true);
     try {
@@ -260,12 +278,20 @@ export default function AdminPage() {
             <div className="mb-8 space-y-4">
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold text-white">Booking Statistics</h2>
-                <button
-                  onClick={fetchStats}
-                  className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-semibold transition-colors"
-                >
-                  Refresh
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={testStatsLogging}
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition-colors"
+                  >
+                    Test Counter
+                  </button>
+                  <button
+                    onClick={fetchStats}
+                    className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-semibold transition-colors"
+                  >
+                    Refresh
+                  </button>
+                </div>
               </div>
 
               {/* Stats Cards */}

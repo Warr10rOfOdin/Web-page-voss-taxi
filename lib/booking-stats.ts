@@ -65,7 +65,9 @@ function writeStatsFile(data: StatsData) {
   try {
     fs.writeFileSync(STATS_FILE, JSON.stringify(data, null, 2), 'utf-8');
   } catch (error) {
-    console.error('Error writing stats file:', error);
+    console.error('CRITICAL ERROR writing stats file:', error);
+    // Re-throw to make errors visible
+    throw new Error(`Failed to write booking stats: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
 

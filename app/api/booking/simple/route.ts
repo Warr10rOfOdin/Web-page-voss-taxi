@@ -63,15 +63,19 @@ export async function POST(request: NextRequest) {
     // Check for error in response
     if (data.errorMessage) {
       // Log failed booking
-      logBooking({
-        bookRef: undefined,
-        customerName: body.customerName,
-        fromCity: body.fromCity,
-        toCity: body.toCity,
-        pickupTime: body.pickupTime,
-        bookingType: 'simple',
-        success: false,
-      });
+      try {
+        logBooking({
+          bookRef: undefined,
+          customerName: body.customerName,
+          fromCity: body.fromCity,
+          toCity: body.toCity,
+          pickupTime: body.pickupTime,
+          bookingType: 'simple',
+          success: false,
+        });
+      } catch (logError) {
+        console.error('Failed to log failed booking:', logError);
+      }
 
       return NextResponse.json(
         { error: 'Booking failed', details: data.errorMessage },
@@ -80,15 +84,20 @@ export async function POST(request: NextRequest) {
     }
 
     // Log successful booking
-    logBooking({
-      bookRef: data.bookRef,
-      customerName: body.customerName,
-      fromCity: body.fromCity,
-      toCity: body.toCity,
-      pickupTime: body.pickupTime,
-      bookingType: 'simple',
-      success: true,
-    });
+    try {
+      logBooking({
+        bookRef: data.bookRef,
+        customerName: body.customerName,
+        fromCity: body.fromCity,
+        toCity: body.toCity,
+        pickupTime: body.pickupTime,
+        bookingType: 'simple',
+        success: true,
+      });
+    } catch (logError) {
+      console.error('Failed to log successful booking:', logError);
+      // Don't fail the booking just because logging failed
+    }
 
     return NextResponse.json({
       success: true,
