@@ -303,12 +303,60 @@ Before going live:
 4. **Sensitive Data**: Receipts contain customer information - handle securely
 5. **HTTPS**: Always use HTTPS in production for email/PDF endpoints
 
+## Troubleshooting
+
+### Common Error: "500 - Failed to load resource"
+
+**Error Message:**
+```
+api/booking/receipt/email:1  Failed to load resource: the server responded with a status of 500 ()
+```
+
+**Cause:** Missing Taxi4U API credentials (TAXI4U_USER_ID and TAXI4U_PASSWORD)
+
+**Solution:**
+1. Create a `.env.local` file in the root directory (copy from `.env.local.example`)
+2. Add your Taxi4U API credentials:
+   ```bash
+   TAXI4U_USER_ID=your_actual_user_id
+   TAXI4U_PASSWORD=your_actual_password
+   TAXI4U_CENTRAL_CODE=VS
+   ```
+3. Restart your development server: `npm run dev`
+4. For production (Vercel/deployment), add these as environment variables in your hosting dashboard
+
+**Note:** The receipt email feature requires valid Taxi4U API credentials to fetch booking data. Without these, the endpoint will return a 503 Service Unavailable error.
+
+### SMTP Not Configured
+
+If SMTP is not configured, the system will:
+- Still allow PDF receipt downloads
+- Log email attempts to console (in development)
+- Return success message indicating "DEV MODE"
+
+To enable actual email sending, configure SMTP settings (see "SMTP Settings" above).
+
+### Email Not Sending
+
+1. Check SMTP credentials are correct
+2. Test SMTP connection: visit `/api/email/test-smtp`
+3. Check email provider settings (port, SSL/TLS)
+4. Verify firewall/network allows SMTP traffic
+5. Check spam folder for test emails
+
+### PDF Generation Fails
+
+1. Check server logs for specific error
+2. Verify all required booking data fields are present
+3. Ensure `@react-pdf/renderer` package is installed
+4. Check that receipt data from Taxi4U API is valid
+
 ## Support
 
 For issues or questions:
 - Check server logs for detailed error messages
 - Visit `/api/email/test-smtp` to diagnose SMTP issues
-- Review this documentation
+- Review this troubleshooting section
 - Contact support with error messages and logs
 
 ## Advanced Configuration

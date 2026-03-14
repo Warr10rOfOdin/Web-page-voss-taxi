@@ -26,6 +26,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check if Taxi4U credentials are configured
+    if (!process.env.TAXI4U_USER_ID || !process.env.TAXI4U_PASSWORD) {
+      console.error('⚠️  Taxi4U credentials not configured');
+      return NextResponse.json(
+        {
+          success: false,
+          error: locale === 'no'
+            ? 'Kvitteringsteneste er ikkje konfigurert. Kontakt administrator.'
+            : 'Receipt service is not configured. Please contact administrator.',
+          details: 'Missing TAXI4U_USER_ID or TAXI4U_PASSWORD environment variables',
+        },
+        { status: 503 }
+      );
+    }
+
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -95,7 +110,7 @@ export async function POST(request: NextRequest) {
 
     const receiptData: ReceiptData = {
       bookRef: bookingData.bookRef,
-      date: new Date().toISOString(),
+      date: bookingData.bookedTimeStamp || receiptApiData.bookedDateTime || new Date().toISOString(),
       customerName: passenger.clientName || 'Unknown',
       customerPhone: passenger.tel,
       pickupAddress: `${passenger.fromStreet || ''}, ${passenger.fromPostalCode || ''} ${passenger.fromCity || ''}`.trim(),
@@ -258,18 +273,39 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Email receipt error:', error);
     console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
+    console.error('Error context:', { bookRef, locale });
 
     // Provide helpful error messages
     let errorMessage = 'Failed to send receipt email';
+    let statusCode = 500;
+
     if (error instanceof Error) {
-      if (error.message.includes('SMTP')) {
+      // Authentication errors
+      if (error.message.includes('TAXI4U_USER_ID') || error.message.includes('TAXI4U_PASSWORD') || error.message.includes('Login failed')) {
+        errorMessage = locale === 'no'
+          ? 'Kvitteringsteneste er ikkje konfigurert. Kontakt administrator.'
+          : 'Receipt service is not configured. Please contact administrator.';
+        statusCode = 503;
+      }
+      // SMTP errors
+      else if (error.message.includes('SMTP')) {
         errorMessage = locale === 'no'
           ? 'Kunne ikkje sende e-post. Sjekk e-postkonfigurasjon.'
           : 'Could not send email. Please check email configuration.';
-      } else if (error.message.includes('PDF')) {
+        statusCode = 503;
+      }
+      // PDF generation errors
+      else if (error.message.includes('PDF')) {
         errorMessage = locale === 'no'
           ? 'Kunne ikkje generere kvittering. Prøv igjen seinare.'
           : 'Could not generate receipt. Please try again later.';
+      }
+      // Booking not found
+      else if (error.message.includes('404') || error.message.includes('not found')) {
+        errorMessage = locale === 'no'
+          ? 'Fant ikkje booking eller kvittering.'
+          : 'Booking or receipt not found.';
+        statusCode = 404;
       }
     }
 
@@ -281,7 +317,7 @@ export async function POST(request: NextRequest) {
         bookRef: bookRef || undefined,
         timestamp: new Date().toISOString(),
       },
-      { status: 500 }
+      { status: statusCode }
     );
   }
 }
