@@ -41,8 +41,8 @@ export function CalculatorEmbed({ locale }: CalculatorEmbedProps) {
             </svg>
             <p>
               {locale === 'no'
-                ? 'Prisane er basert på gjeldande Voss Taxi-takstar. Endeleg pris kan variere avhengig av faktiske forhold.'
-                : 'Prices are based on current Voss Taxi tariffs. Final price may vary depending on actual conditions.'}
+                ? 'Prisane er berre estimat og kan avvike frå den faktiske prisen i bilen, på grunn av webfeil, trafikk, vegforhold og andre faktorar.'
+                : 'Prices are only estimates and may differ from the actual in-car price due to web errors, traffic, road conditions, and other factors.'}
             </p>
           </div>
         </CardContent>
