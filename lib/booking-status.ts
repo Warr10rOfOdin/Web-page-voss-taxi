@@ -33,8 +33,8 @@ export const STATUS_CODES: Record<string, StatusInfo> = {
   // Payment method statuses
   'A': {
     code: 'A',
-    label: { no: 'Kontant', en: 'Cash' },
-    description: { no: 'Betaling med kontanter', en: 'Cash payment' },
+    label: { no: 'Kontant', en: 'Paid in Car' },
+    description: { no: 'Betaling i bil (kontant/kort)', en: 'Paid in car (cash/card)' },
     type: 'payment',
     canDelete: true,
     canGetReceipt: false,
