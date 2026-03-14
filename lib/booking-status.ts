@@ -18,7 +18,7 @@ export interface StatusInfo {
     no: string;
     en: string;
   };
-  type: 'payment' | 'process' | 'sent' | 'response' | 'completed' | 'changed' | 'unknown';
+  type: 'payment' | 'process' | 'sent' | 'response' | 'completed' | 'changed' | 'cancelled' | 'unknown';
   canDelete: boolean;
   canGetReceipt?: boolean;
   showLoyve?: boolean; // Show license/car number for this status
@@ -258,6 +258,17 @@ export const STATUS_CODES: Record<string, StatusInfo> = {
     canDelete: true,
     canGetReceipt: false,
     icon: '⏰'
+  },
+
+  // Cancelled status
+  '0': {
+    code: '0',
+    label: { no: 'Avbestilt', en: 'Cancelled' },
+    description: { no: 'Turen er avbestilt', en: 'Trip has been cancelled' },
+    type: 'cancelled',
+    canDelete: false,
+    canGetReceipt: false,
+    icon: '🚫'
   }
 };
 
@@ -366,6 +377,8 @@ export function getStatusColorClass(type: StatusInfo['type']): string {
       return 'bg-emerald-900/20 border-emerald-500/50 text-emerald-300';
     case 'changed':
       return 'bg-orange-900/20 border-orange-500/50 text-orange-300';
+    case 'cancelled':
+      return 'bg-red-900/20 border-red-500/50 text-red-300';
     case 'unknown':
       return 'bg-gray-900/20 border-gray-500/50 text-gray-300';
     default:

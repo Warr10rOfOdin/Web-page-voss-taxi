@@ -421,6 +421,25 @@
         "canDelete": true,
         "canGetReceipt": false
       }
+    ],
+    "cancelled": [
+      {
+        "code": "0",
+        "sentralkode": "VS",
+        "vogn": 0,
+        "category": "Cancelled",
+        "label": {
+          "no": "Avbestilt",
+          "en": "Cancelled"
+        },
+        "description": {
+          "no": "Turen er avbestilt",
+          "en": "Trip has been cancelled"
+        },
+        "icon": "🚫",
+        "canDelete": false,
+        "canGetReceipt": false
+      }
     ]
   },
   "carStatusCodes": {

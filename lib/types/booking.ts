@@ -73,11 +73,13 @@ export interface BookingResponse {
 
 export interface PriceQuoteRequest {
   fromStreet: string;
-  fromCity: string;
   fromPostalCode: string;
+  fromLat: number;
+  fromLon: number;
   toStreet: string;
-  toCity: string;
   toPostalCode: string;
+  toLat: number;
+  toLon: number;
   attributes?: number[];
   pickupTime?: string; // ISO 8601 format
 }
