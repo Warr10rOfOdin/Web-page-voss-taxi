@@ -28,6 +28,28 @@ interface BookingStats {
   bookingsByMonth: Record<string, number>;
 }
 
+interface VisitorStats {
+  totalVisits: number;
+  uniquePaths: number;
+  visitsByLocale: {
+    no: number;
+    en: number;
+  };
+  visitsByPath: Record<string, number>;
+  visitsByDay: Record<string, number>;
+  visitsByMonth: Record<string, number>;
+  recentVisits: Array<{
+    id: string;
+    timestamp: string;
+    path: string;
+    locale: string;
+    userAgent?: string;
+    referrer?: string;
+    ip?: string;
+  }>;
+  topPages: Array<{ path: string; count: number }>;
+}
+
 export default function AdminPage() {
   const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
@@ -36,7 +58,9 @@ export default function AdminPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingRule, setEditingRule] = useState<BookingRule | null>(null);
   const [stats, setStats] = useState<BookingStats | null>(null);
+  const [visitorStats, setVisitorStats] = useState<VisitorStats | null>(null);
   const [showStats, setShowStats] = useState(true);
+  const [showVisitorStats, setShowVisitorStats] = useState(true);
 
   // Form state
   const [formData, setFormData] = useState<Partial<BookingRule>>({
@@ -58,6 +82,7 @@ export default function AdminPage() {
       setAuthenticated(true);
       fetchRules();
       fetchStats();
+      fetchVisitorStats();
     }
   }, []);
 
@@ -69,6 +94,7 @@ export default function AdminPage() {
       setAuthenticated(true);
       fetchRules();
       fetchStats();
+      fetchVisitorStats();
     } else {
       alert('Invalid password');
     }
@@ -83,6 +109,18 @@ export default function AdminPage() {
       }
     } catch (error) {
       console.error('Error fetching stats:', error);
+    }
+  };
+
+  const fetchVisitorStats = async () => {
+    try {
+      const response = await fetch('/api/admin/visitor-stats?type=summary');
+      const data = await response.json();
+      if (data.success) {
+        setVisitorStats(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching visitor stats:', error);
     }
   };
 
@@ -253,10 +291,16 @@ export default function AdminPage() {
             <h1 className="text-4xl font-bold text-white">Admin Dashboard</h1>
             <div className="flex gap-3">
               <Button
+                onClick={() => setShowVisitorStats(!showVisitorStats)}
+                variant="secondary"
+              >
+                {showVisitorStats ? 'Hide Visitors' : 'Show Visitors'}
+              </Button>
+              <Button
                 onClick={() => setShowStats(!showStats)}
                 variant="secondary"
               >
-                {showStats ? 'Hide Stats' : 'Show Stats'}
+                {showStats ? 'Hide Bookings' : 'Show Bookings'}
               </Button>
               <Button
                 onClick={() => {
@@ -272,6 +316,122 @@ export default function AdminPage() {
               </Button>
             </div>
           </div>
+
+          {/* Visitor Statistics Section */}
+          {showVisitorStats && visitorStats && (
+            <div className="mb-8 space-y-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold text-white">Visitor Statistics</h2>
+                <button
+                  onClick={fetchVisitorStats}
+                  className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-semibold transition-colors"
+                >
+                  Refresh
+                </button>
+              </div>
+
+              {/* Visitor Stats Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="bg-gradient-to-br from-purple-600/20 to-purple-600/10 backdrop-blur-md border border-purple-600/30 rounded-xl p-6">
+                  <h3 className="text-purple-400 text-sm font-semibold mb-2">Total Visits</h3>
+                  <p className="text-4xl font-bold text-white">{visitorStats.totalVisits}</p>
+                </div>
+
+                <div className="bg-gradient-to-br from-blue-600/20 to-blue-600/10 backdrop-blur-md border border-blue-600/30 rounded-xl p-6">
+                  <h3 className="text-blue-400 text-sm font-semibold mb-2">Unique Pages</h3>
+                  <p className="text-4xl font-bold text-white">{visitorStats.uniquePaths}</p>
+                </div>
+
+                <div className="bg-gradient-to-br from-green-600/20 to-green-600/10 backdrop-blur-md border border-green-600/30 rounded-xl p-6">
+                  <h3 className="text-green-400 text-sm font-semibold mb-2">Norwegian</h3>
+                  <p className="text-4xl font-bold text-white">{visitorStats.visitsByLocale.no}</p>
+                  <p className="text-green-400 text-xs mt-1">
+                    {visitorStats.totalVisits > 0 ? Math.round((visitorStats.visitsByLocale.no / visitorStats.totalVisits) * 100) : 0}% of visits
+                  </p>
+                </div>
+
+                <div className="bg-gradient-to-br from-taxi-yellow/20 to-taxi-yellow/10 backdrop-blur-md border border-taxi-yellow/30 rounded-xl p-6">
+                  <h3 className="text-taxi-yellow/80 text-sm font-semibold mb-2">English</h3>
+                  <p className="text-4xl font-bold text-white">{visitorStats.visitsByLocale.en}</p>
+                  <p className="text-taxi-yellow/80 text-xs mt-1">
+                    {visitorStats.totalVisits > 0 ? Math.round((visitorStats.visitsByLocale.en / visitorStats.totalVisits) * 100) : 0}% of visits
+                  </p>
+                </div>
+              </div>
+
+              {/* Top Pages */}
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6">
+                <h3 className="text-xl font-bold text-white mb-4">Top Pages</h3>
+                {visitorStats.topPages.length === 0 ? (
+                  <p className="text-white/70">No visits yet</p>
+                ) : (
+                  <div className="space-y-2">
+                    {visitorStats.topPages.map((page, index) => (
+                      <div key={page.path} className="flex justify-between items-center bg-white/5 rounded-lg p-3">
+                        <div className="flex items-center gap-3">
+                          <span className="text-taxi-yellow font-bold text-lg">#{index + 1}</span>
+                          <span className="text-white font-mono text-sm">{page.path}</span>
+                        </div>
+                        <span className="font-semibold text-taxi-yellow">{page.count} visits</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Recent Visits */}
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6">
+                <h3 className="text-xl font-bold text-white mb-4">Recent Visits</h3>
+                {visitorStats.recentVisits.length === 0 ? (
+                  <p className="text-white/70">No visits yet</p>
+                ) : (
+                  <div className="space-y-2 max-h-96 overflow-y-auto">
+                    {visitorStats.recentVisits.map((visit) => (
+                      <div
+                        key={visit.id}
+                        className="bg-white/5 rounded-lg p-3"
+                      >
+                        <div className="flex justify-between items-start mb-2">
+                          <span className="text-white font-mono text-sm">{visit.path}</span>
+                          <span className={`px-2 py-0.5 rounded text-xs font-semibold ${
+                            visit.locale === 'no' ? 'bg-green-600 text-white' : 'bg-taxi-yellow text-taxi-black'
+                          }`}>
+                            {visit.locale.toUpperCase()}
+                          </span>
+                        </div>
+                        <p className="text-white/50 text-xs">
+                          {new Date(visit.timestamp).toLocaleString()}
+                        </p>
+                        {visit.ip && (
+                          <p className="text-white/30 text-xs">IP: {visit.ip}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Monthly Visitor Statistics */}
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6">
+                <h3 className="text-xl font-bold text-white mb-4">Visits by Month</h3>
+                {Object.keys(visitorStats.visitsByMonth).length === 0 ? (
+                  <p className="text-white/70">No data yet</p>
+                ) : (
+                  <div className="space-y-2">
+                    {Object.entries(visitorStats.visitsByMonth)
+                      .sort(([a], [b]) => b.localeCompare(a))
+                      .slice(0, 6)
+                      .map(([month, count]) => (
+                        <div key={month} className="flex justify-between items-center">
+                          <span className="text-white">{month}</span>
+                          <span className="font-semibold text-taxi-yellow">{count} visits</span>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Booking Statistics Section */}
           {showStats && stats && (

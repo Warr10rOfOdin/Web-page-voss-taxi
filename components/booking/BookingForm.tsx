@@ -31,6 +31,9 @@ export function BookingForm({ locale }: BookingFormProps) {
   const [toLon, setToLon] = useState<number | null>(null);
   const [pickupTime, setPickupTime] = useState('');
   const [passengerCount, setPassengerCount] = useState(1);
+  const [kidsCount, setKidsCount] = useState(0);
+  const [kidsAges, setKidsAges] = useState<number[]>([]);
+  const [kidsMonths, setKidsMonths] = useState<number[]>([]); // For 0-year-old infants
   const [messageToCar, setMessageToCar] = useState('');
 
   // Price quote state
@@ -152,11 +155,14 @@ export function BookingForm({ locale }: BookingFormProps) {
     setPriceQuote(null);
 
     try {
-      // Calculate attributes based on passenger count
+      // Calculate attributes based on passenger count and kids
       // Attribute codes from Taxi4U API:
       // 83=2 PERSONER, 84=3 PERSONER, 85=4 PERSONER
       // 0=6 SETER, 1=7 SETER, 89=8 SETER
+      // Child seats: 12=BARNESETE (general), 8=BABY (infant seat)
       const attributes: number[] = [];
+
+      // Add passenger count attributes
       if (passengerCount === 2) {
         attributes.push(83); // 2 PERSONER
       } else if (passengerCount === 3) {
@@ -170,6 +176,31 @@ export function BookingForm({ locale }: BookingFormProps) {
       } else if (passengerCount === 8) {
         attributes.push(89); // 8 SETER
       }
+
+      // Add child seat attributes based on kids' ages
+      // Attribute codes from Taxi4U:
+      // 27=SPEDBARN STOL (Infant seat)
+      // 29=BARNESTOL 0-1ÅR/0-13KG
+      // 30=BARNESTOL 1-4ÅR/9-18KG
+      // 31=BARNESTOL 4-10ÅR/15-25KG
+      kidsAges.forEach((age, index) => {
+        if (age === 0) {
+          // For 0 year olds, check months
+          const months = kidsMonths[index] || 0;
+          if (months < 12) {
+            attributes.push(27); // SPEDBARN STOL (Infant seat)
+          } else {
+            attributes.push(29); // BARNESTOL 0-1ÅR/0-13KG
+          }
+        } else if (age === 1) {
+          attributes.push(29); // BARNESTOL 0-1ÅR/0-13KG
+        } else if (age >= 2 && age <= 4) {
+          attributes.push(30); // BARNESTOL 1-4ÅR/9-18KG
+        } else if (age >= 5 && age <= 10) {
+          attributes.push(31); // BARNESTOL 4-10ÅR/15-25KG
+        }
+        // Kids 11+ typically don't need special seats
+      });
 
       const response = await fetch('/api/pricequote', {
         method: 'POST',
@@ -217,11 +248,14 @@ export function BookingForm({ locale }: BookingFormProps) {
     const carGroupId = passengerCount <= 4 ? 1 : passengerCount <= 6 ? 2 : 3;
 
     try {
-      // Calculate attributes based on passenger count
+      // Calculate attributes based on passenger count and kids
       // Attribute codes from Taxi4U API:
       // 83=2 PERSONER, 84=3 PERSONER, 85=4 PERSONER
       // 0=6 SETER, 1=7 SETER, 89=8 SETER
+      // Child seats: 12=BARNESETE (general), 8=BABY (infant seat)
       const attributes: number[] = [];
+
+      // Add passenger count attributes
       if (passengerCount === 2) {
         attributes.push(83); // 2 PERSONER
       } else if (passengerCount === 3) {
@@ -236,6 +270,31 @@ export function BookingForm({ locale }: BookingFormProps) {
         attributes.push(89); // 8 SETER
       }
 
+      // Add child seat attributes based on kids' ages
+      // Attribute codes from Taxi4U:
+      // 27=SPEDBARN STOL (Infant seat)
+      // 29=BARNESTOL 0-1ÅR/0-13KG
+      // 30=BARNESTOL 1-4ÅR/9-18KG
+      // 31=BARNESTOL 4-10ÅR/15-25KG
+      kidsAges.forEach((age, index) => {
+        if (age === 0) {
+          // For 0 year olds, check months
+          const months = kidsMonths[index] || 0;
+          if (months < 12) {
+            attributes.push(27); // SPEDBARN STOL (Infant seat)
+          } else {
+            attributes.push(29); // BARNESTOL 0-1ÅR/0-13KG
+          }
+        } else if (age === 1) {
+          attributes.push(29); // BARNESTOL 0-1ÅR/0-13KG
+        } else if (age >= 2 && age <= 4) {
+          attributes.push(30); // BARNESTOL 1-4ÅR/9-18KG
+        } else if (age >= 5 && age <= 10) {
+          attributes.push(31); // BARNESTOL 4-10ÅR/15-25KG
+        }
+        // Kids 11+ typically don't need special seats
+      });
+
       // Prepare booking data for API
       // Calculate pickup time - round to nearest 5 minutes
       const calculatePickupTime = (): string => {
@@ -249,9 +308,27 @@ export function BookingForm({ locale }: BookingFormProps) {
 
       const finalPickupTime = calculatePickupTime();
 
+      // Build message to car including kids info
+      let finalMessageToCar = messageToCar || '';
+      if (kidsCount > 0 && kidsAges.length > 0) {
+        const kidsAgeStrings = kidsAges.map((age, index) => {
+          if (age === 0) {
+            const months = kidsMonths[index] || 0;
+            return locale === 'no' ? `${months} mnd` : `${months} mo`;
+          }
+          return locale === 'no' ? `${age} år` : `${age}y`;
+        });
+        const kidsInfo = locale === 'no'
+          ? `${kidsCount} barn (${kidsAgeStrings.join(', ')})`
+          : `${kidsCount} ${kidsCount === 1 ? 'child' : 'children'} (${kidsAgeStrings.join(', ')})`;
+        finalMessageToCar = finalMessageToCar
+          ? `${finalMessageToCar}. ${kidsInfo}`
+          : kidsInfo;
+      }
+
       const bookingData = {
         orderedBy: 'Website',
-        messageToCar: messageToCar || undefined,
+        messageToCar: finalMessageToCar || undefined,
         pickupTime: finalPickupTime,
         carGroupId: carGroupId,
         numberOfCars: 1,
@@ -348,6 +425,9 @@ export function BookingForm({ locale }: BookingFormProps) {
     setToPostalCode('');
     setPickupTime('');
     setPassengerCount(1);
+    setKidsCount(0);
+    setKidsAges([]);
+    setKidsMonths([]);
     setMessageToCar('');
     setPriceQuote(null);
     setPriceError(null);
@@ -435,7 +515,33 @@ export function BookingForm({ locale }: BookingFormProps) {
                 </p>
                 <p className="text-white font-semibold">
                   {passengerCount} {passengerCount === 1 ? (locale === 'no' ? 'passasjer' : 'passenger') : (locale === 'no' ? 'passasjerer' : 'passengers')}
+                  {kidsCount > 0 && (
+                    <span className="text-taxi-yellow ml-2">
+                      ({kidsCount} {kidsCount === 1 ? (locale === 'no' ? 'barn' : 'child') : (locale === 'no' ? 'born' : 'children')})
+                    </span>
+                  )}
                 </p>
+                {kidsCount > 0 && kidsAges.length > 0 && (
+                  <p className="text-white/70 text-sm mt-1">
+                    {locale === 'no' ? 'Alder:' : 'Ages:'} {kidsAges.map((age, i) => {
+                      if (age === 0) {
+                        const months = kidsMonths[i] || 0;
+                        return (
+                          <span key={i}>
+                            {months} {months === 1 ? (locale === 'no' ? 'månad' : 'month') : (locale === 'no' ? 'månader' : 'months')}
+                            {i < kidsAges.length - 1 ? ', ' : ''}
+                          </span>
+                        );
+                      }
+                      return (
+                        <span key={i}>
+                          {age} {age === 1 ? (locale === 'no' ? 'år' : 'year') : (locale === 'no' ? 'år' : 'years')}
+                          {i < kidsAges.length - 1 ? ', ' : ''}
+                        </span>
+                      );
+                    })}
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -526,11 +632,19 @@ export function BookingForm({ locale }: BookingFormProps) {
           {/* Passenger Count */}
           <div>
             <label className="block text-sm font-semibold mb-3 text-white">
-              {locale === 'no' ? 'Antall passasjerer *' : 'Number of Passengers *'}
+              {locale === 'no' ? 'Totalt antall passasjerer *' : 'Total Number of Passengers *'}
             </label>
             <select
               value={passengerCount}
-              onChange={(e) => setPassengerCount(Number(e.target.value))}
+              onChange={(e) => {
+                const newCount = Number(e.target.value);
+                setPassengerCount(newCount);
+                // Reset kids count if it exceeds new passenger count
+                if (kidsCount > newCount - 1) {
+                  setKidsCount(0);
+                  setKidsAges([]);
+                }
+              }}
               required
               className="w-full px-5 py-4 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm cursor-pointer"
             >
@@ -543,7 +657,143 @@ export function BookingForm({ locale }: BookingFormProps) {
               <option value={7}>7 {locale === 'no' ? 'passasjerer' : 'passengers'}</option>
               <option value={8}>8 {locale === 'no' ? 'passasjerer' : 'passengers'}</option>
             </select>
+            <p className="text-xs text-white/70 mt-2">
+              {locale === 'no'
+                ? '👥 Dette er totalt antall personar, inkludert born'
+                : '👥 This is the total number of people, including children'}
+            </p>
           </div>
+
+          {/* Kids Count */}
+          <div>
+            <label className="block text-sm font-semibold mb-3 text-white">
+              {locale === 'no' ? 'Kor mange av desse er born?' : 'How many of these are children?'}
+            </label>
+            <select
+              value={kidsCount}
+              onChange={(e) => {
+                const count = Number(e.target.value);
+                setKidsCount(count);
+                // Initialize ages and months arrays
+                if (count > kidsAges.length) {
+                  setKidsAges([...kidsAges, ...Array(count - kidsAges.length).fill(5)]);
+                  setKidsMonths([...kidsMonths, ...Array(count - kidsMonths.length).fill(0)]);
+                } else {
+                  setKidsAges(kidsAges.slice(0, count));
+                  setKidsMonths(kidsMonths.slice(0, count));
+                }
+              }}
+              className="w-full px-5 py-4 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm cursor-pointer"
+            >
+              <option value={0}>{locale === 'no' ? 'Ingen born' : 'No children'}</option>
+              {Array.from({ length: Math.min(passengerCount, 7) }, (_, i) => i + 1).map(num => (
+                <option key={num} value={num}>
+                  {num} {num === 1 ? (locale === 'no' ? 'barn' : 'child') : (locale === 'no' ? 'born' : 'children')}
+                </option>
+              ))}
+            </select>
+            {kidsCount > 0 && (
+              <p className="text-xs text-white/70 mt-2">
+                {locale === 'no'
+                  ? '⚠️ Born er inkludert i totalt antall passasjerer, ikkje i tillegg'
+                  : '⚠️ Children are included in the total passenger count, not additional'}
+              </p>
+            )}
+          </div>
+
+          {/* Kids Ages */}
+          {kidsCount > 0 && (
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-taxi-yellow/30 space-y-4">
+              <h3 className="text-lg font-bold text-white flex items-center">
+                <svg className="w-5 h-5 text-taxi-yellow mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
+                </svg>
+                {locale === 'no' ? 'Alder på born' : 'Ages of Children'}
+              </h3>
+              <p className="text-sm text-white/80">
+                {locale === 'no'
+                  ? 'Oppgi alderen for kvart barn slik at vi kan sørge for riktige barnesete.'
+                  : 'Specify the age of each child so we can provide appropriate child seats.'}
+              </p>
+              <div className="space-y-4">
+                {kidsAges.map((age, index) => (
+                  <div key={index} className="bg-white/5 rounded-xl p-4 border border-white/20">
+                    <label className="block text-sm font-semibold mb-2 text-white">
+                      {locale === 'no' ? `Barn ${index + 1}` : `Child ${index + 1}`}
+                    </label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs text-white/70 mb-1">
+                          {locale === 'no' ? 'Alder (år)' : 'Age (years)'}
+                        </label>
+                        <select
+                          value={age}
+                          onChange={(e) => {
+                            const newAges = [...kidsAges];
+                            newAges[index] = Number(e.target.value);
+                            setKidsAges(newAges);
+                          }}
+                          className="w-full px-4 py-3 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm cursor-pointer"
+                        >
+                          <option value={0}>{locale === 'no' ? '0 år' : '0 years'}</option>
+                          {Array.from({ length: 17 }, (_, i) => i + 1).map(a => (
+                            <option key={a} value={a}>
+                              {a} {a === 1 ? (locale === 'no' ? 'år' : 'year') : (locale === 'no' ? 'år' : 'years')}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      {age === 0 && (
+                        <div>
+                          <label className="block text-xs text-white/70 mb-1">
+                            {locale === 'no' ? 'Månader' : 'Months'}
+                          </label>
+                          <select
+                            value={kidsMonths[index] || 0}
+                            onChange={(e) => {
+                              const newMonths = [...kidsMonths];
+                              newMonths[index] = Number(e.target.value);
+                              setKidsMonths(newMonths);
+                            }}
+                            className="w-full px-4 py-3 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm cursor-pointer"
+                          >
+                            {Array.from({ length: 12 }, (_, i) => i).map(m => (
+                              <option key={m} value={m}>
+                                {m} {m === 1 ? (locale === 'no' ? 'månad' : 'month') : (locale === 'no' ? 'månader' : 'months')}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="bg-taxi-yellow/10 border border-taxi-yellow/30 rounded-lg p-4 mt-4">
+                <p className="text-sm text-white/90">
+                  <span className="font-bold text-taxi-yellow">ℹ️ {locale === 'no' ? 'Barnesete-info:' : 'Child Seat Info:'}</span>
+                  <br />
+                  {locale === 'no' ? (
+                    <>
+                      • 0-11 mnd: Spedbarnstol (0-13kg)<br />
+                      • 0-1 år: Barnestol 0-1år (0-13kg)<br />
+                      • 1-4 år: Barnestol 1-4år (9-18kg)<br />
+                      • 5-10 år: Barnestol 4-10år (15-25kg)<br />
+                      • 11+ år: Vanleg beltesete
+                    </>
+                  ) : (
+                    <>
+                      • 0-11 mo: Infant seat (0-13kg)<br />
+                      • 0-1 year: Child seat 0-1yr (0-13kg)<br />
+                      • 1-4 years: Child seat 1-4yr (9-18kg)<br />
+                      • 5-10 years: Child seat 4-10yr (15-25kg)<br />
+                      • 11+ years: Regular seat belt
+                    </>
+                  )}
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Pickup Location */}
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 sm:p-8 border-2 border-taxi-yellow/30 space-y-5 mt-8">
