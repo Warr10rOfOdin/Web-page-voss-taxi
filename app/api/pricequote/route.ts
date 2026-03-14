@@ -7,7 +7,7 @@ const TAXI4U_CENTRAL_CODE = process.env.TAXI4U_CENTRAL_CODE || 'vs';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { fromStreet, fromPostalCode, fromLat, fromLon, toStreet, toPostalCode, toLat, toLon, attributes, pickupTime } = body;
+    const { fromStreet, fromPostalCode, fromLat, fromLon, toStreet, toPostalCode, toLat, toLon, carGroupId, attributes, pickupTime } = body;
 
     // Validate required fields
     if (!fromStreet || !toStreet) {
@@ -29,6 +29,7 @@ export async function POST(req: NextRequest) {
       toPostalCode: toPostalCode || '',
       toLat: toLat || 0,
       toLon: toLon || 0,
+      carGroupId: carGroupId || 1, // Default to Standard Taxi if not provided
       attributes: attributes || [],
       pickupTime: pickupTime || new Date().toISOString(),
     };
