@@ -282,6 +282,12 @@ export function BookingForm({ locale }: BookingFormProps) {
         // Kids 11+ typically don't need special seats
       });
 
+      // Calculate car group based on passenger count
+      // 1-4 passengers = Standard Taxi (carGroupId 1)
+      // 5-6 passengers = Large Taxi (carGroupId 2)
+      // 7+ passengers = Minibus (carGroupId 3)
+      const carGroupId = passengerCount <= 4 ? 1 : passengerCount <= 6 ? 2 : 3;
+
       const response = await fetch('/api/pricequote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -294,6 +300,7 @@ export function BookingForm({ locale }: BookingFormProps) {
           toPostalCode,
           toLat: finalToLat,
           toLon: finalToLon,
+          carGroupId,
           attributes,
           pickupTime: pickupTime ? formatDateForTaxi4U(new Date(pickupTime)) : formatDateForTaxi4U(new Date()),
         }),
