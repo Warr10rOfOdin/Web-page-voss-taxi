@@ -158,71 +158,61 @@ export const ReceiptCard: React.FC<ReceiptCardProps> = ({ data, locale }) => {
           <h4 className="font-semibold text-sm text-gray-700 uppercase tracking-wide">
             {t.tripSummary}
           </h4>
-          <div className="space-y-2 bg-gray-50 p-4 rounded-lg">
-            <div className="flex justify-between items-start">
-              <span className="text-sm text-gray-600">{t.pickup}:</span>
-              <span className="font-medium text-right max-w-[60%]">{data.pickupAddress}</span>
+          <div className="space-y-3 bg-gray-50 p-4 rounded-lg">
+            {/* Pickup and Dropoff */}
+            <div className="space-y-2">
+              <div>
+                <div className="text-xs text-gray-500 mb-1">{t.pickup}:</div>
+                <div className="font-medium text-sm leading-relaxed">{data.pickupAddress}</div>
+              </div>
+              <div>
+                <div className="text-xs text-gray-500 mb-1">{t.dropoff}:</div>
+                <div className="font-medium text-sm leading-relaxed">{data.dropoffAddress}</div>
+              </div>
             </div>
-            <div className="flex justify-between items-start">
-              <span className="text-sm text-gray-600">{t.dropoff}:</span>
-              <span className="font-medium text-right max-w-[60%]">{data.dropoffAddress}</span>
-            </div>
-            <div className="h-px bg-gray-200 my-2"></div>
-            <div className="flex justify-between">
-              <span className="text-sm text-gray-600">{t.pickupTime}:</span>
-              <span className="text-sm">
-                {new Date(data.pickupTime).toLocaleString(locale === 'no' ? 'no-NO' : 'en-US', {
-                  dateStyle: 'short',
-                  timeStyle: 'short',
-                })}
-              </span>
-            </div>
-            {data.dropoffTime && (
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-600">{t.dropoffTime}:</span>
-                <span className="text-sm">
-                  {new Date(data.dropoffTime).toLocaleString(locale === 'no' ? 'no-NO' : 'en-US', {
-                    dateStyle: 'short',
-                    timeStyle: 'short',
+
+            <div className="h-px bg-gray-200"></div>
+
+            {/* Time Information */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <div className="text-xs text-gray-500 mb-1">{t.pickupTime}:</div>
+                <div className="text-sm font-medium">
+                  {new Date(data.pickupTime).toLocaleString(locale === 'no' ? 'no-NO' : 'en-US', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
                   })}
-                </span>
+                </div>
               </div>
-            )}
-            {(data.distance !== undefined || data.duration !== undefined) && (
-              <div className="h-px bg-gray-200 my-2"></div>
-            )}
-            {data.distance !== undefined && (
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-600">{t.distance}:</span>
-                <span className="font-medium">{formatDistance(data.distance)}</span>
-              </div>
-            )}
-            {data.duration !== undefined && (
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-600">{t.duration}:</span>
-                <span className="font-medium">{formatDuration(data.duration)}</span>
-              </div>
-            )}
-            {(data.licenseNumber || data.driverName) && (
-              <div className="h-px bg-gray-200 my-2"></div>
-            )}
-            {data.licenseNumber && (
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-600">{t.license}:</span>
-                <span className="font-medium">{data.licenseNumber}</span>
-              </div>
-            )}
-            {data.driverName && (
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-600">{t.driver}:</span>
-                <span className="font-medium">{data.driverName}</span>
-              </div>
-            )}
-            {data.tariff && (
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-600">{t.tariff}:</span>
-                <span className="font-medium">{data.tariff}</span>
-              </div>
+              {data.licenseNumber && (
+                <div>
+                  <div className="text-xs text-gray-500 mb-1">{t.license}:</div>
+                  <div className="text-sm font-bold text-taxi-black">{data.licenseNumber}</div>
+                </div>
+              )}
+            </div>
+
+            {(data.distance !== undefined || data.duration !== undefined || data.driverName) && (
+              <>
+                <div className="h-px bg-gray-200"></div>
+                <div className="grid grid-cols-2 gap-3">
+                  {data.distance !== undefined && (
+                    <div>
+                      <div className="text-xs text-gray-500 mb-1">{t.distance}:</div>
+                      <div className="text-sm font-medium">{formatDistance(data.distance)}</div>
+                    </div>
+                  )}
+                  {data.duration !== undefined && (
+                    <div>
+                      <div className="text-xs text-gray-500 mb-1">{t.duration}:</div>
+                      <div className="text-sm font-medium">{formatDuration(data.duration)}</div>
+                    </div>
+                  )}
+                </div>
+              </>
             )}
           </div>
         </div>
