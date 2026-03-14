@@ -279,7 +279,7 @@ export const ReceiptPDF: React.FC<ReceiptPDFProps> = ({ data, locale }) => {
       <Page size="A4" style={styles.page}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.title}>{t.companyName}</Text>
+          <Image src="/images/voss-taxi-logo.png" style={styles.logo} />
           <Text style={styles.companyInfo}>{t.companyAddress}</Text>
           <Text style={styles.companyInfo}>{t.companyPhone} • {t.companyEmail}</Text>
           <Text style={styles.companyInfo}>{t.companyOrg}</Text>

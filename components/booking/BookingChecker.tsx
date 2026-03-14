@@ -330,15 +330,6 @@ export function BookingChecker({ locale }: BookingCheckerProps) {
                 {statusInfo?.description[locale === 'no' ? 'no' : 'en']}
               </p>
             </div>
-
-            <div className="pt-2">
-              <a
-                href={`/${locale}/manage-booking?ref=${encodeURIComponent(bookRef)}&phone=${encodeURIComponent(phoneNumber)}`}
-                className="text-sm text-taxi-yellow hover:underline block text-center font-medium"
-              >
-                {locale === 'no' ? '📋 Handter bestilling' : '📋 Manage Booking'}
-              </a>
-            </div>
           </div>
         </div>
       )}

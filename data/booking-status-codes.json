@@ -8,11 +8,11 @@
         "category": "Payment",
         "label": {
           "no": "Kontant",
-          "en": "Cash"
+          "en": "Paid in Car"
         },
         "description": {
-          "no": "Betaling med kontanter",
-          "en": "Cash payment"
+          "no": "Betaling i bil (kontant/kort)",
+          "en": "Paid in car (cash/card)"
         },
         "icon": "💵",
         "canDelete": true,
