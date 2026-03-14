@@ -237,24 +237,22 @@ export function BookingForm({ locale }: BookingFormProps) {
       }
       // Calculate attributes based on passenger count and kids
       // Attribute codes from Taxi4U API:
-      // 83=2 PERSONER, 84=3 PERSONER, 85=4 PERSONER
+      // Vehicle size attributes (only for larger vehicles):
       // 0=6 SETER, 1=7 SETER, 89=8 SETER
+      //
+      // Note: For 1-4 passengers (carGroupId 1), no passenger count attribute is needed.
+      // The carGroupId alone determines the vehicle type.
       // Child seats: 12=BARNESETE (general), 8=BABY (infant seat)
       const attributes: number[] = [];
 
-      // Add passenger count attributes
-      if (passengerCount === 2) {
-        attributes.push(83); // 2 PERSONER
-      } else if (passengerCount === 3) {
-        attributes.push(84); // 3 PERSONER
-      } else if (passengerCount === 4) {
-        attributes.push(85); // 4 PERSONER
-      } else if (passengerCount === 5 || passengerCount === 6) {
-        attributes.push(0); // 6 SETER
+      // Add vehicle size attributes only for larger vehicles
+      // For 1-4 passengers: carGroupId 1 is sufficient, no attribute needed
+      if (passengerCount === 5 || passengerCount === 6) {
+        attributes.push(0); // 6 SETER (for carGroupId 2)
       } else if (passengerCount === 7) {
-        attributes.push(1); // 7 SETER
+        attributes.push(1); // 7 SETER (for carGroupId 3)
       } else if (passengerCount === 8) {
-        attributes.push(89); // 8 SETER
+        attributes.push(89); // 8 SETER (for carGroupId 3)
       }
 
       // Add child seat attributes based on kids' ages
@@ -364,24 +362,22 @@ export function BookingForm({ locale }: BookingFormProps) {
       }
       // Calculate attributes based on passenger count and kids
       // Attribute codes from Taxi4U API:
-      // 83=2 PERSONER, 84=3 PERSONER, 85=4 PERSONER
+      // Vehicle size attributes (only for larger vehicles):
       // 0=6 SETER, 1=7 SETER, 89=8 SETER
+      //
+      // Note: For 1-4 passengers (carGroupId 1), no passenger count attribute is needed.
+      // The carGroupId alone determines the vehicle type.
       // Child seats: 12=BARNESETE (general), 8=BABY (infant seat)
       const attributes: number[] = [];
 
-      // Add passenger count attributes
-      if (passengerCount === 2) {
-        attributes.push(83); // 2 PERSONER
-      } else if (passengerCount === 3) {
-        attributes.push(84); // 3 PERSONER
-      } else if (passengerCount === 4) {
-        attributes.push(85); // 4 PERSONER
-      } else if (passengerCount === 5 || passengerCount === 6) {
-        attributes.push(0); // 6 SETER
+      // Add vehicle size attributes only for larger vehicles
+      // For 1-4 passengers: carGroupId 1 is sufficient, no attribute needed
+      if (passengerCount === 5 || passengerCount === 6) {
+        attributes.push(0); // 6 SETER (for carGroupId 2)
       } else if (passengerCount === 7) {
-        attributes.push(1); // 7 SETER
+        attributes.push(1); // 7 SETER (for carGroupId 3)
       } else if (passengerCount === 8) {
-        attributes.push(89); // 8 SETER
+        attributes.push(89); // 8 SETER (for carGroupId 3)
       }
 
       // Add child seat attributes based on kids' ages
