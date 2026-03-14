@@ -70,6 +70,29 @@ export function validatePostalCode(postalCode: string): { isValid: boolean; erro
 }
 
 /**
+ * Validate email address
+ */
+export function validateEmail(email: string): { isValid: boolean; error?: string } {
+  const trimmed = email.trim();
+
+  if (trimmed === '') {
+    return { isValid: true }; // Email is optional
+  }
+
+  // Basic email validation regex
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(trimmed)) {
+    return {
+      isValid: false,
+      error: 'Invalid email format',
+    };
+  }
+
+  return { isValid: true };
+}
+
+/**
  * Validate ISO 8601 date string
  */
 export function validateDateTime(dateTime: string): { isValid: boolean; error?: string } {
@@ -79,9 +102,20 @@ export function validateDateTime(dateTime: string): { isValid: boolean; error?: 
       return { isValid: false, error: 'Invalid date/time format' };
     }
 
-    // Check if date is in the past
-    if (date < new Date()) {
+    const now = new Date();
+    const oneYearFromNow = new Date();
+    oneYearFromNow.setFullYear(now.getFullYear() + 1);
+
+    // Allow times within 5 minutes in the past (for rounding and time zone differences)
+    const fiveMinutesAgo = new Date(now.getTime() - 5 * 60 * 1000);
+
+    if (date < fiveMinutesAgo) {
       return { isValid: false, error: 'Pickup time cannot be in the past' };
+    }
+
+    // Don't allow bookings more than 1 year in advance
+    if (date > oneYearFromNow) {
+      return { isValid: false, error: 'Pickup time cannot be more than 1 year in advance' };
     }
 
     return { isValid: true };
@@ -121,10 +155,40 @@ export function validatePassenger(
     }
   }
 
+  // Validate email if provided
+  if (passenger.email) {
+    const emailValidation = validateEmail(passenger.email);
+    if (!emailValidation.isValid) {
+      errors.push(`${prefix}: ${emailValidation.error}`);
+    }
+  }
+
   // Validate pickup address
   const addressValidation = validateRequiredString(passenger.fromStreet, 'Pickup address');
   if (!addressValidation.isValid) {
     errors.push(`${prefix}: ${addressValidation.error}`);
+  }
+
+  // Validate pickup city
+  const cityValidation = validateRequiredString(passenger.fromCity, 'Pickup city');
+  if (!cityValidation.isValid) {
+    errors.push(`${prefix}: ${cityValidation.error}`);
+  }
+
+  // Validate pickup postal code
+  if (passenger.fromPostalCode) {
+    const postalValidation = validatePostalCode(passenger.fromPostalCode);
+    if (!postalValidation.isValid) {
+      errors.push(`${prefix}: ${postalValidation.error}`);
+    }
+  }
+
+  // Validate destination postal code if provided
+  if (passenger.toPostalCode) {
+    const toPostalValidation = validatePostalCode(passenger.toPostalCode);
+    if (!toPostalValidation.isValid) {
+      errors.push(`${prefix}: Destination ${toPostalValidation.error}`);
+    }
   }
 
   // Validate pickup time if provided
@@ -180,6 +244,51 @@ export function validatePassengers(passengers: any): ValidationResult {
 // ============================================================================
 
 /**
+ * Validate car group ID
+ */
+export function validateCarGroupId(carGroupId: number): { isValid: boolean; error?: string } {
+  if (typeof carGroupId !== 'number' || !Number.isInteger(carGroupId)) {
+    return { isValid: false, error: 'Car group ID must be a number' };
+  }
+
+  if (carGroupId < 1 || carGroupId > 3) {
+    return { isValid: false, error: 'Car group ID must be between 1 and 3' };
+  }
+
+  return { isValid: true };
+}
+
+/**
+ * Validate number of cars
+ */
+export function validateNumberOfCars(numberOfCars: number): { isValid: boolean; error?: string } {
+  if (typeof numberOfCars !== 'number' || !Number.isInteger(numberOfCars)) {
+    return { isValid: false, error: 'Number of cars must be a number' };
+  }
+
+  if (numberOfCars < 1 || numberOfCars > 10) {
+    return { isValid: false, error: 'Number of cars must be between 1 and 10' };
+  }
+
+  return { isValid: true };
+}
+
+/**
+ * Validate passenger count
+ */
+export function validatePassengerCount(count: number): { isValid: boolean; error?: string } {
+  if (typeof count !== 'number' || !Number.isInteger(count)) {
+    return { isValid: false, error: 'Passenger count must be a number' };
+  }
+
+  if (count < 1 || count > 8) {
+    return { isValid: false, error: 'Passenger count must be between 1 and 8' };
+  }
+
+  return { isValid: true };
+}
+
+/**
  * Validate general booking request
  */
 export function validateGeneralBookingRequest(
@@ -200,8 +309,32 @@ export function validateGeneralBookingRequest(
   }
 
   // Validate car group ID
-  if (request.carGroupId && (request.carGroupId < 1 || request.carGroupId > 3)) {
-    errors.push('Invalid car group ID (must be 1-3)');
+  if (request.carGroupId) {
+    const carGroupValidation = validateCarGroupId(request.carGroupId);
+    if (!carGroupValidation.isValid) {
+      errors.push(carGroupValidation.error!);
+    }
+  }
+
+  // Validate number of cars
+  if (request.numberOfCars) {
+    const numberOfCarsValidation = validateNumberOfCars(request.numberOfCars);
+    if (!numberOfCarsValidation.isValid) {
+      errors.push(numberOfCarsValidation.error!);
+    }
+  }
+
+  // Validate orderedBy if provided
+  if (request.orderedBy) {
+    const orderedByValidation = validateRequiredString(request.orderedBy, 'Ordered by');
+    if (!orderedByValidation.isValid) {
+      errors.push(orderedByValidation.error!);
+    }
+  }
+
+  // Validate messageToCar length if provided
+  if (request.messageToCar && request.messageToCar.length > 500) {
+    errors.push('Message to car must be less than 500 characters');
   }
 
   return {
@@ -241,12 +374,52 @@ export function validateSimpleBookingRequest(
     errors.push(addressValidation.error!);
   }
 
+  // Validate pickup city
+  const cityValidation = validateRequiredString(request.fromCity, 'Pickup city');
+  if (!cityValidation.isValid) {
+    errors.push(cityValidation.error!);
+  }
+
+  // Validate pickup postal code if provided
+  if (request.fromPostalCode) {
+    const postalValidation = validatePostalCode(request.fromPostalCode);
+    if (!postalValidation.isValid) {
+      errors.push(postalValidation.error!);
+    }
+  }
+
+  // Validate destination postal code if provided
+  if (request.toPostalCode) {
+    const toPostalValidation = validatePostalCode(request.toPostalCode);
+    if (!toPostalValidation.isValid) {
+      errors.push(toPostalValidation.error!);
+    }
+  }
+
   // Validate pickup time if provided
   if (request.pickupTime) {
     const timeValidation = validateDateTime(request.pickupTime);
     if (!timeValidation.isValid) {
       errors.push(timeValidation.error!);
     }
+  }
+
+  // Validate orderedBy if provided
+  if (request.orderedBy) {
+    const orderedByValidation = validateRequiredString(request.orderedBy, 'Ordered by');
+    if (!orderedByValidation.isValid) {
+      errors.push(orderedByValidation.error!);
+    }
+  }
+
+  // Validate messageToCar length if provided
+  if (request.messageToCar && request.messageToCar.length > 500) {
+    errors.push('Message to car must be less than 500 characters');
+  }
+
+  // Validate messageToBooking length if provided
+  if (request.messageToBooking && request.messageToBooking.length > 500) {
+    errors.push('Message to booking must be less than 500 characters');
   }
 
   return {

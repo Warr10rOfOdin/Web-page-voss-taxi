@@ -2,18 +2,45 @@ import { NextRequest, NextResponse } from 'next/server';
 import { taxi4uFetch } from '@/lib/taxi4u-auth';
 import { getZoneFromCoordinates } from '@/lib/zone-lookup';
 import { logBooking } from '@/lib/booking-stats';
+import { validateGeneralBookingRequest, sanitizeString, sanitizePhoneNumber, sanitizePostalCode } from '@/lib/validation';
 
 // General booking endpoint (multi-passenger, detailed)
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
+    // Validate the booking request
+    const validationResult = validateGeneralBookingRequest(body);
+    if (!validationResult.isValid) {
+      console.error('Booking validation failed:', validationResult.errors);
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Validation failed',
+          details: validationResult.errors.join(', '),
+          validationErrors: validationResult.errors,
+        },
+        { status: 400 }
+      );
+    }
+
     // Get central code from environment or use default
     const centralCode = process.env.TAXI4U_CENTRAL_CODE || 'VS';
 
-    // Process passengers and add zone numbers from GPS coordinates
+    // Process passengers: sanitize data and add zone numbers from GPS coordinates
     const processedPassengers = body.passengers.map((passenger: any) => {
-      const passengerData = { ...passenger };
+      const passengerData = {
+        ...passenger,
+        // Sanitize passenger data
+        clientName: sanitizeString(passenger.clientName, 100),
+        tel: sanitizePhoneNumber(passenger.tel),
+        fromStreet: sanitizeString(passenger.fromStreet, 200),
+        fromCity: sanitizeString(passenger.fromCity, 100),
+        fromPostalCode: passenger.fromPostalCode ? sanitizePostalCode(passenger.fromPostalCode) : undefined,
+        toStreet: passenger.toStreet ? sanitizeString(passenger.toStreet, 200) : undefined,
+        toCity: passenger.toCity ? sanitizeString(passenger.toCity, 100) : undefined,
+        toPostalCode: passenger.toPostalCode ? sanitizePostalCode(passenger.toPostalCode) : undefined,
+      };
 
       // Determine fromZoneNo from GPS coordinates if available
       if (passenger.fromLat && passenger.fromLon) {
@@ -28,13 +55,16 @@ export async function POST(request: NextRequest) {
       return passengerData;
     });
 
-    // Build enhanced booking payload
+    // Build enhanced booking payload with sanitized data
     const bookingData = {
       ...body,
       passengers: processedPassengers,
       // Add required dispatch fields
       carGroupId: body.carGroupId || 1, // Default to standard taxi (group 1)
       numberOfCars: body.numberOfCars || 1, // Default to 1 car
+      // Sanitize optional fields
+      orderedBy: body.orderedBy ? sanitizeString(body.orderedBy, 100) : undefined,
+      messageToCar: body.messageToCar ? sanitizeString(body.messageToCar, 500) : undefined,
     };
 
     // Convert attributes array to comma-separated string if present
