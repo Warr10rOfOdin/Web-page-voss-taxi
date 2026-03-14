@@ -957,8 +957,8 @@ export function BookingForm({ locale }: BookingFormProps) {
                   <div className="h-px bg-taxi-black/20 my-3" />
                   <p className="text-xs text-taxi-black/70">
                     {locale === 'no'
-                      ? 'Dette er eit estimat. Faktisk pris kan variere avhengig av trafikk og rute.'
-                      : 'This is an estimate. Actual price may vary depending on traffic and route.'
+                      ? 'Dette er berre eit estimat og kan avvike frå den faktiske prisen i bilen, på grunn av webfeil, trafikk, vegforhold og andre faktorar.'
+                      : 'This is only an estimate and may differ from the actual in-car price due to web errors, traffic, road conditions, and other factors.'
                     }
                   </p>
                 </div>
