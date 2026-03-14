@@ -9,9 +9,15 @@ export const dynamic = 'force-dynamic';
 
 // Email PDF receipt
 export async function POST(request: NextRequest) {
+  // Declare variables outside try block for error handling
+  let bookRef: string = '';
+  let locale: 'no' | 'en' = 'no';
+
   try {
     const body = await request.json();
-    const { bookRef, email, locale = 'no' } = body;
+    bookRef = body.bookRef;
+    const email = body.email;
+    locale = (body.locale === 'en' ? 'en' : 'no');
 
     if (!bookRef || !email) {
       return NextResponse.json(
@@ -116,8 +122,35 @@ export async function POST(request: NextRequest) {
     };
 
     // Generate PDF - ReceiptPDF returns a Document element
+    console.log('Generating PDF for email attachment...');
     const receiptElement = React.createElement(ReceiptPDF, { data: receiptData, locale });
-    const pdfBuffer = await ReactPDF.renderToBuffer(receiptElement as any);
+
+    let pdfBuffer: Buffer;
+    try {
+      pdfBuffer = await ReactPDF.renderToBuffer(receiptElement as any);
+      console.log(`✓ PDF generated successfully (${pdfBuffer.length} bytes)`);
+    } catch (pdfError) {
+      console.error('PDF generation error:', pdfError);
+      throw new Error(`Failed to generate PDF: ${pdfError instanceof Error ? pdfError.message : 'Unknown error'}`);
+    }
+
+    // Check if SMTP is configured
+    if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
+      console.log('=== EMAIL WITH PDF ATTACHMENT (SMTP NOT CONFIGURED) ===');
+      console.log(`To: ${email}`);
+      console.log(`Subject: ${locale === 'no' ? `Kvittering frå Voss Taxi - ${bookRef}` : `Receipt from Voss Taxi - ${bookRef}`}`);
+      console.log(`PDF size: ${pdfBuffer.length} bytes`);
+      console.log('========================================================');
+      console.log('NOTE: Set SMTP_HOST, SMTP_USER, and SMTP_PASS env vars to enable email delivery');
+
+      return NextResponse.json({
+        success: true,
+        message: locale === 'no'
+          ? '(DEV MODE) Kvittering ville vore sendt til ' + email
+          : '(DEV MODE) Receipt would be sent to ' + email,
+        dev: true,
+      });
+    }
 
     // Configure SMTP transporter
     const transporter = nodemailer.createTransport({
@@ -128,6 +161,8 @@ export async function POST(request: NextRequest) {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
+      connectionTimeout: 10000,
+      socketTimeout: 10000,
     });
 
     // Email content
@@ -181,8 +216,18 @@ export async function POST(request: NextRequest) {
       </div>
     `;
 
+    // Verify SMTP connection
+    try {
+      await transporter.verify();
+      console.log('✓ SMTP connection verified');
+    } catch (verifyError) {
+      console.error('✗ SMTP verification failed:', verifyError);
+      throw new Error('SMTP connection failed. Please check email configuration.');
+    }
+
     // Send email
-    await transporter.sendMail({
+    console.log(`Sending receipt email to ${email}...`);
+    const info = await transporter.sendMail({
       from: `"Voss Taxi" <${process.env.SMTP_USER}>`,
       to: email,
       subject,
@@ -196,6 +241,9 @@ export async function POST(request: NextRequest) {
       ],
     });
 
+    console.log(`✓ Receipt email sent successfully to ${email}`);
+    console.log(`  Message ID: ${info.messageId}`);
+
     return NextResponse.json({
       success: true,
       message: locale === 'no'
@@ -205,11 +253,29 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Email receipt error:', error);
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
+
+    // Provide helpful error messages
+    let errorMessage = 'Failed to send receipt email';
+    if (error instanceof Error) {
+      if (error.message.includes('SMTP')) {
+        errorMessage = locale === 'no'
+          ? 'Kunne ikkje sende e-post. Sjekk e-postkonfigurasjon.'
+          : 'Could not send email. Please check email configuration.';
+      } else if (error.message.includes('PDF')) {
+        errorMessage = locale === 'no'
+          ? 'Kunne ikkje generere kvittering. Prøv igjen seinare.'
+          : 'Could not generate receipt. Please try again later.';
+      }
+    }
+
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to send receipt email',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        error: errorMessage,
+        details: error instanceof Error ? error.message : 'Unknown error',
+        bookRef: bookRef || undefined,
+        timestamp: new Date().toISOString(),
       },
       { status: 500 }
     );
