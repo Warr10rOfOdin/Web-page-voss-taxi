@@ -4,15 +4,23 @@ import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/render
 // Create styles
 const styles = StyleSheet.create({
   page: {
-    padding: 40,
-    fontSize: 10,
+    padding: 30,
+    fontSize: 9,
     fontFamily: 'Helvetica',
     backgroundColor: '#ffffff',
   },
   header: {
-    marginBottom: 30,
-    borderBottom: '2px solid #1a1a1a',
-    paddingBottom: 20,
+    marginBottom: 15,
+    borderBottom: '3px solid #FFD700',
+    paddingBottom: 12,
+    backgroundColor: '#FFFBF0',
+    padding: 12,
+    marginLeft: -30,
+    marginRight: -30,
+    marginTop: -30,
+    paddingLeft: 30,
+    paddingRight: 30,
+    paddingTop: 20,
   },
   logo: {
     width: 120,
@@ -24,31 +32,40 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 'bold',
     color: '#1a1a1a',
-    marginBottom: 10,
+    marginBottom: 8,
   },
   receiptNumber: {
-    fontSize: 10,
+    fontSize: 9,
     color: '#666',
-    marginBottom: 5,
+    marginBottom: 3,
+  },
+  receiptInfoBox: {
+    backgroundColor: '#ffffff',
+    padding: 10,
+    borderRadius: 4,
+    borderLeft: '3px solid #FFD700',
+    marginTop: 12,
   },
   section: {
-    marginBottom: 20,
+    marginBottom: 12,
   },
   sectionTitle: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 6,
     color: '#1a1a1a',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#FFF9E6',
     padding: 8,
+    borderLeft: '4px solid #FFD700',
+    paddingLeft: 10,
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 6,
+    paddingVertical: 4,
     borderBottom: '1px solid #eee',
   },
   label: {
@@ -64,14 +81,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   totalSection: {
-    marginTop: 20,
-    paddingTop: 15,
-    borderTop: '2px solid #1a1a1a',
+    marginTop: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    backgroundColor: '#FFF9E6',
+    borderLeft: '4px solid #FFD700',
+    borderTop: '2px solid #FFD700',
   },
   totalRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 8,
+    paddingVertical: 4,
   },
   totalLabel: {
     fontSize: 14,
@@ -85,24 +107,24 @@ const styles = StyleSheet.create({
   },
   footer: {
     position: 'absolute',
-    bottom: 30,
-    left: 40,
-    right: 40,
-    borderTop: '1px solid #eee',
-    paddingTop: 15,
-    fontSize: 8,
-    color: '#999',
+    bottom: 25,
+    left: 30,
+    right: 30,
+    borderTop: '2px solid #FFD700',
+    paddingTop: 10,
+    fontSize: 7,
+    color: '#666',
     textAlign: 'center',
   },
   highlight: {
     backgroundColor: '#FFF9E6',
-    padding: 10,
+    padding: 6,
     borderLeft: '3px solid #FFD700',
-    marginVertical: 10,
+    marginVertical: 6,
   },
   vatSection: {
-    marginTop: 10,
-    padding: 10,
+    marginTop: 6,
+    padding: 6,
     backgroundColor: '#f9f9f9',
   },
   vatRow: {
@@ -188,7 +210,7 @@ export const ReceiptPDF: React.FC<ReceiptPDFProps> = ({ data, locale }) => {
     companyAddress: 'Voss, Noreg',
     companyPhone: '+47 56 51 13 40',
     companyEmail: 'post@vosstaxi.no',
-    companyOrg: 'Org.nr: NO922900817MVA',
+    companyOrg: 'Org.nr: NO999505279MVA',
     footer: 'Dette er ein elektronisk generert kvittering. Spar denne for dine eigne register.',
   } : {
     receipt: 'Receipt',
@@ -217,7 +239,7 @@ export const ReceiptPDF: React.FC<ReceiptPDFProps> = ({ data, locale }) => {
     companyAddress: 'Voss, Norway',
     companyPhone: '+47 56 51 13 40',
     companyEmail: 'post@vosstaxi.no',
-    companyOrg: 'Org.no: NO922900817MVA',
+    companyOrg: 'Org.no: NO999505279MVA',
     footer: 'This is an electronically generated receipt. Please save for your records.',
   };
 
@@ -257,41 +279,48 @@ export const ReceiptPDF: React.FC<ReceiptPDFProps> = ({ data, locale }) => {
       <Page size="A4" style={styles.page}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.title}>{t.companyName}</Text>
+          <Text style={styles.title}>🚕 {t.companyName}</Text>
           <Text style={styles.companyInfo}>{t.companyAddress}</Text>
           <Text style={styles.companyInfo}>{t.companyPhone} • {t.companyEmail}</Text>
           <Text style={styles.companyInfo}>{t.companyOrg}</Text>
         </View>
 
         {/* Receipt Title */}
-        <View style={{ marginBottom: 20 }}>
-          <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 5 }}>
+        <View style={{ marginBottom: 12 }}>
+          <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 8, color: '#1a1a1a' }}>
             {t.receipt}
           </Text>
-          <Text style={styles.receiptNumber}>
-            {t.bookingReference}: {data.bookRef}
-          </Text>
-          {data.receiptNumber && (
-            <Text style={styles.receiptNumber}>
-              {locale === 'no' ? 'Kvitt.nr' : 'Receipt No'}: {data.receiptNumber}
+          <View style={styles.receiptInfoBox}>
+            <Text style={{ fontSize: 10, color: '#1a1a1a', marginBottom: 4, fontWeight: 'bold' }}>
+              {t.bookingReference}: {data.bookRef}
             </Text>
-          )}
-          {data.invoiceNumber && (
+            {data.receiptNumber && (
+              <Text style={styles.receiptNumber}>
+                {locale === 'no' ? 'Kvitt.nr' : 'Receipt No'}: {data.receiptNumber}
+              </Text>
+            )}
+            {data.invoiceNumber && (
+              <Text style={styles.receiptNumber}>
+                {locale === 'no' ? 'Rekv.nr' : 'Invoice No'}: {data.invoiceNumber}
+              </Text>
+            )}
             <Text style={styles.receiptNumber}>
-              {locale === 'no' ? 'Rekv.nr' : 'Invoice No'}: {data.invoiceNumber}
+              {t.date}: {new Date(data.date).toLocaleString(locale === 'no' ? 'no-NO' : 'en-US', {
+                dateStyle: 'medium',
+                timeStyle: 'short',
+              })}
             </Text>
-          )}
-          <Text style={styles.receiptNumber}>
-            {t.date}: {new Date(data.date).toLocaleString(locale === 'no' ? 'no-NO' : 'en-US', {
-              dateStyle: 'long',
-              timeStyle: 'short',
-            })}
-          </Text>
-          {data.driverId && (
-            <Text style={styles.receiptNumber}>
-              {locale === 'no' ? 'Fører ID' : 'Driver ID'}: {data.driverId}
-            </Text>
-          )}
+            {data.licenseNumber && (
+              <Text style={{ fontSize: 9, color: '#1a1a1a', marginTop: 4, fontWeight: 'bold' }}>
+                {t.license}: {data.licenseNumber}
+              </Text>
+            )}
+            {data.driverId && (
+              <Text style={styles.receiptNumber}>
+                {locale === 'no' ? 'Fører ID' : 'Driver ID'}: {data.driverId}
+              </Text>
+            )}
+          </View>
         </View>
 
         {/* Customer Information */}
@@ -364,12 +393,6 @@ export const ReceiptPDF: React.FC<ReceiptPDFProps> = ({ data, locale }) => {
               <Text style={styles.value}>{formatDuration(data.duration)}</Text>
             </View>
           )}
-          {data.licenseNumber && (
-            <View style={styles.row}>
-              <Text style={styles.label}>{t.license}</Text>
-              <Text style={styles.value}>{data.licenseNumber}</Text>
-            </View>
-          )}
           {data.driverName && (
             <View style={styles.row}>
               <Text style={styles.label}>{t.driver}</Text>
@@ -426,10 +449,10 @@ export const ReceiptPDF: React.FC<ReceiptPDFProps> = ({ data, locale }) => {
           <Text style={styles.sectionTitle}>{t.economicDetails}</Text>
 
           {data.tariff && (
-            <View style={styles.highlight}>
-              <View style={styles.row}>
-                <Text style={{ ...styles.label, fontWeight: 'bold', color: '#1a1a1a' }}>{t.tariff}</Text>
-                <Text style={{ ...styles.value, fontWeight: 'bold' }}>{data.tariff}</Text>
+            <View style={{ backgroundColor: '#FFF9E6', padding: 8, marginBottom: 6, borderLeft: '3px solid #FFD700' }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Text style={{ fontSize: 10, fontWeight: 'bold', color: '#1a1a1a' }}>{t.tariff}</Text>
+                <Text style={{ fontSize: 11, fontWeight: 'bold', color: '#1a1a1a' }}>{data.tariff}</Text>
               </View>
             </View>
           )}
@@ -490,8 +513,8 @@ export const ReceiptPDF: React.FC<ReceiptPDFProps> = ({ data, locale }) => {
         </View>
 
         {/* Thank You Message */}
-        <View style={styles.highlight}>
-          <Text style={{ fontSize: 11, fontWeight: 'bold', textAlign: 'center' }}>
+        <View style={{ backgroundColor: '#FFD700', padding: 10, marginTop: 8, borderRadius: 4 }}>
+          <Text style={{ fontSize: 10, fontWeight: 'bold', textAlign: 'center', color: '#1a1a1a' }}>
             {t.thankYou}
           </Text>
         </View>
