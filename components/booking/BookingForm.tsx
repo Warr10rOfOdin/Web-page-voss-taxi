@@ -286,6 +286,15 @@ export function BookingForm({ locale }: BookingFormProps) {
       // 7+ passengers = Minibus (carGroupId 3)
       const carGroupId = passengerCount <= 4 ? 1 : passengerCount <= 6 ? 2 : 3;
 
+      // Debug logging
+      console.log('Price quote request:', {
+        passengerCount,
+        carGroupId,
+        attributes,
+        fromStreet,
+        toStreet,
+      });
+
       const response = await fetch('/api/pricequote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1026,8 +1035,8 @@ export function BookingForm({ locale }: BookingFormProps) {
             </div>
           </div>
 
-          {/* Price Quote Button - Only for 1-4 passengers */}
-          {passengerCount >= 1 && passengerCount <= 4 && (
+          {/* Price Quote Button - Available for all passenger counts (1-8) */}
+          {passengerCount >= 1 && passengerCount <= 8 && (
             <div>
               <Button
                 type="button"

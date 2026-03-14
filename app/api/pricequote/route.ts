@@ -34,6 +34,15 @@ export async function POST(req: NextRequest) {
       pickupTime: pickupTime || new Date().toISOString(),
     };
 
+    // Debug logging - what we're sending to Taxi4U API
+    console.log('Sending to Taxi4U API:', {
+      carGroupId: priceQuoteData.carGroupId,
+      attributes: priceQuoteData.attributes,
+      fromStreet: priceQuoteData.fromStreet,
+      toStreet: priceQuoteData.toStreet,
+      pickupTime: priceQuoteData.pickupTime,
+    });
+
     const response = await taxi4uFetch(apiUrl, {
       method: 'POST',
       headers: {
