@@ -143,6 +143,51 @@ export function BookingForm({ locale }: BookingFormProps) {
     }
   };
 
+  // Geocode an address if coordinates are missing
+  const geocodeAddress = async (street: string, postalCode: string, city: string): Promise<{ lat: number; lon: number } | null> => {
+    try {
+      // Try Kartverket API first (more accurate for Norwegian addresses)
+      const kartverketResponse = await fetch(
+        `https://ws.geonorge.no/adresser/v1/sok?sok=${encodeURIComponent(street + ', ' + postalCode + ' ' + city)}&treffPerSide=1`,
+        { headers: { 'Accept': 'application/json' } }
+      );
+
+      if (kartverketResponse.ok) {
+        const data = await kartverketResponse.json();
+        if (data.adresser && data.adresser.length > 0) {
+          const addr = data.adresser[0];
+          if (addr.representasjonspunkt?.lat && addr.representasjonspunkt?.lon) {
+            return {
+              lat: parseFloat(addr.representasjonspunkt.lat),
+              lon: parseFloat(addr.representasjonspunkt.lon)
+            };
+          }
+        }
+      }
+
+      // Fallback to Nominatim (OpenStreetMap)
+      const nominatimResponse = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&street=${encodeURIComponent(street)}&postalcode=${encodeURIComponent(postalCode)}&city=${encodeURIComponent(city)}&country=Norway&limit=1`,
+        { headers: { 'Accept': 'application/json' } }
+      );
+
+      if (nominatimResponse.ok) {
+        const data = await nominatimResponse.json();
+        if (data.length > 0) {
+          return {
+            lat: parseFloat(data[0].lat),
+            lon: parseFloat(data[0].lon)
+          };
+        }
+      }
+
+      return null;
+    } catch (error) {
+      console.error('Geocoding error:', error);
+      return null;
+    }
+  };
+
   // Get price quote
   const getPriceQuote = async () => {
     if (!fromStreet || !toStreet) {
@@ -155,6 +200,41 @@ export function BookingForm({ locale }: BookingFormProps) {
     setPriceQuote(null);
 
     try {
+      // Geocode addresses if coordinates are missing
+      let finalFromLat = fromLat;
+      let finalFromLon = fromLon;
+      let finalToLat = toLat;
+      let finalToLon = toLon;
+
+      if (!fromLat || !fromLon || fromLat === 0 || fromLon === 0) {
+        const fromCoords = await geocodeAddress(fromStreet, fromPostalCode, fromCity);
+        if (fromCoords) {
+          finalFromLat = fromCoords.lat;
+          finalFromLon = fromCoords.lon;
+          // Update state for future use
+          setFromLat(fromCoords.lat);
+          setFromLon(fromCoords.lon);
+        } else {
+          setPriceError(locale === 'no' ? 'Kunne ikkje finne GPS-koordinatar for hentingsadressa. Vel ei adresse frå lista.' : 'Could not find GPS coordinates for pickup address. Please select an address from the list.');
+          setLoadingPrice(false);
+          return;
+        }
+      }
+
+      if (!toLat || !toLon || toLat === 0 || toLon === 0) {
+        const toCoords = await geocodeAddress(toStreet, toPostalCode, toCity);
+        if (toCoords) {
+          finalToLat = toCoords.lat;
+          finalToLon = toCoords.lon;
+          // Update state for future use
+          setToLat(toCoords.lat);
+          setToLon(toCoords.lon);
+        } else {
+          setPriceError(locale === 'no' ? 'Kunne ikkje finne GPS-koordinatar for leveringsadressa. Vel ei adresse frå lista.' : 'Could not find GPS coordinates for destination address. Please select an address from the list.');
+          setLoadingPrice(false);
+          return;
+        }
+      }
       // Calculate attributes based on passenger count and kids
       // Attribute codes from Taxi4U API:
       // 83=2 PERSONER, 84=3 PERSONER, 85=4 PERSONER
@@ -208,12 +288,12 @@ export function BookingForm({ locale }: BookingFormProps) {
         body: JSON.stringify({
           fromStreet,
           fromPostalCode,
-          fromLat: fromLat || 0,
-          fromLon: fromLon || 0,
+          fromLat: finalFromLat,
+          fromLon: finalFromLon,
           toStreet,
           toPostalCode,
-          toLat: toLat || 0,
-          toLon: toLon || 0,
+          toLat: finalToLat,
+          toLon: finalToLon,
           attributes,
           pickupTime: pickupTime ? formatDateForTaxi4U(new Date(pickupTime)) : formatDateForTaxi4U(new Date()),
         }),
@@ -246,6 +326,35 @@ export function BookingForm({ locale }: BookingFormProps) {
     const carGroupId = passengerCount <= 4 ? 1 : passengerCount <= 6 ? 2 : 3;
 
     try {
+      // Geocode addresses if coordinates are missing
+      let bookingFromLat = fromLat;
+      let bookingFromLon = fromLon;
+      let bookingToLat = toLat;
+      let bookingToLon = toLon;
+
+      if (!fromLat || !fromLon || fromLat === 0 || fromLon === 0) {
+        const fromCoords = await geocodeAddress(fromStreet, fromPostalCode, fromCity);
+        if (fromCoords) {
+          bookingFromLat = fromCoords.lat;
+          bookingFromLon = fromCoords.lon;
+          // Update state for future use
+          setFromLat(fromCoords.lat);
+          setFromLon(fromCoords.lon);
+        }
+        // Note: Booking can proceed without coordinates, but price quote cannot
+      }
+
+      if (toStreet && (!toLat || !toLon || toLat === 0 || toLon === 0)) {
+        const toCoords = await geocodeAddress(toStreet, toPostalCode, toCity);
+        if (toCoords) {
+          bookingToLat = toCoords.lat;
+          bookingToLon = toCoords.lon;
+          // Update state for future use
+          setToLat(toCoords.lat);
+          setToLon(toCoords.lon);
+        }
+        // Note: Booking can proceed without coordinates, but price quote cannot
+      }
       // Calculate attributes based on passenger count and kids
       // Attribute codes from Taxi4U API:
       // 83=2 PERSONER, 84=3 PERSONER, 85=4 PERSONER
@@ -338,13 +447,13 @@ export function BookingForm({ locale }: BookingFormProps) {
           fromStreet,
           fromCity,
           fromPostalCode,
-          fromLat,
-          fromLon,
+          fromLat: bookingFromLat,
+          fromLon: bookingFromLon,
           toStreet: toStreet || undefined,
           toCity: toCity || undefined,
           toPostalCode: toPostalCode || undefined,
-          toLat: toLat || undefined,
-          toLon: toLon || undefined,
+          toLat: bookingToLat || undefined,
+          toLon: bookingToLon || undefined,
           pickupTime: finalPickupTime,
         }],
       };
