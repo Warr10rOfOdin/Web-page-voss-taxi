@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { taxi4uFetch } from '@/lib/taxi4u-auth';
-import ReactPDF from '@react-pdf/renderer';
+import { renderToStream } from '@react-pdf/renderer';
 import { ReceiptPDF, ReceiptData } from '@/components/receipts/ReceiptPDF';
 import React from 'react';
 
@@ -126,26 +126,34 @@ export async function GET(request: NextRequest) {
     console.log('Starting PDF generation...');
     const receiptElement = React.createElement(ReceiptPDF, { data: receiptData, locale });
 
-    let pdfBuffer: Buffer;
     try {
-      pdfBuffer = await ReactPDF.renderToBuffer(receiptElement as any);
+      // Use renderToStream which is the correct API for @react-pdf/renderer v4
+      const stream = await renderToStream(receiptElement);
+
+      // Convert stream to buffer
+      const chunks: Uint8Array[] = [];
+      for await (const chunk of stream) {
+        chunks.push(chunk);
+      }
+      const pdfBuffer = Buffer.concat(chunks);
+
       console.log(`✓ PDF generated successfully (${pdfBuffer.length} bytes)`);
+
+      // Return PDF
+      return new NextResponse(pdfBuffer, {
+        headers: {
+          'Content-Type': 'application/pdf',
+          'Content-Disposition': `attachment; filename="voss-taxi-receipt-${bookRef}.pdf"`,
+          'Content-Length': pdfBuffer.length.toString(),
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0',
+        },
+      });
     } catch (pdfError) {
       console.error('PDF rendering error:', pdfError);
       throw new Error(`PDF rendering failed: ${pdfError instanceof Error ? pdfError.message : 'Unknown error'}`);
     }
-
-    // Return PDF - convert buffer to Uint8Array for NextResponse compatibility
-    return new NextResponse(new Uint8Array(pdfBuffer), {
-      headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="voss-taxi-receipt-${bookRef}.pdf"`,
-        'Content-Length': pdfBuffer.length.toString(),
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0',
-      },
-    });
 
   } catch (error) {
     console.error('PDF generation error:', error);
