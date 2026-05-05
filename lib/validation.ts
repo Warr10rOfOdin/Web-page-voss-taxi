@@ -106,10 +106,10 @@ export function validateDateTime(dateTime: string): { isValid: boolean; error?: 
     const oneYearFromNow = new Date();
     oneYearFromNow.setFullYear(now.getFullYear() + 1);
 
-    // Allow times within 5 minutes in the past (for rounding and time zone differences)
-    const fiveMinutesAgo = new Date(now.getTime() - 5 * 60 * 1000);
+    // Match WebAPIBook tolerance: PickupTime may be up to 10 minutes in the past.
+    const tenMinutesAgo = new Date(now.getTime() - 10 * 60 * 1000);
 
-    if (date < fiveMinutesAgo) {
+    if (date < tenMinutesAgo) {
       return { isValid: false, error: 'Pickup time cannot be in the past' };
     }
 
@@ -244,36 +244,6 @@ export function validatePassengers(passengers: any): ValidationResult {
 // ============================================================================
 
 /**
- * Validate car group ID
- */
-export function validateCarGroupId(carGroupId: number): { isValid: boolean; error?: string } {
-  if (typeof carGroupId !== 'number' || !Number.isInteger(carGroupId)) {
-    return { isValid: false, error: 'Car group ID must be a number' };
-  }
-
-  if (carGroupId < 1 || carGroupId > 3) {
-    return { isValid: false, error: 'Car group ID must be between 1 and 3' };
-  }
-
-  return { isValid: true };
-}
-
-/**
- * Validate number of cars
- */
-export function validateNumberOfCars(numberOfCars: number): { isValid: boolean; error?: string } {
-  if (typeof numberOfCars !== 'number' || !Number.isInteger(numberOfCars)) {
-    return { isValid: false, error: 'Number of cars must be a number' };
-  }
-
-  if (numberOfCars < 1 || numberOfCars > 10) {
-    return { isValid: false, error: 'Number of cars must be between 1 and 10' };
-  }
-
-  return { isValid: true };
-}
-
-/**
  * Validate passenger count
  */
 export function validatePassengerCount(count: number): { isValid: boolean; error?: string } {
@@ -308,19 +278,15 @@ export function validateGeneralBookingRequest(
     }
   }
 
-  // Validate car group ID
-  if (request.carGroupId) {
-    const carGroupValidation = validateCarGroupId(request.carGroupId);
-    if (!carGroupValidation.isValid) {
-      errors.push(carGroupValidation.error!);
-    }
-  }
-
-  // Validate number of cars
-  if (request.numberOfCars) {
-    const numberOfCarsValidation = validateNumberOfCars(request.numberOfCars);
-    if (!numberOfCarsValidation.isValid) {
-      errors.push(numberOfCarsValidation.error!);
+  // Validate additionalVehicles (Trip.additionalVehicles) if provided
+  if (request.additionalVehicles !== undefined && request.additionalVehicles !== null) {
+    if (
+      typeof request.additionalVehicles !== 'number' ||
+      !Number.isInteger(request.additionalVehicles) ||
+      request.additionalVehicles < 0 ||
+      request.additionalVehicles > 9
+    ) {
+      errors.push('additionalVehicles must be an integer between 0 and 9');
     }
   }
 

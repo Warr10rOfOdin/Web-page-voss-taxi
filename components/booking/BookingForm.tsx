@@ -280,16 +280,12 @@ export function BookingForm({ locale }: BookingFormProps) {
         // Kids 11+ typically don't need special seats
       });
 
-      // Calculate car group based on passenger count
-      // 1-4 passengers = Standard Taxi (carGroupId 1)
-      // 5-6 passengers = Large Taxi (carGroupId 2)
-      // 7+ passengers = Minibus (carGroupId 3)
-      const carGroupId = passengerCount <= 4 ? 1 : passengerCount <= 6 ? 2 : 3;
+      // Vehicle type is selected via attributes (6/7/8-seater codes added below);
+      // the upstream PriceQuoteRequest schema no longer accepts carGroupId.
 
       // Debug logging
       console.log('Price quote request:', {
         passengerCount,
-        carGroupId,
         attributes,
         fromStreet,
         toStreet,
@@ -307,7 +303,6 @@ export function BookingForm({ locale }: BookingFormProps) {
           toPostalCode,
           toLat: finalToLat,
           toLon: finalToLon,
-          carGroupId,
           attributes,
           pickupTime: pickupTime ? formatDateForTaxi4U(new Date(pickupTime)) : formatDateForTaxi4U(new Date()),
         }),
@@ -333,11 +328,8 @@ export function BookingForm({ locale }: BookingFormProps) {
     setError(null);
     setSuccess(false);
 
-    // Auto-determine vehicle type based on passenger count
-    // 1-4 passengers = Standard Taxi (carGroupId 1)
-    // 5-6 passengers = Large Taxi (carGroupId 2)
-    // 7+ passengers = Minibus (carGroupId 3)
-    const carGroupId = passengerCount <= 4 ? 1 : passengerCount <= 6 ? 2 : 3;
+    // Vehicle type is selected via attributes (6/7/8-seater codes); the
+    // upstream Trip schema no longer accepts carGroupId/numberOfCars.
 
     try {
       // Geocode addresses if coordinates are missing
@@ -449,8 +441,6 @@ export function BookingForm({ locale }: BookingFormProps) {
         orderedBy: 'Website',
         messageToCar: finalMessageToCar || undefined,
         pickupTime: finalPickupTime,
-        carGroupId: carGroupId,
-        numberOfCars: 1,
         attributes: attributes.length > 0 ? attributes : undefined,
         passengers: [{
           seqNo: 1,
