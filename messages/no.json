@@ -183,6 +183,8 @@
     "pickupTimeNote": "La stå tom for umiddelbar henting (så snart som mogleg)",
     "messageOptional": "Melding til sjåfør (Valfritt)",
     "messagePlaceholder": "T.d. bagasje, tal passasjerar, spesielle ønskje...",
+    "smsConfirmation": "Send SMS-stadfesting til mobilnummeret mitt",
+    "smsConfirmationNote": "Du får ein SMS med bookingreferanse og hentetid.",
     "privacyNote": "Informasjonen din blir berre brukt til denne bestillinga og handtert i samsvar med personvernreglane våre.",
     "processing": "Behandlar...",
     "errorTitle": "Bestillingsfeil",

@@ -66,6 +66,8 @@ export async function POST(request: NextRequest) {
       passengers: processedPassengers,
       orderedBy: body.orderedBy ? sanitizeString(body.orderedBy, 100) : undefined,
       messageToCar: body.messageToCar ? sanitizeString(body.messageToCar, 500) : undefined,
+      // SMS booking confirmation: default on; client may opt out by sending false.
+      sendSMSConfirmation: body.sendSMSConfirmation !== false,
     };
 
     // Translate legacy numberOfCars (1..N) to Trip.additionalVehicles (0..N-1)

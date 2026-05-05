@@ -36,6 +36,8 @@ export interface GeneralBookingRequest {
   additionalVehicles?: number;
   attributes?: number[] | string;
   messageToCar?: string;
+  // Send SMS booking confirmation to the passenger's phone number. Default: true.
+  sendSMSConfirmation?: boolean;
 }
 
 export interface SimpleBookingRequest {
@@ -54,6 +56,8 @@ export interface SimpleBookingRequest {
   messageToBooking?: string;
   accountNumber?: string;
   attributes?: number[] | string;
+  // Send SMS booking confirmation to the passenger's phone number. Default: true.
+  sendSMSConfirmation?: boolean;
 }
 
 // ============================================================================

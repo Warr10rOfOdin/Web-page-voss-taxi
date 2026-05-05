@@ -52,6 +52,8 @@ export async function POST(request: NextRequest) {
       attributes: Array.isArray(body.attributes)
         ? body.attributes.join(',')
         : (body.attributes || ''),
+      // SMS booking confirmation: default on; client may opt out by sending false.
+      sendSMSConfirmation: body.sendSMSConfirmation !== false,
     };
 
     // Call Taxi4U API with authentication

@@ -183,6 +183,8 @@
     "pickupTimeNote": "Leave empty for immediate pickup (ASAP)",
     "messageOptional": "Message to Driver (Optional)",
     "messagePlaceholder": "E.g., luggage, number of passengers, special requests...",
+    "smsConfirmation": "Send SMS confirmation to my mobile",
+    "smsConfirmationNote": "You'll get an SMS with the booking reference and pickup time.",
     "privacyNote": "Your information will be used only for this booking and handled according to our privacy policy.",
     "processing": "Processing...",
     "errorTitle": "Booking Error",

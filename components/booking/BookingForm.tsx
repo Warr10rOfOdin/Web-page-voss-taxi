@@ -35,6 +35,7 @@ export function BookingForm({ locale }: BookingFormProps) {
   const [kidsAges, setKidsAges] = useState<number[]>([]);
   const [kidsMonths, setKidsMonths] = useState<number[]>([]); // For 0-year-old infants
   const [messageToCar, setMessageToCar] = useState('');
+  const [sendSMSConfirmation, setSendSMSConfirmation] = useState(true);
 
   // Price quote state
   const [priceQuote, setPriceQuote] = useState<{ tariff: string; price: number } | null>(null);
@@ -441,6 +442,7 @@ export function BookingForm({ locale }: BookingFormProps) {
         orderedBy: 'Website',
         messageToCar: finalMessageToCar || undefined,
         pickupTime: finalPickupTime,
+        sendSMSConfirmation,
         attributes: attributes.length > 0 ? attributes : undefined,
         passengers: [{
           seqNo: 1,
@@ -538,6 +540,7 @@ export function BookingForm({ locale }: BookingFormProps) {
     setKidsAges([]);
     setKidsMonths([]);
     setMessageToCar('');
+    setSendSMSConfirmation(true);
     setPriceQuote(null);
     setPriceError(null);
     setSuccess(false);
@@ -1214,6 +1217,24 @@ export function BookingForm({ locale }: BookingFormProps) {
               className="w-full px-5 py-4 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black placeholder-gray-400 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition resize-none shadow-sm"
               placeholder={t('messagePlaceholder')}
             />
+          </div>
+
+          {/* SMS Confirmation Opt-In */}
+          <div className="mt-6">
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={sendSMSConfirmation}
+                onChange={(e) => setSendSMSConfirmation(e.target.checked)}
+                className="mt-1 h-5 w-5 rounded border-2 border-white/30 bg-white/95 text-taxi-yellow focus:ring-2 focus:ring-taxi-yellow cursor-pointer"
+              />
+              <span className="text-sm text-white">
+                <span className="font-semibold">{t('smsConfirmation')}</span>
+                <span className="block text-taxi-light-grey/80 mt-1">
+                  {t('smsConfirmationNote')}
+                </span>
+              </span>
+            </label>
           </div>
 
           {/* Error Display */}
