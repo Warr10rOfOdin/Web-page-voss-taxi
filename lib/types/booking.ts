@@ -31,9 +31,13 @@ export interface Passenger {
 export interface GeneralBookingRequest {
   orderedBy: string;
   pickupTime: string; // ISO 8601 format
-  carGroupId: number;
-  numberOfCars: number;
   passengers: Passenger[];
+  // Trip.additionalVehicles - extra cars beyond the first one (default 0).
+  additionalVehicles?: number;
+  attributes?: number[] | string;
+  messageToCar?: string;
+  // Send SMS booking confirmation to the passenger's phone number. Default: true.
+  sendSMSConfirmation?: boolean;
 }
 
 export interface SimpleBookingRequest {
@@ -52,6 +56,8 @@ export interface SimpleBookingRequest {
   messageToBooking?: string;
   accountNumber?: string;
   attributes?: number[] | string;
+  // Send SMS booking confirmation to the passenger's phone number. Default: true.
+  sendSMSConfirmation?: boolean;
 }
 
 // ============================================================================
@@ -80,7 +86,6 @@ export interface PriceQuoteRequest {
   toPostalCode: string;
   toLat: number;
   toLon: number;
-  carGroupId?: number; // Vehicle type: 1=Standard (1-4 pax), 2=Large (5-6 pax), 3=Minibus (7-8 pax)
   attributes?: number[];
   pickupTime?: string; // ISO 8601 format
 }

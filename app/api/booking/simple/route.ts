@@ -52,6 +52,8 @@ export async function POST(request: NextRequest) {
       attributes: Array.isArray(body.attributes)
         ? body.attributes.join(',')
         : (body.attributes || ''),
+      // SMS booking confirmation: default on; client may opt out by sending false.
+      sendSMSConfirmation: body.sendSMSConfirmation !== false,
     };
 
     // Call Taxi4U API with authentication
@@ -66,10 +68,24 @@ export async function POST(request: NextRequest) {
     });
 
     if (!response.ok) {
-      const error = await response.text();
-      console.error('Booking failed:', { status: response.status, error, sentData: bookingData });
+      const errorText = await response.text();
+      // 400/422 returns ApiErrorResponse { errors: string[] }
+      let details = errorText;
+      try {
+        const parsed = JSON.parse(errorText);
+        if (Array.isArray(parsed?.errors)) {
+          details = parsed.errors.join('; ');
+        } else if (parsed?.detail) {
+          details = parsed.detail;
+        } else if (parsed?.title) {
+          details = parsed.title;
+        }
+      } catch {
+        // keep raw text
+      }
+      console.error('Booking failed:', { status: response.status, error: errorText, sentData: bookingData });
       return NextResponse.json(
-        { error: 'Booking failed', details: error },
+        { error: 'Booking failed', details },
         { status: response.status }
       );
     }

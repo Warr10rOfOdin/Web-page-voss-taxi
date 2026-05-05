@@ -55,17 +55,25 @@ export async function POST(request: NextRequest) {
       return passengerData;
     });
 
-    // Build enhanced booking payload with sanitized data
-    const bookingData = {
-      ...body,
+    // Build Trip payload per WebAPIBook v1 spec.
+    // centralCode now lives in the body (no query parameter).
+    // carGroupId/numberOfCars are not part of the Trip schema; vehicle type is
+    // determined by attributes (e.g. 6/7/8-seater codes).
+    const { carGroupId: _carGroupId, numberOfCars, ...rest } = body;
+    const bookingData: any = {
+      ...rest,
+      centralCode,
       passengers: processedPassengers,
-      // Add required dispatch fields
-      carGroupId: body.carGroupId || 1, // Default to standard taxi (group 1)
-      numberOfCars: body.numberOfCars || 1, // Default to 1 car
-      // Sanitize optional fields
       orderedBy: body.orderedBy ? sanitizeString(body.orderedBy, 100) : undefined,
       messageToCar: body.messageToCar ? sanitizeString(body.messageToCar, 500) : undefined,
+      // SMS booking confirmation: default on; client may opt out by sending false.
+      sendSMSConfirmation: body.sendSMSConfirmation !== false,
     };
+
+    // Translate legacy numberOfCars (1..N) to Trip.additionalVehicles (0..N-1)
+    if (typeof numberOfCars === 'number' && numberOfCars > 1) {
+      bookingData.additionalVehicles = numberOfCars - 1;
+    }
 
     // Convert attributes array to comma-separated string if present
     if (Array.isArray(bookingData.attributes) && bookingData.attributes.length > 0) {
@@ -76,7 +84,7 @@ export async function POST(request: NextRequest) {
 
     // Call Taxi4U API with authentication (handles token refresh)
     const response = await taxi4uFetch(
-      `https://api.taxi4u.cab/api/book/general?centralCode=${centralCode}`,
+      'https://api.taxi4u.cab/api/book/general',
       {
         method: 'POST',
         headers: {
@@ -87,17 +95,31 @@ export async function POST(request: NextRequest) {
     );
 
     if (!response.ok) {
-      const error = await response.text();
-      console.error('General booking failed:', { status: response.status, error, sentData: body });
+      const errorText = await response.text();
+      // 400/422 returns ApiErrorResponse { errors: string[] }
+      let details = errorText;
+      try {
+        const parsed = JSON.parse(errorText);
+        if (Array.isArray(parsed?.errors)) {
+          details = parsed.errors.join('; ');
+        } else if (parsed?.detail) {
+          details = parsed.detail;
+        } else if (parsed?.title) {
+          details = parsed.title;
+        }
+      } catch {
+        // keep raw text
+      }
+      console.error('General booking failed:', { status: response.status, error: errorText, sentData: bookingData });
       return NextResponse.json(
-        { error: 'Booking failed', details: error },
+        { error: 'Booking failed', details },
         { status: response.status }
       );
     }
 
     const data = await response.json();
 
-    // Check for error in response
+    // Check for error in response (legacy field; success body is Trip with bookRef)
     if (data.errorMessage) {
       // Log failed booking
       try {

@@ -35,6 +35,7 @@ export function BookingForm({ locale }: BookingFormProps) {
   const [kidsAges, setKidsAges] = useState<number[]>([]);
   const [kidsMonths, setKidsMonths] = useState<number[]>([]); // For 0-year-old infants
   const [messageToCar, setMessageToCar] = useState('');
+  const [sendSMSConfirmation, setSendSMSConfirmation] = useState(true);
 
   // Price quote state
   const [priceQuote, setPriceQuote] = useState<{ tariff: string; price: number } | null>(null);
@@ -280,16 +281,12 @@ export function BookingForm({ locale }: BookingFormProps) {
         // Kids 11+ typically don't need special seats
       });
 
-      // Calculate car group based on passenger count
-      // 1-4 passengers = Standard Taxi (carGroupId 1)
-      // 5-6 passengers = Large Taxi (carGroupId 2)
-      // 7+ passengers = Minibus (carGroupId 3)
-      const carGroupId = passengerCount <= 4 ? 1 : passengerCount <= 6 ? 2 : 3;
+      // Vehicle type is selected via attributes (6/7/8-seater codes added below);
+      // the upstream PriceQuoteRequest schema no longer accepts carGroupId.
 
       // Debug logging
       console.log('Price quote request:', {
         passengerCount,
-        carGroupId,
         attributes,
         fromStreet,
         toStreet,
@@ -307,7 +304,6 @@ export function BookingForm({ locale }: BookingFormProps) {
           toPostalCode,
           toLat: finalToLat,
           toLon: finalToLon,
-          carGroupId,
           attributes,
           pickupTime: pickupTime ? formatDateForTaxi4U(new Date(pickupTime)) : formatDateForTaxi4U(new Date()),
         }),
@@ -333,11 +329,8 @@ export function BookingForm({ locale }: BookingFormProps) {
     setError(null);
     setSuccess(false);
 
-    // Auto-determine vehicle type based on passenger count
-    // 1-4 passengers = Standard Taxi (carGroupId 1)
-    // 5-6 passengers = Large Taxi (carGroupId 2)
-    // 7+ passengers = Minibus (carGroupId 3)
-    const carGroupId = passengerCount <= 4 ? 1 : passengerCount <= 6 ? 2 : 3;
+    // Vehicle type is selected via attributes (6/7/8-seater codes); the
+    // upstream Trip schema no longer accepts carGroupId/numberOfCars.
 
     try {
       // Geocode addresses if coordinates are missing
@@ -449,8 +442,7 @@ export function BookingForm({ locale }: BookingFormProps) {
         orderedBy: 'Website',
         messageToCar: finalMessageToCar || undefined,
         pickupTime: finalPickupTime,
-        carGroupId: carGroupId,
-        numberOfCars: 1,
+        sendSMSConfirmation,
         attributes: attributes.length > 0 ? attributes : undefined,
         passengers: [{
           seqNo: 1,
@@ -548,6 +540,7 @@ export function BookingForm({ locale }: BookingFormProps) {
     setKidsAges([]);
     setKidsMonths([]);
     setMessageToCar('');
+    setSendSMSConfirmation(true);
     setPriceQuote(null);
     setPriceError(null);
     setSuccess(false);
@@ -1224,6 +1217,24 @@ export function BookingForm({ locale }: BookingFormProps) {
               className="w-full px-5 py-4 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black placeholder-gray-400 focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition resize-none shadow-sm"
               placeholder={t('messagePlaceholder')}
             />
+          </div>
+
+          {/* SMS Confirmation Opt-In */}
+          <div className="mt-6">
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={sendSMSConfirmation}
+                onChange={(e) => setSendSMSConfirmation(e.target.checked)}
+                className="mt-1 h-5 w-5 rounded border-2 border-white/30 bg-white/95 text-taxi-yellow focus:ring-2 focus:ring-taxi-yellow cursor-pointer"
+              />
+              <span className="text-sm text-white">
+                <span className="font-semibold">{t('smsConfirmation')}</span>
+                <span className="block text-taxi-light-grey/80 mt-1">
+                  {t('smsConfirmationNote')}
+                </span>
+              </span>
+            </label>
           </div>
 
           {/* Error Display */}

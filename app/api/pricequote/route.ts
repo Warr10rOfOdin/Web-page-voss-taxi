@@ -7,7 +7,7 @@ const TAXI4U_CENTRAL_CODE = process.env.TAXI4U_CENTRAL_CODE || 'vs';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { fromStreet, fromPostalCode, fromLat, fromLon, toStreet, toPostalCode, toLat, toLon, carGroupId, attributes, pickupTime } = body;
+    const { fromStreet, fromPostalCode, fromLat, fromLon, toStreet, toPostalCode, toLat, toLon, attributes, pickupTime } = body;
 
     // Validate required fields
     if (!fromStreet || !toStreet) {
@@ -20,6 +20,8 @@ export async function POST(req: NextRequest) {
     // Call Taxi4U price quote API using the same authentication as booking
     const apiUrl = `${TAXI4U_API_BASE}/api/pricequote?centralCode=${TAXI4U_CENTRAL_CODE}`;
 
+    // PriceQuoteRequest schema does not include carGroupId; vehicle type is
+    // selected via the attributes array (e.g. 6/7/8-seater codes).
     const priceQuoteData = {
       fromStreet,
       fromPostalCode: fromPostalCode || '',
@@ -29,14 +31,12 @@ export async function POST(req: NextRequest) {
       toPostalCode: toPostalCode || '',
       toLat: toLat || 0,
       toLon: toLon || 0,
-      carGroupId: carGroupId || 1, // Default to Standard Taxi if not provided
-      attributes: attributes || [],
+      attributes: Array.isArray(attributes) ? attributes : [],
       pickupTime: pickupTime || new Date().toISOString(),
     };
 
     // Debug logging - what we're sending to Taxi4U API
     console.log('Sending to Taxi4U API:', {
-      carGroupId: priceQuoteData.carGroupId,
       attributes: priceQuoteData.attributes,
       fromStreet: priceQuoteData.fromStreet,
       toStreet: priceQuoteData.toStreet,
@@ -56,10 +56,16 @@ export async function POST(req: NextRequest) {
       const errorText = await response.text();
       let errorDetails = errorText;
 
-      // Try to parse error as JSON for better error messages
+      // Try to parse error as JSON for better error messages.
+      // 422 returns PriceQuoteResponse { errorMessage }; 400 returns
+      // ApiErrorResponse { errors: string[] }.
       try {
         const errorJson = JSON.parse(errorText);
-        errorDetails = errorJson.message || errorJson.error || errorText;
+        if (Array.isArray(errorJson?.errors)) {
+          errorDetails = errorJson.errors.join('; ');
+        } else {
+          errorDetails = errorJson.errorMessage || errorJson.detail || errorJson.title || errorJson.message || errorJson.error || errorText;
+        }
 
         console.error('Price quote API error:', {
           status: response.status,
