@@ -36,25 +36,34 @@ export function AddressAutocomplete({
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  // After the user picks a suggestion the parent updates `value`, which would
+  // re-trigger the search effect and reopen the dropdown — making the user
+  // think they have to click twice. Skip exactly one fetch after a select.
+  const skipNextFetchRef = useRef(false);
+  // Avoid clobbering newer results with an older in-flight response.
+  const requestSeqRef = useRef(0);
 
   // Fetch suggestions from Kartverket API
   useEffect(() => {
-    if (!value || value.length < 3) {
-      setSuggestions([]);
+    if (skipNextFetchRef.current) {
+      skipNextFetchRef.current = false;
       return;
     }
+
+    if (!value || value.trim().length < 2) {
+      setSuggestions([]);
+      setShowSuggestions(false);
+      return;
+    }
+
+    const seq = ++requestSeqRef.current;
 
     const fetchSuggestions = async () => {
       setLoading(true);
       try {
-        // Using Kartverket's address search API (free, no API key needed)
         const response = await fetch(
-          `https://ws.geonorge.no/adresser/v1/sok?sok=${encodeURIComponent(value)}&treffPerSide=10&sokemodus=AND`,
-          {
-            headers: {
-              'Accept': 'application/json',
-            },
-          }
+          `https://ws.geonorge.no/adresser/v1/sok?sok=${encodeURIComponent(value)}&treffPerSide=8&sokemodus=AND`,
+          { headers: { Accept: 'application/json' } }
         );
 
         if (!response.ok) throw new Error('Failed to fetch suggestions');
@@ -62,15 +71,12 @@ export function AddressAutocomplete({
         const data = await response.json();
 
         const formatted: AddressSuggestion[] = (data.adresser || []).map((addr: any) => {
-          // Extract GPS coordinates from representasjonspunkt
           let lat: number | undefined;
           let lon: number | undefined;
-
           if (addr.representasjonspunkt?.lat && addr.representasjonspunkt?.lon) {
             lat = parseFloat(addr.representasjonspunkt.lat);
             lon = parseFloat(addr.representasjonspunkt.lon);
           }
-
           return {
             display: `${addr.adressetekst}, ${addr.postnummer} ${addr.poststed}`,
             street: addr.adressetekst || '',
@@ -81,17 +87,20 @@ export function AddressAutocomplete({
           };
         });
 
+        if (seq !== requestSeqRef.current) return; // stale response
         setSuggestions(formatted);
-        setShowSuggestions(true);
+        setShowSuggestions(formatted.length > 0);
       } catch (error) {
-        console.error('Address search error:', error);
-        setSuggestions([]);
+        if (seq === requestSeqRef.current) {
+          console.error('Address search error:', error);
+          setSuggestions([]);
+        }
       } finally {
-        setLoading(false);
+        if (seq === requestSeqRef.current) setLoading(false);
       }
     };
 
-    const timeoutId = setTimeout(fetchSuggestions, 300);
+    const timeoutId = setTimeout(fetchSuggestions, 200);
     return () => clearTimeout(timeoutId);
   }, [value]);
 
@@ -108,8 +117,11 @@ export function AddressAutocomplete({
   }, []);
 
   const handleSelect = (suggestion: AddressSuggestion) => {
-    onChange(suggestion.street);
+    skipNextFetchRef.current = true;
+    requestSeqRef.current++; // invalidate any in-flight request
+    setSuggestions([]);
     setShowSuggestions(false);
+    onChange(suggestion.street);
     onSelect?.(suggestion);
   };
 
@@ -153,7 +165,16 @@ export function AddressAutocomplete({
             <button
               key={index}
               type="button"
-              onClick={() => handleSelect(suggestion)}
+              // mousedown fires before the input's blur/click-outside, so handle
+              // selection there to avoid races with the dropdown closing.
+              onMouseDown={(e) => {
+                e.preventDefault();
+                handleSelect(suggestion);
+              }}
+              onTouchStart={(e) => {
+                e.preventDefault();
+                handleSelect(suggestion);
+              }}
               className="w-full px-5 py-4 text-left hover:bg-taxi-yellow/20 transition-colors border-b border-gray-100 last:border-b-0 first:rounded-t-xl last:rounded-b-xl"
             >
               <div className="font-semibold text-gray-900">{suggestion.street}</div>
