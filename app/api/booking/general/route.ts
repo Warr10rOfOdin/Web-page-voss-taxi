@@ -26,59 +26,92 @@ export async function POST(request: NextRequest) {
 
     // Get central code from environment or use default
     const centralCode = process.env.TAXI4U_CENTRAL_CODE || 'VS';
+    if (centralCode.length !== 2) {
+      console.warn('TAXI4U_CENTRAL_CODE should be a 2-letter code, got:', centralCode);
+    }
 
-    // Process passengers: sanitize data and add zone numbers from GPS coordinates
-    const processedPassengers = body.passengers.map((passenger: any) => {
-      const passengerData = {
-        ...passenger,
-        // Sanitize passenger data
-        clientName: sanitizeString(passenger.clientName, 100),
-        tel: sanitizePhoneNumber(passenger.tel),
-        fromStreet: sanitizeString(passenger.fromStreet, 200),
-        fromCity: sanitizeString(passenger.fromCity, 100),
-        fromPostalCode: passenger.fromPostalCode ? sanitizePostalCode(passenger.fromPostalCode) : undefined,
-        toStreet: passenger.toStreet ? sanitizeString(passenger.toStreet, 200) : undefined,
-        toCity: passenger.toCity ? sanitizeString(passenger.toCity, 100) : undefined,
-        toPostalCode: passenger.toPostalCode ? sanitizePostalCode(passenger.toPostalCode) : undefined,
+    // Build Passenger objects with only the fields defined in the WebAPIBook
+    // Passenger schema. Spreading unknown fields can trip strict deserialisers
+    // upstream. Required: seqNo, fromLat, fromLon, fromStreet, pickupTime.
+    const processedPassengers = body.passengers.map((p: any, idx: number) => {
+      const passenger: Record<string, unknown> = {
+        seqNo: typeof p.seqNo === 'number' ? p.seqNo : idx + 1,
+        clientName: p.clientName ? sanitizeString(p.clientName, 100) : undefined,
+        tel: p.tel ? sanitizePhoneNumber(p.tel) : undefined,
+        pickupTime: p.pickupTime,
+        fromStreet: sanitizeString(p.fromStreet, 200),
+        fromCity: p.fromCity ? sanitizeString(p.fromCity, 100) : undefined,
+        fromPostalCode: p.fromPostalCode ? sanitizePostalCode(p.fromPostalCode) : undefined,
+        fromLat: typeof p.fromLat === 'number' ? p.fromLat : undefined,
+        fromLon: typeof p.fromLon === 'number' ? p.fromLon : undefined,
+        toStreet: p.toStreet ? sanitizeString(p.toStreet, 200) : undefined,
+        toCity: p.toCity ? sanitizeString(p.toCity, 100) : undefined,
+        toPostalCode: p.toPostalCode ? sanitizePostalCode(p.toPostalCode) : undefined,
+        toLat: typeof p.toLat === 'number' ? p.toLat : undefined,
+        toLon: typeof p.toLon === 'number' ? p.toLon : undefined,
+        clientNote: p.clientNote ? sanitizeString(p.clientNote, 500) : undefined,
+        clientNoteToCar: typeof p.clientNoteToCar === 'boolean' ? p.clientNoteToCar : undefined,
       };
 
-      // Determine fromZoneNo from GPS coordinates if available
-      if (passenger.fromLat && passenger.fromLon) {
-        passengerData.fromZoneNo = getZoneFromCoordinates(passenger.fromLon, passenger.fromLat);
+      if (typeof p.fromLat === 'number' && typeof p.fromLon === 'number') {
+        passenger.fromZoneNo = getZoneFromCoordinates(p.fromLon, p.fromLat);
+      }
+      if (typeof p.toLat === 'number' && typeof p.toLon === 'number') {
+        passenger.toZoneNo = getZoneFromCoordinates(p.toLon, p.toLat);
       }
 
-      // Determine toZoneNo from GPS coordinates if available
-      if (passenger.toLat && passenger.toLon) {
-        passengerData.toZoneNo = getZoneFromCoordinates(passenger.toLon, passenger.toLat);
-      }
-
-      return passengerData;
+      // Drop undefined keys so we don't send `null` for nullable fields the
+      // user didn't fill in.
+      Object.keys(passenger).forEach((k) => passenger[k] === undefined && delete passenger[k]);
+      return passenger;
     });
 
-    // Build Trip payload per WebAPIBook v1 spec.
-    // centralCode now lives in the body (no query parameter).
-    // carGroupId/numberOfCars are not part of the Trip schema; vehicle type is
-    // determined by attributes (e.g. 6/7/8-seater codes).
-    const { carGroupId: _carGroupId, numberOfCars, ...rest } = body;
-    const bookingData: any = {
-      ...rest,
+    // Required: first passenger needs fromLat/fromLon (per Passenger schema).
+    const first = processedPassengers[0] as Record<string, unknown>;
+    if (typeof first.fromLat !== 'number' || typeof first.fromLon !== 'number') {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Missing pickup coordinates',
+          details:
+            'Pickup location is missing GPS coordinates. Pick the address from the suggestion list so coordinates are attached.',
+        },
+        { status: 400 }
+      );
+    }
+
+    // Build Trip payload per WebAPIBook v1 spec. Only known Trip fields are
+    // forwarded; carGroupId/numberOfCars are legacy and not in the schema.
+    const bookingData: Record<string, unknown> = {
       centralCode,
-      passengers: processedPassengers,
+      pickupTime: body.pickupTime,
       orderedBy: body.orderedBy ? sanitizeString(body.orderedBy, 100) : undefined,
       messageToCar: body.messageToCar ? sanitizeString(body.messageToCar, 500) : undefined,
+      messageToBooking: body.messageToBooking ? sanitizeString(body.messageToBooking, 500) : undefined,
+      attributes: body.attributes,
+      passengers: processedPassengers,
       // SMS booking confirmation: default on; client may opt out by sending false.
       sendSMSConfirmation: body.sendSMSConfirmation !== false,
     };
 
     // Translate legacy numberOfCars (1..N) to Trip.additionalVehicles (0..N-1)
-    if (typeof numberOfCars === 'number' && numberOfCars > 1) {
-      bookingData.additionalVehicles = numberOfCars - 1;
+    if (typeof body.numberOfCars === 'number' && body.numberOfCars > 1) {
+      bookingData.additionalVehicles = body.numberOfCars - 1;
+    }
+    if (typeof body.additionalVehicles === 'number' && body.additionalVehicles >= 0) {
+      bookingData.additionalVehicles = body.additionalVehicles;
     }
 
-    // Convert attributes array to comma-separated string if present
+    // attributes is a comma-separated string in the Trip schema.
     if (Array.isArray(bookingData.attributes) && bookingData.attributes.length > 0) {
       bookingData.attributes = bookingData.attributes.join(',');
+    } else if (!bookingData.attributes) {
+      delete bookingData.attributes;
     }
+
+    Object.keys(bookingData).forEach(
+      (k) => bookingData[k] === undefined && delete bookingData[k]
+    );
 
     console.log('Sending general booking request:', JSON.stringify(bookingData, null, 2));
 
@@ -96,12 +129,15 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       const errorText = await response.text();
-      // 400/422 returns ApiErrorResponse { errors: string[] }
+      // 400/422 returns ApiErrorResponse { errors: string[] }; 500 returns
+      // a plain ASP.NET ProblemDetails-ish object or a bare string.
       let details = errorText;
       try {
         const parsed = JSON.parse(errorText);
         if (Array.isArray(parsed?.errors)) {
           details = parsed.errors.join('; ');
+        } else if (typeof parsed?.errorMessage === 'string' && parsed.errorMessage) {
+          details = parsed.errorMessage;
         } else if (parsed?.detail) {
           details = parsed.detail;
         } else if (parsed?.title) {
@@ -110,9 +146,18 @@ export async function POST(request: NextRequest) {
       } catch {
         // keep raw text
       }
-      console.error('General booking failed:', { status: response.status, error: errorText, sentData: bookingData });
+      console.error('General booking failed:', {
+        upstreamStatus: response.status,
+        upstreamBody: errorText,
+        sentData: bookingData,
+      });
       return NextResponse.json(
-        { error: 'Booking failed', details },
+        {
+          success: false,
+          error: 'Booking failed',
+          details,
+          upstreamStatus: response.status,
+        },
         { status: response.status }
       );
     }

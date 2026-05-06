@@ -316,7 +316,13 @@ export function BookingForm({ locale }: BookingFormProps) {
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Failed to get price quote');
+        const message =
+          (typeof data.details === 'string' && data.details.trim()
+            ? data.details
+            : '') ||
+          data.error ||
+          (locale === 'no' ? 'Klarte ikkje å hente prisestimat' : 'Failed to get price quote');
+        throw new Error(message);
       }
 
       setPriceQuote({ tariff: data.tariff, price: data.price });
@@ -497,7 +503,19 @@ export function BookingForm({ locale }: BookingFormProps) {
           details: data.details,
           fullResponse: data
         });
-        throw new Error(data.error || data.details || 'Booking failed');
+        // Surface the underlying reason, not just the generic header.
+        // Validation arrays from upstream come through as data.details.
+        const validationList = Array.isArray(data.validationErrors)
+          ? data.validationErrors.join(' • ')
+          : '';
+        const message =
+          validationList ||
+          (typeof data.details === 'string' && data.details.trim()
+            ? data.details
+            : '') ||
+          data.error ||
+          (locale === 'no' ? 'Bestilling feila' : 'Booking failed');
+        throw new Error(message);
       }
 
       setSuccess(true);
