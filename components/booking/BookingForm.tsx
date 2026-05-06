@@ -31,6 +31,9 @@ export function BookingForm({ locale }: BookingFormProps) {
   const [toLat, setToLat] = useState<number | null>(null);
   const [toLon, setToLon] = useState<number | null>(null);
   const [pickupTime, setPickupTime] = useState('');
+  // Date selected without a time yet — kept separate so the form can require
+  // an explicit time selection before allowing submission.
+  const [pickupDateDraft, setPickupDateDraft] = useState('');
   const [passengerCount, setPassengerCount] = useState(1);
   const [kidsCount, setKidsCount] = useState(0);
   const [kidsAges, setKidsAges] = useState<number[]>([]);
@@ -326,6 +329,16 @@ export function BookingForm({ locale }: BookingFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (pickupDateDraft && !pickupTime) {
+      setError(
+        locale === 'no'
+          ? 'Vel også eit tidspunkt før du sender inn.'
+          : 'Please also pick a time before submitting.'
+      );
+      return;
+    }
+
     setLoading(true);
     setError(null);
     setSuccess(false);
@@ -536,6 +549,7 @@ export function BookingForm({ locale }: BookingFormProps) {
     setToCity('');
     setToPostalCode('');
     setPickupTime('');
+    setPickupDateDraft('');
     setPassengerCount(1);
     setKidsCount(0);
     setKidsAges([]);
@@ -560,6 +574,7 @@ export function BookingForm({ locale }: BookingFormProps) {
     const target = roundToNearest5Minutes(new Date(Date.now() + minutesFromNow * 60_000));
     const localValue = toLocalDateTimeInputValue(target);
     setPickupTime(localValue);
+    setPickupDateDraft('');
     checkRules(formatDateForTaxi4U(target));
   };
 
@@ -1107,11 +1122,12 @@ export function BookingForm({ locale }: BookingFormProps) {
                 type="button"
                 onClick={() => {
                   setPickupTime('');
+                  setPickupDateDraft('');
                   checkRules('');
                 }}
                 className={cn(
                   'px-3 py-3 text-sm font-semibold rounded-xl border-2 smooth-transition',
-                  pickupTime === ''
+                  pickupTime === '' && pickupDateDraft === ''
                     ? 'bg-taxi-yellow border-taxi-yellow text-taxi-black shadow-lg'
                     : 'bg-white/10 border-white/30 text-white hover:bg-white/20'
                 )}
@@ -1142,63 +1158,98 @@ export function BookingForm({ locale }: BookingFormProps) {
             </div>
 
             {/* Single combined date+time picker */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <input
-                type="date"
-                value={pickupTime ? pickupTime.split('T')[0] : ''}
-                onChange={(e) => {
-                  const newDate = e.target.value;
-                  if (!newDate) {
-                    setPickupTime('');
-                    checkRules('');
-                    return;
-                  }
-                  const currentTime = pickupTime ? pickupTime.split('T')[1] : '';
-                  const time = currentTime || (() => {
-                    const next = roundToNearest5Minutes(new Date(Date.now() + 5 * 60_000));
-                    return toLocalDateTimeInputValue(next).split('T')[1];
-                  })();
-                  const next = `${newDate}T${time}`;
-                  setPickupTime(next);
-                  checkRules(formatDateForTaxi4U(new Date(next)));
-                }}
-                min={getMinDateTime().split('T')[0]}
-                aria-label={locale === 'no' ? 'Dato' : 'Date'}
-                className="px-4 py-3 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm"
-              />
-              <select
-                value={pickupTime ? pickupTime.split('T')[1] || '' : ''}
-                onChange={(e) => {
-                  const newTime = e.target.value;
-                  if (!newTime) {
-                    setPickupTime('');
-                    checkRules('');
-                    return;
-                  }
-                  const currentDate = pickupTime
-                    ? pickupTime.split('T')[0]
-                    : toLocalDateTimeInputValue(new Date()).split('T')[0];
-                  const next = `${currentDate}T${newTime}`;
-                  setPickupTime(next);
-                  checkRules(formatDateForTaxi4U(new Date(next)));
-                }}
-                aria-label={locale === 'no' ? 'Tid' : 'Time'}
-                className="px-4 py-3 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm"
-              >
-                <option value="">{locale === 'no' ? 'Vel tid' : 'Select time'}</option>
-                {Array.from({ length: 24 * 12 }, (_, i) => {
-                  const h = Math.floor(i / 12);
-                  const m = (i % 12) * 5;
-                  const v = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-                  return (
-                    <option key={v} value={v}>
-                      {v}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-            <p className="text-xs text-white/70 mt-3 bg-white/10 px-4 py-2 rounded-lg">{t('pickupTimeNote')}</p>
+            {(() => {
+              const dateValue = pickupTime ? pickupTime.split('T')[0] : pickupDateDraft;
+              const timeValue = pickupTime ? pickupTime.split('T')[1] || '' : '';
+              const needsTime = !!pickupDateDraft && !pickupTime;
+              return (
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <input
+                      type="date"
+                      value={dateValue}
+                      onChange={(e) => {
+                        const newDate = e.target.value;
+                        if (!newDate) {
+                          setPickupTime('');
+                          setPickupDateDraft('');
+                          checkRules('');
+                          return;
+                        }
+                        if (timeValue) {
+                          // Already had a time; keep it and just swap the date.
+                          const next = `${newDate}T${timeValue}`;
+                          setPickupTime(next);
+                          setPickupDateDraft('');
+                          checkRules(formatDateForTaxi4U(new Date(next)));
+                        } else {
+                          // Date selected but no time yet — force user to pick time.
+                          setPickupDateDraft(newDate);
+                          setPickupTime('');
+                          checkRules('');
+                        }
+                      }}
+                      min={getMinDateTime().split('T')[0]}
+                      aria-label={locale === 'no' ? 'Dato' : 'Date'}
+                      className={cn(
+                        'px-4 py-3 text-base bg-white/95 border-2 rounded-xl text-taxi-black focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm',
+                        'border-white/30'
+                      )}
+                    />
+                    <select
+                      value={timeValue}
+                      onChange={(e) => {
+                        const newTime = e.target.value;
+                        if (!newTime) {
+                          // Clearing time: keep the date as a draft until time is reset.
+                          if (pickupTime) {
+                            setPickupDateDraft(pickupTime.split('T')[0]);
+                          }
+                          setPickupTime('');
+                          checkRules('');
+                          return;
+                        }
+                        const baseDate =
+                          dateValue ||
+                          toLocalDateTimeInputValue(new Date()).split('T')[0];
+                        const next = `${baseDate}T${newTime}`;
+                        setPickupTime(next);
+                        setPickupDateDraft('');
+                        checkRules(formatDateForTaxi4U(new Date(next)));
+                      }}
+                      aria-label={locale === 'no' ? 'Tid' : 'Time'}
+                      aria-invalid={needsTime}
+                      className={cn(
+                        'px-4 py-3 text-base bg-white/95 border-2 rounded-xl text-taxi-black focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm',
+                        needsTime ? 'border-taxi-yellow ring-2 ring-taxi-yellow/60' : 'border-white/30'
+                      )}
+                    >
+                      <option value="">{locale === 'no' ? 'Vel tid' : 'Select time'}</option>
+                      {Array.from({ length: 24 * 12 }, (_, i) => {
+                        const h = Math.floor(i / 12);
+                        const m = (i % 12) * 5;
+                        const v = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+                        return (
+                          <option key={v} value={v}>
+                            {v}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                  {needsTime && (
+                    <p className="text-sm text-taxi-yellow font-semibold mt-2">
+                      {locale === 'no'
+                        ? 'Vel også eit tidspunkt for å fullføre bestillinga.'
+                        : 'Please also pick a time to complete the booking.'}
+                    </p>
+                  )}
+                  <p className="text-xs text-white/70 mt-3 bg-white/10 px-4 py-2 rounded-lg">
+                    {t('pickupTimeNote')}
+                  </p>
+                </>
+              );
+            })()}
 
             {/* Rule Restrictions */}
             {hasRestrictions && ruleRestrictions.length > 0 && (
@@ -1288,7 +1339,7 @@ export function BookingForm({ locale }: BookingFormProps) {
             type="submit"
             size="lg"
             className="w-full depth-glow hover-scale smooth-transition text-lg font-bold py-6"
-            disabled={loading || hasRestrictions}
+            disabled={loading || hasRestrictions || (!!pickupDateDraft && !pickupTime)}
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
