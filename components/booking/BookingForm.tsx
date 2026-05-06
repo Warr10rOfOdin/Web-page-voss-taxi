@@ -5,7 +5,8 @@ import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { AddressAutocomplete } from '@/components/ui/AddressAutocomplete';
-import { formatDateForTaxi4U, roundToNearest5Minutes } from '@/lib/date-utils';
+import { formatDateForTaxi4U, roundToNearest5Minutes, toLocalDateTimeInputValue } from '@/lib/date-utils';
+import { cn } from '@/lib/utils';
 
 interface BookingFormProps {
   locale: string;
@@ -547,12 +548,19 @@ export function BookingForm({ locale }: BookingFormProps) {
     setBookRef(null);
   };
 
-  // Get minimum datetime (now + 5 minutes, rounded to nearest 5)
+  // Minimum allowed datetime-local value (local time, native input format).
+  // We also accept "now" via quick-pick, so the min only constrains manual edits.
   const getMinDateTime = () => {
     const now = new Date();
-    now.setMinutes(now.getMinutes() + 5); // Add 5 minutes buffer
-    const rounded = roundToNearest5Minutes(now);
-    return rounded.toISOString().slice(0, 16);
+    return toLocalDateTimeInputValue(now);
+  };
+
+  // Quick-pick helper: set pickupTime to (now + minutes), rounded to nearest 5.
+  const setPickupInMinutes = (minutesFromNow: number) => {
+    const target = roundToNearest5Minutes(new Date(Date.now() + minutesFromNow * 60_000));
+    const localValue = toLocalDateTimeInputValue(target);
+    setPickupTime(localValue);
+    checkRules(formatDateForTaxi4U(target));
   };
 
   if (success && bookRef) {
@@ -1092,74 +1100,64 @@ export function BookingForm({ locale }: BookingFormProps) {
             <label className="block text-sm font-semibold mb-3 text-white">
               {t('pickupTime')}
             </label>
-            <div className="grid grid-cols-3 gap-3">
-              {/* Date Picker */}
-              <input
-                type="date"
-                value={pickupTime ? pickupTime.split('T')[0] : ''}
-                onChange={(e) => {
-                  if (e.target.value) {
-                    const currentTime = pickupTime ? pickupTime.split('T')[1] || '12:00' : '12:00';
-                    const newDateTime = `${e.target.value}T${currentTime}`;
-                    const selectedDate = new Date(newDateTime);
-                    const rounded = roundToNearest5Minutes(selectedDate);
-                    const timeStr = rounded.toISOString().slice(0, 16);
-                    setPickupTime(timeStr);
-                    checkRules(formatDateForTaxi4U(rounded));
-                  } else {
-                    setPickupTime('');
-                    checkRules('');
-                  }
-                }}
-                min={getMinDateTime().split('T')[0]}
-                className="col-span-3 sm:col-span-1 px-4 py-3 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm"
-              />
 
-              {/* Hour Picker */}
-              <select
-                value={pickupTime ? pickupTime.split('T')[1]?.split(':')[0] || '' : ''}
-                onChange={(e) => {
-                  const currentDate = pickupTime ? pickupTime.split('T')[0] : new Date().toISOString().split('T')[0];
-                  const currentMinute = pickupTime ? pickupTime.split('T')[1]?.split(':')[1] || '00' : '00';
-                  const newDateTime = `${currentDate}T${e.target.value}:${currentMinute}`;
-                  const selectedDate = new Date(newDateTime);
-                  const rounded = roundToNearest5Minutes(selectedDate);
-                  const timeStr = rounded.toISOString().slice(0, 16);
-                  setPickupTime(timeStr);
-                  checkRules(formatDateForTaxi4U(rounded));
+            {/* Quick picks: ASAP / +15 min / +30 min / +1 h */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setPickupTime('');
+                  checkRules('');
                 }}
-                className="col-span-3 sm:col-span-1 px-4 py-3 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm"
+                className={cn(
+                  'px-3 py-3 text-sm font-semibold rounded-xl border-2 smooth-transition',
+                  pickupTime === ''
+                    ? 'bg-taxi-yellow border-taxi-yellow text-taxi-black shadow-lg'
+                    : 'bg-white/10 border-white/30 text-white hover:bg-white/20'
+                )}
               >
-                <option value="">HH</option>
-                {Array.from({ length: 24 }, (_, i) => (
-                  <option key={i} value={i.toString().padStart(2, '0')}>
-                    {i.toString().padStart(2, '0')}
-                  </option>
-                ))}
-              </select>
-
-              {/* Minute Picker - 5 minute increments only */}
-              <select
-                value={pickupTime ? pickupTime.split('T')[1]?.split(':')[1] || '' : ''}
-                onChange={(e) => {
-                  const currentDate = pickupTime ? pickupTime.split('T')[0] : new Date().toISOString().split('T')[0];
-                  const currentHour = pickupTime ? pickupTime.split('T')[1]?.split(':')[0] || '12' : '12';
-                  const newDateTime = `${currentDate}T${currentHour}:${e.target.value}`;
-                  const selectedDate = new Date(newDateTime);
-                  const timeStr = selectedDate.toISOString().slice(0, 16);
-                  setPickupTime(timeStr);
-                  checkRules(formatDateForTaxi4U(selectedDate));
-                }}
-                className="col-span-3 sm:col-span-1 px-4 py-3 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm"
+                {locale === 'no' ? 'Snarast råd' : 'ASAP'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setPickupInMinutes(15)}
+                className="px-3 py-3 text-sm font-semibold rounded-xl border-2 bg-white/10 border-white/30 text-white hover:bg-white/20 smooth-transition"
               >
-                <option value="">MM</option>
-                {['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'].map((min) => (
-                  <option key={min} value={min}>
-                    {min}
-                  </option>
-                ))}
-              </select>
+                +15 min
+              </button>
+              <button
+                type="button"
+                onClick={() => setPickupInMinutes(30)}
+                className="px-3 py-3 text-sm font-semibold rounded-xl border-2 bg-white/10 border-white/30 text-white hover:bg-white/20 smooth-transition"
+              >
+                +30 min
+              </button>
+              <button
+                type="button"
+                onClick={() => setPickupInMinutes(60)}
+                className="px-3 py-3 text-sm font-semibold rounded-xl border-2 bg-white/10 border-white/30 text-white hover:bg-white/20 smooth-transition"
+              >
+                +1 t
+              </button>
             </div>
+
+            {/* Single combined date+time picker */}
+            <input
+              type="datetime-local"
+              value={pickupTime}
+              onChange={(e) => {
+                const val = e.target.value;
+                setPickupTime(val);
+                if (val) {
+                  checkRules(formatDateForTaxi4U(new Date(val)));
+                } else {
+                  checkRules('');
+                }
+              }}
+              min={getMinDateTime()}
+              step={300}
+              className="w-full px-4 py-3 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm"
+            />
             <p className="text-xs text-white/70 mt-3 bg-white/10 px-4 py-2 rounded-lg">{t('pickupTimeNote')}</p>
 
             {/* Rule Restrictions */}

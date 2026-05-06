@@ -1,17 +1,22 @@
 /**
- * Format a date in local timezone for Taxi4U API
- * Returns format: YYYY-MM-DDTHH:mm:ss (without Z suffix)
- * This ensures the time is interpreted correctly by the dispatch system
+ * Serialize a Date for the WebAPIBook API.
+ * Returns ISO 8601 UTC with the trailing Z, e.g. 2025-06-15T14:30:00.000Z.
+ * The booking API rejects values that are not UTC.
  */
 export function formatDateForTaxi4U(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
+  return date.toISOString();
+}
 
-  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+/**
+ * Format a Date as an HTML <input type="datetime-local"> value in LOCAL time:
+ * YYYY-MM-DDTHH:mm. The native input parses this back as local time.
+ */
+export function toLocalDateTimeInputValue(date: Date): string {
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return (
+    `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}` +
+    `T${pad(date.getHours())}:${pad(date.getMinutes())}`
+  );
 }
 
 /**
