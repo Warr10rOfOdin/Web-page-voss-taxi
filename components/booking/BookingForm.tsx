@@ -1142,22 +1142,62 @@ export function BookingForm({ locale }: BookingFormProps) {
             </div>
 
             {/* Single combined date+time picker */}
-            <input
-              type="datetime-local"
-              value={pickupTime}
-              onChange={(e) => {
-                const val = e.target.value;
-                setPickupTime(val);
-                if (val) {
-                  checkRules(formatDateForTaxi4U(new Date(val)));
-                } else {
-                  checkRules('');
-                }
-              }}
-              min={getMinDateTime()}
-              step={300}
-              className="w-full px-4 py-3 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm"
-            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input
+                type="date"
+                value={pickupTime ? pickupTime.split('T')[0] : ''}
+                onChange={(e) => {
+                  const newDate = e.target.value;
+                  if (!newDate) {
+                    setPickupTime('');
+                    checkRules('');
+                    return;
+                  }
+                  const currentTime = pickupTime ? pickupTime.split('T')[1] : '';
+                  const time = currentTime || (() => {
+                    const next = roundToNearest5Minutes(new Date(Date.now() + 5 * 60_000));
+                    return toLocalDateTimeInputValue(next).split('T')[1];
+                  })();
+                  const next = `${newDate}T${time}`;
+                  setPickupTime(next);
+                  checkRules(formatDateForTaxi4U(new Date(next)));
+                }}
+                min={getMinDateTime().split('T')[0]}
+                aria-label={locale === 'no' ? 'Dato' : 'Date'}
+                className="px-4 py-3 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm"
+              />
+              <select
+                value={pickupTime ? pickupTime.split('T')[1] || '' : ''}
+                onChange={(e) => {
+                  const newTime = e.target.value;
+                  if (!newTime) {
+                    setPickupTime('');
+                    checkRules('');
+                    return;
+                  }
+                  const currentDate = pickupTime
+                    ? pickupTime.split('T')[0]
+                    : toLocalDateTimeInputValue(new Date()).split('T')[0];
+                  const next = `${currentDate}T${newTime}`;
+                  setPickupTime(next);
+                  checkRules(formatDateForTaxi4U(new Date(next)));
+                }}
+                aria-label={locale === 'no' ? 'Tid' : 'Time'}
+                className="px-4 py-3 text-base bg-white/95 border-2 border-white/30 rounded-xl text-taxi-black focus:ring-2 focus:ring-taxi-yellow focus:border-taxi-yellow focus:bg-white smooth-transition shadow-sm"
+              >
+                <option value="">{locale === 'no' ? 'Vel tid' : 'Select time'}</option>
+                {Array.from({ length: 24 * 12 }, (_, i) => {
+                  const h = Math.floor(i / 12);
+                  const m = (i % 12) * 5;
+                  const v = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+                  return (
+                    <option key={v} value={v}>
+                      {v}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
             <p className="text-xs text-white/70 mt-3 bg-white/10 px-4 py-2 rounded-lg">{t('pickupTimeNote')}</p>
 
             {/* Rule Restrictions */}
