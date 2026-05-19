@@ -82,6 +82,7 @@ export async function POST(request: NextRequest) {
 
     // Build Trip payload per WebAPIBook v1 spec. Only known Trip fields are
     // forwarded; carGroupId/numberOfCars are legacy and not in the schema.
+    const wantsSms = body.sendSMSConfirmation !== false;
     const bookingData: Record<string, unknown> = {
       centralCode,
       pickupTime: body.pickupTime,
@@ -90,8 +91,15 @@ export async function POST(request: NextRequest) {
       messageToBooking: body.messageToBooking ? sanitizeString(body.messageToBooking, 500) : undefined,
       attributes: body.attributes,
       passengers: processedPassengers,
-      // SMS booking confirmation: default on; client may opt out by sending false.
-      sendSMSConfirmation: body.sendSMSConfirmation !== false,
+      // SMS booking confirmation. The new upstream stored procedure
+      // expects an @sms_confirmation parameter, but the public Trip schema
+      // doesn't yet document the JSON name the controller binds to.
+      // Send the flag under every plausible name so whichever the
+      // controller reads will match.
+      sendSMSConfirmation: wantsSms,
+      smsConfirmation: wantsSms,
+      smsConfirmationToCustomer: wantsSms,
+      sms_confirmation: wantsSms,
     };
 
     // Translate legacy numberOfCars (1..N) to Trip.additionalVehicles (0..N-1)
@@ -131,21 +139,35 @@ export async function POST(request: NextRequest) {
       const errorText = await response.text();
       // 400/422 returns ApiErrorResponse { errors: string[] }; 500 returns
       // a plain ASP.NET ProblemDetails-ish object or a bare string.
-      let details = errorText;
+      let rawDetails = errorText;
       try {
         const parsed = JSON.parse(errorText);
         if (Array.isArray(parsed?.errors)) {
-          details = parsed.errors.join('; ');
+          rawDetails = parsed.errors.join('; ');
         } else if (typeof parsed?.errorMessage === 'string' && parsed.errorMessage) {
-          details = parsed.errorMessage;
+          rawDetails = parsed.errorMessage;
+        } else if (parsed?.error) {
+          rawDetails = parsed.error;
         } else if (parsed?.detail) {
-          details = parsed.detail;
+          rawDetails = parsed.detail;
         } else if (parsed?.title) {
-          details = parsed.title;
+          rawDetails = parsed.title;
         }
       } catch {
         // keep raw text
       }
+
+      // Don't show SQL stack traces to end users. Detect known upstream
+      // failures and replace with a short, actionable message.
+      let userMessage = rawDetails;
+      const looksLikeSqlCrash =
+        response.status >= 500 ||
+        /System\.Data\.SqlClient|SqlException|Procedure or function/i.test(rawDetails);
+      if (looksLikeSqlCrash) {
+        userMessage =
+          'Booking-tenesta er midlertidig ute av drift. Prøv igjen om litt eller ring sentralen.';
+      }
+
       console.error('General booking failed:', {
         upstreamStatus: response.status,
         upstreamBody: errorText,
@@ -155,7 +177,8 @@ export async function POST(request: NextRequest) {
         {
           success: false,
           error: 'Booking failed',
-          details,
+          details: userMessage,
+          rawDetails,
           upstreamStatus: response.status,
         },
         { status: response.status }
