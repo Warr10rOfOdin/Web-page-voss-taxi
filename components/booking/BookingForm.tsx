@@ -462,7 +462,9 @@ export function BookingForm({ locale }: BookingFormProps) {
         orderedBy: 'Website',
         messageToCar: finalMessageToCar || undefined,
         pickupTime: finalPickupTime,
-        sendSMSConfirmation,
+        // sendSMSConfirmation intentionally omitted while the upstream
+        // /api/book/general controller binding is broken (the SP requires
+        // @sms_confirmation but no JSON property is bound to it).
         attributes: attributes.length > 0 ? attributes : undefined,
         passengers: [{
           seqNo: 1,
@@ -1326,7 +1328,12 @@ export function BookingForm({ locale }: BookingFormProps) {
             />
           </div>
 
-          {/* SMS Confirmation Opt-In */}
+          {/*
+            SMS confirmation opt-in is hidden until Petter ships the matching
+            controller change — the SP currently crashes when the flag is sent.
+            Re-enable by uncommenting and removing the temporary route fallback
+            in /api/booking/general.
+
           <div className="mt-6">
             <label className="flex items-start gap-3 cursor-pointer">
               <input
@@ -1343,6 +1350,7 @@ export function BookingForm({ locale }: BookingFormProps) {
               </span>
             </label>
           </div>
+          */}
 
           {/* Error Display */}
           {error && (
