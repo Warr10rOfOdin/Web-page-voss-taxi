@@ -82,7 +82,6 @@ export async function POST(request: NextRequest) {
 
     // Build Trip payload per WebAPIBook v1 spec. Only known Trip fields are
     // forwarded; carGroupId/numberOfCars are legacy and not in the schema.
-    const wantsSms = body.sendSMSConfirmation !== false;
     const bookingData: Record<string, unknown> = {
       centralCode,
       pickupTime: body.pickupTime,
@@ -91,15 +90,10 @@ export async function POST(request: NextRequest) {
       messageToBooking: body.messageToBooking ? sanitizeString(body.messageToBooking, 500) : undefined,
       attributes: body.attributes,
       passengers: processedPassengers,
-      // SMS booking confirmation. The new upstream stored procedure
-      // expects an @sms_confirmation parameter, but the public Trip schema
-      // doesn't yet document the JSON name the controller binds to.
-      // Send the flag under every plausible name so whichever the
-      // controller reads will match.
-      sendSMSConfirmation: wantsSms,
-      smsConfirmation: wantsSms,
-      smsConfirmationToCustomer: wantsSms,
-      sms_confirmation: wantsSms,
+      // SMS booking confirmation: per Petter, the new Trip field is
+      // sendSMSConfirmation. Forwarded as-is; upstream controller must bind
+      // it and pass @sms_confirmation to wsp_GenerelllBooking.
+      sendSMSConfirmation: body.sendSMSConfirmation !== false,
     };
 
     // Translate legacy numberOfCars (1..N) to Trip.additionalVehicles (0..N-1)
@@ -160,10 +154,14 @@ export async function POST(request: NextRequest) {
       // Don't show SQL stack traces to end users. Detect known upstream
       // failures and replace with a short, actionable message.
       let userMessage = rawDetails;
+      const isSmsBindingBug = /@sms_confirmation.*not supplied/i.test(rawDetails);
       const looksLikeSqlCrash =
         response.status >= 500 ||
         /System\.Data\.SqlClient|SqlException|Procedure or function/i.test(rawDetails);
-      if (looksLikeSqlCrash) {
+      if (isSmsBindingBug) {
+        userMessage =
+          'Booking-tenesta er midlertidig ute av drift (manglar SMS-parameter på sentralen). Ring sentralen direkte, eller prøv igjen seinare.';
+      } else if (looksLikeSqlCrash) {
         userMessage =
           'Booking-tenesta er midlertidig ute av drift. Prøv igjen om litt eller ring sentralen.';
       }
