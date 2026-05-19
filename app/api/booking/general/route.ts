@@ -90,10 +90,9 @@ export async function POST(request: NextRequest) {
       messageToBooking: body.messageToBooking ? sanitizeString(body.messageToBooking, 500) : undefined,
       attributes: body.attributes,
       passengers: processedPassengers,
-      // SMS booking confirmation: per Petter, the new Trip field is
-      // sendSMSConfirmation. Forwarded as-is; upstream controller must bind
-      // it and pass @sms_confirmation to wsp_GenerelllBooking.
-      sendSMSConfirmation: body.sendSMSConfirmation !== false,
+      // sendSMSConfirmation intentionally omitted while diagnosing the
+      // upstream SMS-binding crash — first verify that the previously
+      // working /api/book/general flow still works WITHOUT the flag.
     };
 
     // Translate legacy numberOfCars (1..N) to Trip.additionalVehicles (0..N-1)
@@ -115,50 +114,8 @@ export async function POST(request: NextRequest) {
       (k) => bookingData[k] === undefined && delete bookingData[k]
     );
 
-    // Temporary workaround: /api/book/general (wsp_GenerelllBooking) is broken
-    // upstream — the SP expects @sms_confirmation but the controller does not
-    // bind any JSON property to it, so every booking 500s. The simple
-    // /api/book (AppBook) endpoint hits a different SP without this bug, so
-    // route single-passenger bookings (every booking from the website) there.
-    // Drop sendSMSConfirmation since AppBook does not support it. Revert once
-    // Petter has shipped the matching controller change.
-    const isSinglePassenger = processedPassengers.length === 1;
-    const useAppBookFallback = isSinglePassenger;
-
-    let upstreamUrl = 'https://api.taxi4u.cab/api/book/general';
-    let upstreamPayload: Record<string, unknown> = bookingData;
-
-    if (useAppBookFallback) {
-      const p = processedPassengers[0] as Record<string, unknown>;
-      const appBook: Record<string, unknown> = {
-        centralCode,
-        pickupTime: body.pickupTime,
-        customerName: p.clientName,
-        tel: p.tel,
-        fromStreet: p.fromStreet,
-        fromCity: p.fromCity,
-        fromPostalCode: p.fromPostalCode,
-        fromLat: p.fromLat,
-        fromLon: p.fromLon,
-        fromZoneNo: p.fromZoneNo,
-        toStreet: p.toStreet,
-        toCity: p.toCity,
-        toPostalCode: p.toPostalCode,
-        toLat: p.toLat,
-        toLon: p.toLon,
-        toZoneNo: p.toZoneNo,
-        orderedBy: bookingData.orderedBy,
-        messageToCar: bookingData.messageToCar,
-        messageToBooking: bookingData.messageToBooking,
-        attributes: bookingData.attributes,
-        taxiAccountNo: process.env.TAXI4U_DEFAULT_ACCOUNT_NO || '0',
-      };
-      Object.keys(appBook).forEach(
-        (k) => appBook[k] === undefined && delete appBook[k]
-      );
-      upstreamUrl = 'https://api.taxi4u.cab/api/book';
-      upstreamPayload = appBook;
-    }
+    const upstreamUrl = 'https://api.taxi4u.cab/api/book/general';
+    const upstreamPayload = bookingData;
 
     console.log(
       `Sending booking request to ${upstreamUrl}:`,
